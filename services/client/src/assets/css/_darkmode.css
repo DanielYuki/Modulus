@@ -1,0 +1,12 @@
+/*
+|--------------------------------------------------------------------------
+| Global darkmode settings
+|--------------------------------------------------------------------------
+|
+| Dark mode is the default. Add .light class to switch to light mode.
+|
+*/
+
+.dark {
+  color: var(--color-text-primary);
+}

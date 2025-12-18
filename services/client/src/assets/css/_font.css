@@ -1,0 +1,5 @@
+@theme {
+  --font-*: initial;
+  --font-primary: "Inter", "sans-serif";
+  --font-secondary: "Merriweather", "serif";
+}

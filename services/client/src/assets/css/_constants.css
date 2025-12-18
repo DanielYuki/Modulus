@@ -1,0 +1,87 @@
+@import "tailwindcss";
+
+:root {
+  /* Color System */
+  /* Primary Colors - Blue theme */
+  --color-primary-soft: rgb(96 165 250);
+  --color-primary-medium: rgb(59 130 246);
+  --color-primary-strong: rgb(37 99 235);
+
+  /* Secondary Colors */
+  --color-secondary-soft: rgb(167 139 250);
+  --color-secondary-medium: rgb(139 92 246);
+  --color-secondary-strong: rgb(124 58 237);
+
+  /* CTA Colors */
+  --color-cta-soft: rgb(96 165 250);
+  --color-cta-medium: rgb(59 130 246);
+  --color-cta-strong: rgb(37 99 235);
+
+  /* Accessory Colors */
+  --color-accessory-medium: rgb(34 211 238);
+  --color-accessory-strong: rgb(6 182 212);
+
+  /* Background Colors */
+  --color-background-medium: rgb(15 23 42);
+  --color-background-strong: rgb(2 6 23);
+
+  /* Fixed Colors */
+  --color-fixed-white: rgb(255 255 255);
+  --color-fixed-black: rgb(0 0 0);
+
+  /* Feedback Colors */
+  --color-feedback-success-soft: rgb(209 250 229);
+  --color-feedback-success-medium: rgb(16 185 129);
+  --color-feedback-success-strong: rgb(4 120 87);
+
+  --color-feedback-info-soft: rgb(207 250 254);
+  --color-feedback-info-medium: rgb(6 182 212);
+  --color-feedback-info-strong: rgb(14 116 144);
+
+  --color-feedback-warning-soft: rgb(255 237 213);
+  --color-feedback-warning-medium: rgb(234 179 8);
+  --color-feedback-warning-strong: rgb(161 98 7);
+
+  --color-feedback-danger-soft: rgb(254 226 226);
+  --color-feedback-danger-medium: rgb(239 68 68);
+  --color-feedback-danger-strong: rgb(185 28 28);
+
+  /* Neutral Colors */
+  --color-neutral-xxsoft: rgb(248 250 252);
+  --color-neutral-xsoft: rgb(241 245 249);
+  --color-neutral-soft: rgb(226 232 240);
+  --color-neutral-medium: rgb(100 116 139);
+  --color-neutral-strong: rgb(71 85 105);
+  --color-neutral-xstrong: rgb(51 65 85);
+  --color-neutral-xxstrong: rgb(30 41 59);
+
+  /* Surface Colors - Dark theme default */
+  --color-surface-medium: rgb(30 41 59);
+  --color-surface-strong: rgb(15 23 42);
+
+  /* Text Colors */
+  --color-text-primary: rgb(248 250 252);
+  --color-text-secondary: rgb(148 163 184);
+  --color-text-muted: rgb(100 116 139);
+}
+
+/* Light Mode Variables */
+.light {
+  --color-background-medium: rgb(241 245 249);
+  --color-background-strong: rgb(226 232 240);
+  
+  --color-surface-medium: rgb(255 255 255);
+  --color-surface-strong: rgb(248 250 252);
+
+  --color-text-primary: rgb(15 23 42);
+  --color-text-secondary: rgb(51 65 85);
+  --color-text-muted: rgb(100 116 139);
+
+  --color-neutral-xxsoft: rgb(30 41 59);
+  --color-neutral-xsoft: rgb(51 65 85);
+  --color-neutral-soft: rgb(71 85 105);
+  --color-neutral-medium: rgb(100 116 139);
+  --color-neutral-strong: rgb(226 232 240);
+  --color-neutral-xstrong: rgb(241 245 249);
+  --color-neutral-xxstrong: rgb(248 250 252);
+}
