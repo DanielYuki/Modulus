@@ -1,9 +1,10 @@
 import type React from "react";
 import { Suspense } from "react";
 import { Navigate, Route, Routes, useLocation } from "react-router";
+import { AppLayout } from "@app/components";
 import { LazyHomePage } from "@app/modules/home";
 import { LazyBatchNewPage } from "@app/modules/batch-new";
-import { LazyBatchProgressPage } from "@app/modules/batch-progress";
+import { LazyBatchOutputPage } from "@app/modules/batch-output";
 
 // Loading fallback component
 const LoadingFallback = () => (
@@ -18,7 +19,6 @@ export const AppRoutes = {
   Documents: "/documents",
   BatchNew: "/batch/new",
   BatchOutput: "/batch/output",
-  BatchProgress: "/batch/:id",
   Settings: "/settings",
 } as const;
 
@@ -28,10 +28,11 @@ export const RootRouter: React.FC = () => {
   return (
     <Suspense fallback={<LoadingFallback />}>
       <Routes location={location}>
-        <Route path={AppRoutes.Home} element={<LazyHomePage />} />
-        <Route path={AppRoutes.BatchNew} element={<LazyBatchNewPage />} />
-        <Route path={AppRoutes.BatchProgress} element={<LazyBatchProgressPage />} />
-        <Route path={AppRoutes.BatchOutput} element={<LazyBatchProgressPage />} />
+        <Route element={<AppLayout />}>
+          <Route path={AppRoutes.Home} element={<LazyHomePage />} />
+          <Route path={AppRoutes.BatchNew} element={<LazyBatchNewPage />} />
+          <Route path={AppRoutes.BatchOutput} element={<LazyBatchOutputPage />} />
+        </Route>
         <Route path="*" element={<Navigate to={AppRoutes.BatchNew} replace />} />
       </Routes>
     </Suspense>

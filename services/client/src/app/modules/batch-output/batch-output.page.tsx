@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import type React from 'react';
-import { AppLayout } from '@app/components';
 import { Button } from '@atomic';
 import { StatusFilter, type FilterStatus, type StatusFilterOption } from '@atomic/mol.status-filter';
 import { JobCard, type JobStatus } from '@atomic/org.job-card';
@@ -24,7 +23,7 @@ const mockJobs: Job[] = [
   { id: '5', filename: 'appendix_A.pdf', fileSize: '', status: 'queued', statusLabel: 'Waiting for resources...' },
 ];
 
-const BatchProgressPage: React.FC = () => {
+const BatchOutputPage: React.FC = () => {
   const [activeFilter, setActiveFilter] = useState<FilterStatus | undefined>();
   const [jobs] = useState<Job[]>(mockJobs);
   const [paused, setPaused] = useState(false);
@@ -47,10 +46,10 @@ const BatchProgressPage: React.FC = () => {
     : jobs;
 
   return (
-    <AppLayout>
-      <div className="max-w-[1600px] mx-auto">
-        {/* Header */}
-        <header className="flex items-start justify-between mb-8 pb-6 border-b-2 border-border-strong">
+    <>
+      {/* Header */}
+      <header className="bg-fixed-white border-b-2 border-border-strong px-8 py-6">
+        <div className="max-w-[1600px] mx-auto flex items-start justify-between">
           <div className="flex flex-col gap-1">
             <div className="flex items-center gap-2 text-sm text-text-muted uppercase tracking-wide font-medium">
               <span>Projects</span>
@@ -80,39 +79,43 @@ const BatchProgressPage: React.FC = () => {
               DOWNLOAD ALL
             </Button>
           </div>
-        </header>
-
-        {/* Status Filter */}
-        <div className="mb-8">
-          <StatusFilter
-            options={filterOptions}
-            activeStatus={activeFilter}
-            onSelect={(status) => setActiveFilter(status === activeFilter ? undefined : status)}
-          />
         </div>
+      </header>
 
-        {/* Job Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-6">
-          {filteredJobs.map(job => (
-            <JobCard
-              key={job.id}
-              filename={job.filename}
-              fileSize={job.fileSize}
-              status={job.status}
-              statusLabel={job.statusLabel}
-              progress={job.progress}
-              progressLabel={job.progressLabel}
-              error={job.error}
-              onView={() => console.log('View', job.id)}
-              onRetry={() => console.log('Retry', job.id)}
-              onCancel={() => console.log('Cancel', job.id)}
-              onDownload={(type) => console.log('Download', type, job.id)}
+      <div className="p-8">
+        <div className="max-w-[1600px] mx-auto">
+          {/* Status Filter */}
+          <div className="mb-8">
+            <StatusFilter
+              options={filterOptions}
+              activeStatus={activeFilter}
+              onSelect={(status) => setActiveFilter(status === activeFilter ? undefined : status)}
             />
-          ))}
+          </div>
+
+          {/* Job Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-6">
+            {filteredJobs.map(job => (
+              <JobCard
+                key={job.id}
+                filename={job.filename}
+                fileSize={job.fileSize}
+                status={job.status}
+                statusLabel={job.statusLabel}
+                progress={job.progress}
+                progressLabel={job.progressLabel}
+                error={job.error}
+                onView={() => console.log('View', job.id)}
+                onRetry={() => console.log('Retry', job.id)}
+                onCancel={() => console.log('Cancel', job.id)}
+                onDownload={(type) => console.log('Download', type, job.id)}
+              />
+            ))}
+          </div>
         </div>
       </div>
-    </AppLayout>
+    </>
   );
 };
 
-export default BatchProgressPage;
+export default BatchOutputPage;

@@ -17,15 +17,15 @@ const HomePage: React.FC = () => {
 
       <main className="grid grid-cols-1 lg:grid-cols-2 gap-lg">
         {/* Upload Section */}
-        <section className="bg-surface rounded-xl p-lg border border-neutral-xstrong">
+        <section className="bg-surface p-lg border border-neutral-xstrong">
           <h2 className="text-xl font-semibold mb-md">1. Upload Materials</h2>
           <div className="space-y-md">
-            <div className="border-2 border-dashed border-neutral-xstrong rounded-xl p-xl text-center hover:border-primary transition-colors cursor-pointer">
+            <div className="border-2 border-dashed border-neutral-xstrong p-xl text-center hover:border-primary transition-colors cursor-pointer">
               <p className="text-text-muted">
                 Drop your reference PDF here
               </p>
             </div>
-            <div className="border-2 border-dashed border-neutral-xstrong rounded-xl p-xl text-center hover:border-secondary transition-colors cursor-pointer">
+            <div className="border-2 border-dashed border-neutral-xstrong p-xl text-center hover:border-secondary transition-colors cursor-pointer">
               <p className="text-text-muted">
                 Drop your .tex templates here
               </p>
@@ -34,7 +34,7 @@ const HomePage: React.FC = () => {
         </section>
 
         {/* Generation Section */}
-        <section className="bg-surface rounded-xl p-lg border border-neutral-xstrong">
+        <section className="bg-surface p-lg border border-neutral-xstrong">
           <h2 className="text-xl font-semibold mb-md">2. Configure & Generate</h2>
           <form className="space-y-md">
             <div>
@@ -43,7 +43,7 @@ const HomePage: React.FC = () => {
               </label>
               <input
                 type="text"
-                className="w-full bg-background-strong border border-neutral-xstrong rounded-lg px-md py-sm focus:outline-none focus:border-primary"
+                className="w-full bg-background-strong border border-neutral-xstrong px-md py-sm focus:outline-none focus:border-primary"
                 placeholder="Mathematics"
               />
             </div>
@@ -53,7 +53,7 @@ const HomePage: React.FC = () => {
               </label>
               <input
                 type="text"
-                className="w-full bg-background-strong border border-neutral-xstrong rounded-lg px-md py-sm focus:outline-none focus:border-primary"
+                className="w-full bg-background-strong border border-neutral-xstrong px-md py-sm focus:outline-none focus:border-primary"
                 placeholder="Logarithms"
               />
             </div>
@@ -62,13 +62,13 @@ const HomePage: React.FC = () => {
                 Prompt
               </label>
               <textarea
-                className="w-full bg-background-strong border border-neutral-xstrong rounded-lg px-md py-sm h-24 focus:outline-none focus:border-primary"
+                className="w-full bg-background-strong border border-neutral-xstrong px-md py-sm h-24 focus:outline-none focus:border-primary"
                 placeholder="Generate 5 questions about..."
               />
             </div>
             <button
               type="submit"
-              className="w-full bg-primary text-fixed-white font-semibold py-sm rounded-lg hover:bg-primary-strong transition-colors"
+              className="w-full bg-primary text-fixed-white font-semibold py-sm hover:bg-primary-strong transition-colors"
             >
               Generate Content
             </button>
@@ -78,9 +78,9 @@ const HomePage: React.FC = () => {
 
       {/* Results Section */}
       {files && (
-        <section className="mt-lg bg-surface rounded-xl p-lg border border-neutral-xstrong">
+        <section className="mt-lg bg-surface p-lg border border-neutral-xstrong">
           <h2 className="text-xl font-semibold mb-md">3. Generated Files</h2>
-          <pre className="bg-background-strong p-md rounded-lg overflow-auto text-sm">
+          <pre className="bg-background-strong p-md overflow-auto text-sm">
             {JSON.stringify(files, null, 2)}
           </pre>
         </section>

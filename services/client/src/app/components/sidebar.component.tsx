@@ -15,7 +15,6 @@ const styles = tv({
       'size-10 bg-accent-yellow flex items-center justify-center',
       'border-2 border-border-strong',
       'shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]',
-      'rounded-md',
     ],
     logoText: 'flex flex-col',
     logoTitle: 'text-xl font-bold leading-none tracking-tight text-text-main',
@@ -26,7 +25,7 @@ const styles = tv({
       'flex items-center gap-3 px-4 py-3',
       'text-sm font-medium text-text-secondary',
       'border-2 border-transparent',
-      'rounded-md',
+
       'transition-colors duration-200',
       'hover:bg-gray-100 hover:text-text-main hover:border-border-strong',
       'cursor-pointer',
@@ -38,7 +37,7 @@ const styles = tv({
     ],
     navBadge: [
       'ml-auto flex size-5 items-center justify-center',
-      'bg-fixed-black text-[10px] text-accent-yellow rounded-sm font-bold',
+      'bg-fixed-black text-[10px] text-accent-yellow font-bold',
     ],
   },
 })();

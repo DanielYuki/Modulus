@@ -1,4 +1,5 @@
 import type React from 'react';
+import { Outlet } from 'react-router';
 import { Sidebar, type NavSection } from './sidebar.component';
 
 const defaultNavSections: NavSection[] = [
@@ -23,20 +24,18 @@ const defaultNavSections: NavSection[] = [
 ];
 
 interface AppLayoutProps {
-  children: React.ReactNode;
   navSections?: NavSection[];
 }
 
 export const AppLayout: React.FC<AppLayoutProps> = ({
-  children,
   navSections = defaultNavSections,
 }) => {
   return (
     <div className="flex h-screen w-full bg-background text-text-main font-display overflow-hidden antialiased">
       <Sidebar sections={navSections} />
       <main className="flex-1 flex flex-col h-full overflow-hidden relative bg-fixed-white">
-        <div className="flex-1 overflow-y-auto p-8 bg-surface">
-          {children}
+        <div className="flex-1 overflow-y-auto bg-surface">
+          <Outlet />
         </div>
       </main>
     </div>
