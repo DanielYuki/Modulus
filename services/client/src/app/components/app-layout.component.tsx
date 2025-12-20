@@ -1,0 +1,44 @@
+import type React from 'react';
+import { Sidebar, type NavSection } from './sidebar.component';
+
+const defaultNavSections: NavSection[] = [
+  {
+    items: [
+      { path: '/documents', label: 'My Documents', icon: 'folder' },
+      { path: '/batch/new', label: 'New Batch', icon: 'library_add' },
+    ],
+  },
+  {
+    label: 'Current Session',
+    items: [
+      { path: '/batch/output', label: 'Bulk Output', icon: 'auto_awesome_motion', badge: 8 },
+    ],
+  },
+  {
+    label: 'Preferences',
+    items: [
+      { path: '/settings', label: 'Settings', icon: 'settings' },
+    ],
+  },
+];
+
+interface AppLayoutProps {
+  children: React.ReactNode;
+  navSections?: NavSection[];
+}
+
+export const AppLayout: React.FC<AppLayoutProps> = ({
+  children,
+  navSections = defaultNavSections,
+}) => {
+  return (
+    <div className="flex h-screen w-full bg-background text-text-main font-display overflow-hidden antialiased">
+      <Sidebar sections={navSections} />
+      <main className="flex-1 flex flex-col h-full overflow-hidden relative bg-fixed-white">
+        <div className="flex-1 overflow-y-auto p-8 bg-surface">
+          {children}
+        </div>
+      </main>
+    </div>
+  );
+};
