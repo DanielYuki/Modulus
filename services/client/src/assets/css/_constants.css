@@ -1,87 +1,50 @@
 @import "tailwindcss";
 
 :root {
-  /* Color System */
-  /* Primary Colors - Blue theme */
-  --color-primary-soft: rgb(96 165 250);
-  --color-primary-medium: rgb(59 130 246);
-  --color-primary-strong: rgb(37 99 235);
-
-  /* Secondary Colors */
-  --color-secondary-soft: rgb(167 139 250);
-  --color-secondary-medium: rgb(139 92 246);
-  --color-secondary-strong: rgb(124 58 237);
-
-  /* CTA Colors */
-  --color-cta-soft: rgb(96 165 250);
-  --color-cta-medium: rgb(59 130 246);
-  --color-cta-strong: rgb(37 99 235);
-
-  /* Accessory Colors */
-  --color-accessory-medium: rgb(34 211 238);
-  --color-accessory-strong: rgb(6 182 212);
+  /* Primary Colors - Yellow */
+  --color-primary: #f9f506;
+  --color-primary-hover: #e6e205;
+  --color-primary-light: #fffee0;
+  --color-primary-accent: #e3e005;
+  --color-accent-yellow: #FFE600;
 
   /* Background Colors */
-  --color-background-medium: rgb(15 23 42);
-  --color-background-strong: rgb(2 6 23);
+  --color-background: #ffffff;
+  --color-background-dark: #1a1a1a;
+  --color-surface: #f5f5f5;
+  --color-surface-light: #ffffff;
+  --color-surface-dark: #1e1e1e;
 
-  /* Fixed Colors */
-  --color-fixed-white: rgb(255 255 255);
-  --color-fixed-black: rgb(0 0 0);
-
-  /* Feedback Colors */
-  --color-feedback-success-soft: rgb(209 250 229);
-  --color-feedback-success-medium: rgb(16 185 129);
-  --color-feedback-success-strong: rgb(4 120 87);
-
-  --color-feedback-info-soft: rgb(207 250 254);
-  --color-feedback-info-medium: rgb(6 182 212);
-  --color-feedback-info-strong: rgb(14 116 144);
-
-  --color-feedback-warning-soft: rgb(255 237 213);
-  --color-feedback-warning-medium: rgb(234 179 8);
-  --color-feedback-warning-strong: rgb(161 98 7);
-
-  --color-feedback-danger-soft: rgb(254 226 226);
-  --color-feedback-danger-medium: rgb(239 68 68);
-  --color-feedback-danger-strong: rgb(185 28 28);
-
-  /* Neutral Colors */
-  --color-neutral-xxsoft: rgb(248 250 252);
-  --color-neutral-xsoft: rgb(241 245 249);
-  --color-neutral-soft: rgb(226 232 240);
-  --color-neutral-medium: rgb(100 116 139);
-  --color-neutral-strong: rgb(71 85 105);
-  --color-neutral-xstrong: rgb(51 65 85);
-  --color-neutral-xxstrong: rgb(30 41 59);
-
-  /* Surface Colors - Dark theme default */
-  --color-surface-medium: rgb(30 41 59);
-  --color-surface-strong: rgb(15 23 42);
+  /* Border Colors */
+  --color-border: #e5e5e5;
+  --color-border-strong: #000000;
 
   /* Text Colors */
-  --color-text-primary: rgb(248 250 252);
-  --color-text-secondary: rgb(148 163 184);
-  --color-text-muted: rgb(100 116 139);
-}
+  --color-text-main: #000000;
+  --color-text-secondary: #333333;
+  --color-text-muted: #6b7280;
 
-/* Light Mode Variables */
-.light {
-  --color-background-medium: rgb(241 245 249);
-  --color-background-strong: rgb(226 232 240);
-  
-  --color-surface-medium: rgb(255 255 255);
-  --color-surface-strong: rgb(248 250 252);
+  /* Fixed Colors */
+  --color-fixed-white: #ffffff;
+  --color-fixed-black: #000000;
 
-  --color-text-primary: rgb(15 23 42);
-  --color-text-secondary: rgb(51 65 85);
-  --color-text-muted: rgb(100 116 139);
+  /* Status Colors */
+  --color-status-done: #16a34a;
+  --color-status-done-bg: #dcfce7;
+  --color-status-done-border: #166534;
+  --color-status-active: #2563eb;
+  --color-status-active-bg: #dbeafe;
+  --color-status-active-border: #1e40af;
+  --color-status-failed: #dc2626;
+  --color-status-failed-bg: #fef2f2;
+  --color-status-failed-border: #7f1d1d;
+  --color-status-queued: #6b7280;
+  --color-status-queued-bg: #e5e7eb;
+  --color-status-queued-border: #4b5563;
 
-  --color-neutral-xxsoft: rgb(30 41 59);
-  --color-neutral-xsoft: rgb(51 65 85);
-  --color-neutral-soft: rgb(71 85 105);
-  --color-neutral-medium: rgb(100 116 139);
-  --color-neutral-strong: rgb(226 232 240);
-  --color-neutral-xstrong: rgb(241 245 249);
-  --color-neutral-xxstrong: rgb(248 250 252);
+  /* Shadows - Geometric */
+  --shadow-geo: 4px 4px 0px 0px rgba(0, 0, 0, 1);
+  --shadow-geo-sm: 2px 2px 0px 0px rgba(0, 0, 0, 1);
+  --shadow-geo-lg: 8px 8px 0px 0px rgba(0, 0, 0, 1);
+  --shadow-geo-primary: 4px 4px 0px 0px rgba(249, 245, 6, 1);
 }

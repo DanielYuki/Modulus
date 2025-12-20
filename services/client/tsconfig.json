@@ -38,6 +38,9 @@
       "@app/*": [
         "./src/app/*"
       ],
+      "@atomic": [
+        "./src/atomic"
+      ],
       "@atomic/*": [
         "./src/atomic/*"
       ],

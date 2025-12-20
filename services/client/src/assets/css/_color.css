@@ -1,74 +1,50 @@
 @theme {
   --color-*: initial;
-  --color-primary-soft: var(--color-primary-soft);
-  --color-primary: var(--color-primary-medium);
-  --color-primary-medium: var(--color-primary-medium);
-  --color-primary-strong: var(--color-primary-strong);
+  
+  /* Primary */
+  --color-primary: var(--color-primary);
+  --color-primary-hover: var(--color-primary-hover);
+  --color-primary-light: var(--color-primary-light);
+  --color-primary-accent: var(--color-primary-accent);
+  --color-accent-yellow: var(--color-accent-yellow);
 
-  /* Secondary Colors */
-  --color-secondary-soft: var(--color-secondary-soft);
-  --color-secondary: var(--color-secondary-medium);
-  --color-secondary-medium: var(--color-secondary-medium);
-  --color-secondary-strong: var(--color-secondary-strong);
+  /* Background & Surface */
+  --color-background: var(--color-background);
+  --color-background-dark: var(--color-background-dark);
+  --color-surface: var(--color-surface);
+  --color-surface-light: var(--color-surface-light);
+  --color-surface-dark: var(--color-surface-dark);
 
-  /* CTA Colors */
-  --color-cta-soft: var(--color-cta-soft);
-  --color-cta: var(--color-cta-medium);
-  --color-cta-medium: var(--color-cta-medium);
-  --color-cta-strong: var(--color-cta-strong);
+  /* Border */
+  --color-border: var(--color-border);
+  --color-border-strong: var(--color-border-strong);
 
-  /* Accessory Colors */
-  --color-accessory: var(--color-accessory-medium);
-  --color-accessory-medium: var(--color-accessory-medium);
-  --color-accessory-strong: var(--color-accessory-strong);
-
-  /* Background Colors */
-  --color-background: var(--color-background-medium);
-  --color-background-medium: var(--color-background-medium);
-  --color-background-strong: var(--color-background-strong);
-
-  /* Surface Colors */
-  --color-surface: var(--color-surface-medium);
-  --color-surface-medium: var(--color-surface-medium);
-  --color-surface-strong: var(--color-surface-strong);
-
-  /* Text Colors */
-  --color-text-primary: var(--color-text-primary);
+  /* Text */
+  --color-text-main: var(--color-text-main);
   --color-text-secondary: var(--color-text-secondary);
   --color-text-muted: var(--color-text-muted);
 
-  /* Fixed Colors */
+  /* Fixed */
   --color-fixed-white: var(--color-fixed-white);
   --color-fixed-black: var(--color-fixed-black);
 
-  /* Feedback Colors */
-  --color-feedback-success-soft: var(--color-feedback-success-soft);
-  --color-feedback-success: var(--color-feedback-success-medium);
-  --color-feedback-success-medium: var(--color-feedback-success-medium);
-  --color-feedback-success-strong: var(--color-feedback-success-strong);
+  /* Status */
+  --color-status-done: var(--color-status-done);
+  --color-status-done-bg: var(--color-status-done-bg);
+  --color-status-done-border: var(--color-status-done-border);
+  --color-status-active: var(--color-status-active);
+  --color-status-active-bg: var(--color-status-active-bg);
+  --color-status-active-border: var(--color-status-active-border);
+  --color-status-failed: var(--color-status-failed);
+  --color-status-failed-bg: var(--color-status-failed-bg);
+  --color-status-failed-border: var(--color-status-failed-border);
+  --color-status-queued: var(--color-status-queued);
+  --color-status-queued-bg: var(--color-status-queued-bg);
+  --color-status-queued-border: var(--color-status-queued-border);
 
-  --color-feedback-info-soft: var(--color-feedback-info-soft);
-  --color-feedback-info: var(--color-feedback-info-medium);
-  --color-feedback-info-medium: var(--color-feedback-info-medium);
-  --color-feedback-info-strong: var(--color-feedback-info-strong);
-
-  --color-feedback-warning-soft: var(--color-feedback-warning-soft);
-  --color-feedback-warning: var(--color-feedback-warning-medium);
-  --color-feedback-warning-medium: var(--color-feedback-warning-medium);
-  --color-feedback-warning-strong: var(--color-feedback-warning-strong);
-
-  --color-feedback-danger-soft: var(--color-feedback-danger-soft);
-  --color-feedback-danger: var(--color-feedback-danger-medium);
-  --color-feedback-danger-medium: var(--color-feedback-danger-medium);
-  --color-feedback-danger-strong: var(--color-feedback-danger-strong);
-
-  /* Neutral Colors */
-  --color-neutral-xxsoft: var(--color-neutral-xxsoft);
-  --color-neutral-xsoft: var(--color-neutral-xsoft);
-  --color-neutral-soft: var(--color-neutral-soft);
-  --color-neutral: var(--color-neutral-medium);
-  --color-neutral-medium: var(--color-neutral-medium);
-  --color-neutral-strong: var(--color-neutral-strong);
-  --color-neutral-xstrong: var(--color-neutral-xstrong);
-  --color-neutral-xxstrong: var(--color-neutral-xxstrong);
+  /* Shadows */
+  --shadow-geo: var(--shadow-geo);
+  --shadow-geo-sm: var(--shadow-geo-sm);
+  --shadow-geo-lg: var(--shadow-geo-lg);
+  --shadow-geo-primary: var(--shadow-geo-primary);
 }
