@@ -6,7 +6,7 @@ export const textInputStyle = tv({
     label: 'text-xs font-bold uppercase tracking-wide text-text-main',
     input: [
       'w-full px-3 py-3',
-      'bg-fixed-white border-2 border-border-strong rounded-md',
+      'bg-fixed-white border-2 border-border-strong',
       'text-sm text-text-main placeholder:text-text-muted',
       'font-medium',
       'transition-all duration-200',

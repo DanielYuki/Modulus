@@ -57,7 +57,7 @@ export const JobCard: React.FC<JobCardProps> = ({
             <div className={styles.info()}>
               <h3 className={styles.filename()}>{filename}</h3>
               {status === 'active' ? (
-                <p className="text-xs text-fixed-black font-bold uppercase tracking-wider animate-pulse bg-accent-yellow px-1 inline-block mt-1 rounded-sm">
+                <p className="text-xs text-fixed-black font-bold uppercase tracking-wider animate-pulse bg-accent-yellow px-1 inline-block mt-1">
                   {statusLabel}
                 </p>
               ) : (
@@ -102,13 +102,13 @@ export const JobCard: React.FC<JobCardProps> = ({
             <div className="flex gap-2">
               <button
                 onClick={() => onDownload?.('pdf')}
-                className="size-10 border-2 border-border-strong flex items-center justify-center hover:bg-accent-yellow text-text-secondary transition-colors bg-fixed-white rounded-md"
+                className="size-10 border-2 border-border-strong flex items-center justify-center hover:bg-accent-yellow text-text-secondary transition-colors bg-fixed-white"
               >
                 <span className="font-bold text-[10px]">PDF</span>
               </button>
               <button
                 onClick={() => onDownload?.('tex')}
-                className="size-10 border-2 border-border-strong flex items-center justify-center hover:bg-accent-yellow text-text-secondary transition-colors bg-fixed-white rounded-md"
+                className="size-10 border-2 border-border-strong flex items-center justify-center hover:bg-accent-yellow text-text-secondary transition-colors bg-fixed-white"
               >
                 <span className="font-bold text-[10px]">TEX</span>
               </button>
@@ -122,7 +122,7 @@ export const JobCard: React.FC<JobCardProps> = ({
             </Button>
             <button
               onClick={() => onDownload?.('tex')}
-              className="size-10 border-2 border-status-failed-border flex items-center justify-center hover:bg-status-failed/20 text-status-failed transition-colors bg-fixed-white rounded-md"
+              className="size-10 border-2 border-status-failed-border flex items-center justify-center hover:bg-status-failed/20 text-status-failed transition-colors bg-fixed-white"
             >
               <span className="font-bold text-[10px]">TEX</span>
             </button>

@@ -6,7 +6,7 @@ export const selectStyle = tv({
     label: 'text-xs font-bold uppercase tracking-wide text-text-main',
     select: [
       'w-full pl-3 pr-10 py-3',
-      'bg-fixed-white border-2 border-border-strong rounded-md',
+      'bg-fixed-white border-2 border-border-strong',
       'text-sm text-text-main font-medium',
       'transition-all duration-200',
       'focus:outline-none focus:ring-0 focus:border-primary-hover focus:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]',

@@ -4,21 +4,21 @@ export const jobCardStyle = tv({
   slots: {
     wrapper: [
       'bg-fixed-white border-2 border-border-strong',
-      'flex flex-col rounded-md overflow-hidden',
+      'flex flex-col overflow-hidden',
       'transition-all duration-200',
     ],
     header: 'p-6 flex flex-col gap-4',
     headerTop: 'flex items-start justify-between',
     headerLeft: 'flex items-center gap-4',
-    icon: 'size-12 border-2 border-border-strong flex items-center justify-center rounded-md',
+    icon: 'size-12 border-2 border-border-strong flex items-center justify-center',
     info: 'flex flex-col',
     filename: 'font-bold text-text-main truncate max-w-[150px] text-lg',
     meta: 'text-xs text-text-muted font-mono mt-1',
     body: 'flex flex-col gap-2 mt-4',
-    error: 'p-3 bg-fixed-white border-2 border-status-failed/20 rounded-sm text-xs text-status-failed font-mono leading-relaxed',
+    error: 'p-3 bg-fixed-white border-2 border-status-failed/20 text-xs text-status-failed font-mono leading-relaxed',
     footer: 'border-t-2 border-border-strong p-4 flex gap-3 mt-auto bg-gray-50',
     footerBtn: [
-      'flex-1 h-10 font-bold text-sm flex items-center justify-center gap-2 uppercase tracking-wide rounded-md',
+      'flex-1 h-10 font-bold text-sm flex items-center justify-center gap-2 uppercase tracking-wide',
     ],
   },
   variants: {

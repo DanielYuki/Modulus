@@ -7,7 +7,7 @@ export const statusFilterStyle = tv({
       'bg-fixed-white px-5 py-3 border-2 border-border-strong',
       'flex items-center gap-3',
       'shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]',
-      'rounded-md',
+
       'cursor-pointer',
       'transition-all duration-200',
       'hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]',

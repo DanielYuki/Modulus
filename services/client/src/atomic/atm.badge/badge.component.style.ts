@@ -5,7 +5,7 @@ export const badgeStyle = tv({
     'inline-flex items-center justify-center',
     'px-2 py-1',
     'text-[10px] font-bold uppercase tracking-widest',
-    'border rounded-sm',
+    'border',
   ],
   variants: {
     status: {

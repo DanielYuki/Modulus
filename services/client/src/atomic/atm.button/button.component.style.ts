@@ -9,7 +9,7 @@ export const buttonStyle = tv({
     'focus:outline-none',
     'disabled:opacity-50 disabled:cursor-not-allowed',
     'cursor-pointer',
-    'rounded-md',
+
   ],
   variants: {
     variant: {

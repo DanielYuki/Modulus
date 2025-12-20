@@ -4,7 +4,7 @@ export const fileChipStyle = tv({
   slots: {
     wrapper: [
       'flex items-center gap-0',
-      'bg-background border-2 border-border-strong rounded-md overflow-hidden',
+      'bg-background border-2 border-border-strong overflow-hidden',
       'shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]',
     ],
     icon: [

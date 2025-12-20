@@ -6,7 +6,7 @@ export const textAreaStyle = tv({
     label: 'text-xs font-bold uppercase tracking-wide text-text-main',
     textarea: [
       'w-full px-4 py-4',
-      'bg-fixed-white border-2 border-border-strong rounded-md',
+      'bg-fixed-white border-2 border-border-strong',
       'text-base text-text-main placeholder:text-text-muted',
       'font-mono leading-relaxed',
       'transition-all duration-200',
