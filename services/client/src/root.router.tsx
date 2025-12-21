@@ -18,7 +18,7 @@ export const AppRoutes = {
   Home: "/",
   Documents: "/documents",
   BatchNew: "/batch/new",
-  BatchOutput: "/batch/output",
+  BatchOutput: "/batch/output/:jobId",
   Settings: "/settings",
 } as const;
 

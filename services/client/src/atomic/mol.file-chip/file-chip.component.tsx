@@ -15,7 +15,6 @@ export const FileChip: React.FC<FileChipProps> = ({
   className,
   fileType,
 }) => {
-  const styles = fileChipStyle({ fileType });
   const isPdf = filename.toLowerCase().endsWith('.pdf');
   const isTex = filename.toLowerCase().endsWith('.tex');
   const effectiveType = fileType ?? (isTex ? 'tex' : 'pdf');

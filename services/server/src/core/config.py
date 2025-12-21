@@ -8,7 +8,8 @@ from pathlib import Path
 from dotenv import load_dotenv
 
 # Resolve path to root .env (works for both Docker and local)
-_env_path = Path(__file__).parents[3] / ".env"
+# Path: config.py -> core -> src -> server -> services -> root
+_env_path = Path(__file__).parents[4] / ".env"
 if _env_path.exists():
     load_dotenv(_env_path)
 

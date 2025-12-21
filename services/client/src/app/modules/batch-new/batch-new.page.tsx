@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
+import { useNavigate } from 'react-router';
 import type React from 'react';
 import {
   Button,
@@ -8,39 +9,85 @@ import {
 } from '@atomic';
 import { FileDropzone } from '@atomic/mol.file-dropzone';
 import { FileChip } from '@atomic/mol.file-chip';
+import { createBatch } from '@/app/data/batch.gateway';
 
 interface UploadedFile {
   id: string;
   name: string;
   type: 'pdf' | 'tex';
   status: 'ready' | 'uploading';
+  file: File; // Store actual File object
 }
 
 const BatchNewPage: React.FC = () => {
-  const [files, setFiles] = useState<UploadedFile[]>([
-    { id: '1', name: 'Research_Paper_v1.pdf', type: 'pdf', status: 'ready' },
-    { id: '2', name: 'Appendix_B.tex', type: 'tex', status: 'ready' },
-  ]);
+  const navigate = useNavigate();
+
+  const [files, setFiles] = useState<UploadedFile[]>([]);
   const [subjects, setSubjects] = useState('');
   const [selectedTemplate, setSelectedTemplate] = useState('');
+  const [instructions, setInstructions] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const handleFilesChange = (newFiles: File[]) => {
+  const handleFilesChange = useCallback((newFiles: File[]) => {
     const uploadedFiles: UploadedFile[] = newFiles.map((f, idx) => ({
       id: `${Date.now()}-${idx}`,
       name: f.name,
       type: f.name.endsWith('.tex') ? 'tex' : 'pdf',
       status: 'ready',
+      file: f,
     }));
     setFiles(prev => [...prev, ...uploadedFiles]);
-  };
+  }, []);
 
-  const handleRemoveFile = (id: string) => {
+  const handleRemoveFile = useCallback((id: string) => {
     setFiles(prev => prev.filter(f => f.id !== id));
+    // Clear selected template if the removed file was the template
+    if (selectedTemplate === id) {
+      setSelectedTemplate('');
+    }
+  }, [selectedTemplate]);
+
+  const handleGenerateBatch = async () => {
+    setError(null);
+
+    // Validation
+    const subjectList = subjects.split('\n').filter(s => s.trim());
+    if (subjectList.length === 0) {
+      setError('Please enter at least one subject');
+      return;
+    }
+
+    const templateFile = files.find(f => f.id === selectedTemplate);
+    if (!templateFile) {
+      setError('Please select a template');
+      return;
+    }
+
+    setIsLoading(true);
+
+    try {
+      const pdfFiles = files.filter(f => f.type === 'pdf').map(f => f.file);
+
+      const result = await createBatch(
+        pdfFiles,
+        templateFile.file,
+        subjectList,
+        instructions || undefined
+      );
+
+      // Navigate to output page with the job ID
+      navigate(`/batch/output/${result.job_id}`);
+    } catch (err) {
+      console.error('Batch creation failed:', err);
+      setError(err instanceof Error ? err.message : 'Failed to create batch');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const texFiles = files.filter(f => f.type === 'tex');
   const templateOptions = texFiles.map(f => ({ value: f.id, label: `${f.name} (Uploaded)` }));
-
   const subjectCount = subjects.split('\n').filter(s => s.trim()).length;
 
   return (
@@ -63,7 +110,7 @@ const BatchNewPage: React.FC = () => {
           <div className="xl:col-span-2 space-y-8">
             {/* Source Files */}
             <div className="bg-surface-light p-6 border-2 border-border-strong shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
-              <h3 className="text-sm font-bold uppercase tracking-wider text-text-main mb-6 flex items-center gap-2 border-b-2 border-border-strong pb-2 w-max">
+              <h3 className="text-sm font-bold uppercase tracking-wider text-text-main mb-6 flex items-center gap-2 w-max">
                 <span className="material-symbols-outlined text-xl">upload_file</span> Source Files
               </h3>
 
@@ -143,16 +190,40 @@ const BatchNewPage: React.FC = () => {
                   className="w-full px-3 py-3 bg-fixed-white border-2 border-border-strong text-sm text-text-main placeholder:text-text-muted font-medium focus:outline-none focus:border-primary-hover focus:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all"
                   placeholder="E.g., Maintain citation keys..."
                   type="text"
+                  value={instructions}
+                  onChange={(e) => setInstructions(e.target.value)}
                 />
               </div>
 
+              {/* Error Display */}
+              {error && (
+                <div className="p-3 bg-red-100 border-2 border-red-500 text-red-700 text-sm font-medium">
+                  {error}
+                </div>
+              )}
+
               <div className="pt-4 border-t-2 border-border-strong border-dashed">
-                <Button variant="primary" size="lg" fullWidth>
-                  <span className="material-symbols-outlined text-2xl group-hover:rotate-12 transition-transform">auto_awesome</span>
-                  Generate Batch
+                <Button
+                  variant="primary"
+                  size="lg"
+                  fullWidth
+                  onClick={handleGenerateBatch}
+                  disabled={isLoading}
+                >
+                  {isLoading ? (
+                    <>
+                      <span className="material-symbols-outlined text-2xl animate-spin">progress_activity</span>
+                      Processing...
+                    </>
+                  ) : (
+                    <>
+                      <span className="material-symbols-outlined text-2xl group-hover:rotate-12 transition-transform">auto_awesome</span>
+                      Generate Batch
+                    </>
+                  )}
                 </Button>
                 <p className="text-center text-xs font-mono text-text-secondary mt-3 border-b-2 border-primary inline-block mx-auto w-max px-2">
-                  Est. time: ~2m 15s
+                  Est. time: ~{Math.max(1, subjectCount * 0.5).toFixed(0)}m per subject
                 </p>
               </div>
             </div>

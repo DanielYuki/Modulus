@@ -25,14 +25,13 @@ const styles = tv({
       'flex items-center gap-3 px-4 py-3',
       'text-sm font-medium text-text-secondary',
       'border-2 border-transparent',
-
       'transition-colors duration-200',
       'hover:bg-gray-100 hover:text-text-main hover:border-border-strong',
       'cursor-pointer',
     ],
     navItemActive: [
       'bg-primary text-fixed-black font-bold',
-      'border-2 border-border-strong',
+      '!border-border-strong',
       'shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]',
     ],
     navBadge: [
@@ -64,7 +63,11 @@ export const Sidebar: React.FC<SidebarProps> = ({ sections }) => {
   return (
     <aside className={styles.wrapper()}>
       <div className={styles.header()}>
-        <div className={styles.logo()}>
+        <NavLink
+          to="/"
+          className={styles.logo()}
+        >
+          {/* <div className={styles.logo()}> */}
           <div className={styles.logoIcon()}>
             <span className="material-symbols-outlined !text-2xl text-fixed-black font-bold">article</span>
           </div>
@@ -72,7 +75,8 @@ export const Sidebar: React.FC<SidebarProps> = ({ sections }) => {
             <span className={styles.logoTitle()}>AI Docs</span>
             <span className={styles.logoSubtitle()}>Bulk Processor</span>
           </div>
-        </div>
+          {/* </div> */}
+        </NavLink>
       </div>
 
       <nav className={styles.nav()}>
