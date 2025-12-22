@@ -4,7 +4,8 @@ import { Navigate, Route, Routes, useLocation } from "react-router";
 import { AppLayout } from "@app/components";
 import { LazyHomePage } from "@app/modules/home";
 import { LazyBatchNewPage } from "@app/modules/batch-new";
-import { LazyBatchOutputPage } from "@app/modules/batch-output";
+import { BatchNewRoutes } from "@app/modules/batch-new/batch-new.routes";
+import { LazyBatchesPage, BatchesRoutes } from "@app/modules/batches";
 
 // TODO: Create ActivityIndicator component instead
 // Loading fallback component
@@ -14,16 +15,6 @@ const LoadingFallback = () => (
   </div>
 );
 
-// TODO: Leave routes definitions in .routes file on modules
-// Route definitions
-export const AppRoutes = {
-  Home: "/",
-  Documents: "/documents",
-  BatchNew: "/batch/new",
-  BatchOutput: "/batch/output/:jobId",
-  Settings: "/settings",
-} as const;
-
 export const RootRouter: React.FC = () => {
   const location = useLocation();
 
@@ -31,11 +22,12 @@ export const RootRouter: React.FC = () => {
     <Suspense fallback={<LoadingFallback />}>
       <Routes location={location}>
         <Route element={<AppLayout />}>
-          <Route path={AppRoutes.Home} element={<LazyHomePage />} />
-          <Route path={AppRoutes.BatchNew} element={<LazyBatchNewPage />} />
-          <Route path={AppRoutes.BatchOutput} element={<LazyBatchOutputPage />} />
+          <Route index element={<Navigate to={BatchesRoutes.List} replace />} />
+          <Route path="/home" element={<LazyHomePage />} />
+          <Route path={BatchNewRoutes.New} element={<LazyBatchNewPage />} />
+          <Route path={BatchesRoutes.Base} element={<LazyBatchesPage />} />
         </Route>
-        <Route path="*" element={<Navigate to={AppRoutes.BatchNew} replace />} />
+        <Route path="*" element={<Navigate to={BatchesRoutes.List} replace />} />
       </Routes>
     </Suspense>
   );

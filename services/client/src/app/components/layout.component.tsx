@@ -6,15 +6,16 @@ const defaultNavSections: NavSection[] = [
   {
     items: [
       // { path: '/documents', label: 'My Documents', icon: 'folder' },
-      { path: '/batch/new', label: 'New Batch', icon: 'library_add' },
+      { path: '/batches', label: 'Batches', icon: 'stacks' },
+      { path: '/batch/new', label: 'New Batch', icon: 'note_stack_add' },
     ],
   },
-  {
-    label: 'Current Session',
-    items: [
-      { path: '/batch/output', label: 'Bulk Output', icon: 'auto_awesome_motion', badge: 8 }, // TODO: Add badge logic
-    ],
-  },
+  // {
+  //   label: 'Current Session',
+  //   items: [
+  //     { path: '/batch/output', label: 'Bulk Output', icon: 'auto_awesome_motion', badge: 8 }, // TODO: Add badge logic
+  //   ],
+  // },
   // {
   //   label: 'Preferences',
   //   items: [

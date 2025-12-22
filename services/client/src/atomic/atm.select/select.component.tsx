@@ -27,8 +27,9 @@ export const Select: React.FC<SelectProps> = ({
   id,
   placeholder,
   error,
+  inline,
 }) => {
-  const styles = style({ error });
+  const styles = style({ error, inline });
 
   return (
     <div className={styles.wrapper({ class: className })}>

@@ -5,6 +5,7 @@ import { Button } from '@atomic';
 import { StatusFilter, type FilterStatus, type StatusFilterOption } from '@atomic/mol.status-filter';
 import { JobCard, type JobStatus } from '@atomic/org.job-card';
 import { getBatchStatus, getPdfUrl, getTexUrl, type BatchItem } from '@/app/data/batch.gateway';
+import { BatchesRoutes } from '../batches.routes';
 
 // Map API status to UI JobStatus
 function mapStatus(apiStatus: BatchItem['status']): JobStatus {
@@ -29,8 +30,8 @@ function mapStatusLabel(item: BatchItem): string {
   }
 }
 
-const BatchOutputPage: React.FC = () => {
-  const { jobId } = useParams<{ jobId: string }>();
+const BatchDetailPage: React.FC = () => {
+  const { batchId } = useParams<{ batchId: string }>();
   const navigate = useNavigate();
 
   const [activeFilter, setActiveFilter] = useState<FilterStatus | undefined>();
@@ -38,14 +39,13 @@ const BatchOutputPage: React.FC = () => {
   const [batchStatus, setBatchStatus] = useState<string>('pending');
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [elapsedTime, setElapsedTime] = useState(0);
 
   // Fetch batch status
   const fetchStatus = useCallback(async () => {
-    if (!jobId) return;
+    if (!batchId) return;
 
     try {
-      const response = await getBatchStatus(jobId);
+      const response = await getBatchStatus(batchId);
       setJobs(response.items);
       setBatchStatus(response.status);
       setError(null);
@@ -55,7 +55,7 @@ const BatchOutputPage: React.FC = () => {
     } finally {
       setIsLoading(false);
     }
-  }, [jobId]);
+  }, [batchId]);
 
   // Initial fetch and polling
   useEffect(() => {
@@ -71,35 +71,19 @@ const BatchOutputPage: React.FC = () => {
     return () => clearInterval(interval);
   }, [fetchStatus, batchStatus]);
 
-  // Elapsed time counter
-  useEffect(() => {
-    const timer = setInterval(() => {
-      if (batchStatus === 'pending' || batchStatus === 'processing') {
-        setElapsedTime(prev => prev + 1);
-      }
-    }, 1000);
 
-    return () => clearInterval(timer);
-  }, [batchStatus]);
-
-  // Format elapsed time
-  const formatTime = (seconds: number) => {
-    const mins = Math.floor(seconds / 60);
-    const secs = seconds % 60;
-    return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
-  };
 
   // Handle view PDF in new tab
   const handleView = (index: number) => {
-    if (!jobId) return;
-    const url = getPdfUrl(jobId, index);
+    if (!batchId) return;
+    const url = getPdfUrl(batchId, index);
     window.open(url, '_blank');
   };
 
   // Handle download TEX
   const handleDownload = (index: number, type: 'tex' | 'pdf') => {
-    if (!jobId) return;
-    const url = type === 'tex' ? getTexUrl(jobId, index) : getPdfUrl(jobId, index);
+    if (!batchId) return;
+    const url = type === 'tex' ? getTexUrl(batchId, index) : getPdfUrl(batchId, index);
     window.open(url, '_blank');
   };
 
@@ -121,10 +105,10 @@ const BatchOutputPage: React.FC = () => {
     })
     : jobs;
 
-  if (!jobId) {
+  if (!batchId) {
     return (
       <div className="p-8 text-center">
-        <p className="text-text-muted">No job ID provided</p>
+        <p className="text-text-muted">No batch ID provided</p>
         <Button variant="primary" onClick={() => navigate('/batch/new')}>
           Create New Batch
         </Button>
@@ -139,24 +123,24 @@ const BatchOutputPage: React.FC = () => {
         <div className="max-w-[1600px] mx-auto flex items-start justify-between">
           <div className="flex flex-col gap-1">
             <div className="flex items-center gap-2 text-sm text-text-muted uppercase tracking-wide font-medium">
-              <span>Batch</span>
+              <button
+                onClick={() => navigate(BatchesRoutes.List)}
+                className="hover:text-text-main transition-colors flex items-center gap-1"
+              >
+                <span className="material-symbols-outlined !text-sm">arrow_back</span>
+                All Batches
+              </button>
               <span className="material-symbols-outlined !text-sm">chevron_right</span>
-              <span className="text-text-main font-bold font-mono">{jobId.slice(0, 8)}...</span>
+              <span className="text-text-main font-bold font-mono">#{batchId.slice(0, 8)}...</span>
             </div>
             <h1 className="text-3xl font-bold tracking-tight text-text-main mt-2">
-              Bulk Generation Progress
+              Batch #{batchId.slice(0, 8)}
             </h1>
             {error && (
               <p className="text-red-600 text-sm mt-1">{error}</p>
             )}
           </div>
           <div className="flex items-center gap-4">
-            <div className="hidden md:flex flex-col items-end mr-2">
-              <span className="text-xs font-bold text-text-muted uppercase tracking-widest">Time Elapsed</span>
-              <span className="font-mono font-bold text-lg text-text-main">
-                {batchStatus === 'completed' || batchStatus === 'failed' ? 'DONE' : formatTime(elapsedTime)}
-              </span>
-            </div>
             <Button variant="secondary" onClick={() => navigate('/batch/new')}>
               <span className="material-symbols-outlined !text-[18px]">add</span>
               NEW BATCH
@@ -217,4 +201,4 @@ const BatchOutputPage: React.FC = () => {
   );
 };
 
-export default BatchOutputPage;
+export default BatchDetailPage;
