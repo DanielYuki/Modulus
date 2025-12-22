@@ -104,13 +104,13 @@ export const JobCard: React.FC<JobCardProps> = ({
                 onClick={() => onDownload?.('pdf')}
                 className="size-10 border-2 border-border-strong flex items-center justify-center hover:bg-accent-yellow text-text-secondary transition-colors bg-fixed-white"
               >
-                <span className="font-bold text-[10px]">PDF</span>
+                <span className="font-bold text-[8px]">PDF</span>
               </button>
               <button
                 onClick={() => onDownload?.('tex')}
                 className="size-10 border-2 border-border-strong flex items-center justify-center hover:bg-accent-yellow text-text-secondary transition-colors bg-fixed-white"
               >
-                <span className="font-bold text-[10px]">TEX</span>
+                <span className="font-bold text-[8px]">TEX</span>
               </button>
             </div>
           </>
@@ -124,7 +124,7 @@ export const JobCard: React.FC<JobCardProps> = ({
               onClick={() => onDownload?.('tex')}
               className="size-10 border-2 border-status-failed-border flex items-center justify-center hover:bg-status-failed/20 text-status-failed transition-colors bg-fixed-white"
             >
-              <span className="font-bold text-[10px]">TEX</span>
+              <span className="font-bold text-[8px]">TEX</span>
             </button>
           </>
         )}

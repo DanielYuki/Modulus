@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router';
 import type React from 'react';
-import { Button } from '@atomic';
+import { Button, H1, Body } from '@atomic';
 import { StatusFilter, type FilterStatus, type StatusFilterOption } from '@atomic/mol.status-filter';
 import { JobCard, type JobStatus } from '@atomic/org.job-card';
 import { getBatchStatus, getPdfUrl, getTexUrl, type BatchItem } from '@/app/data/batch.gateway';
@@ -133,11 +133,11 @@ const BatchDetailPage: React.FC = () => {
               <span className="material-symbols-outlined !text-sm">chevron_right</span>
               <span className="text-text-main font-bold font-mono">#{batchId.slice(0, 8)}...</span>
             </div>
-            <h1 className="text-3xl font-bold tracking-tight text-text-main mt-2">
+            <H1>
               Batch #{batchId.slice(0, 8)}
-            </h1>
+            </H1>
             {error && (
-              <p className="text-red-600 text-sm mt-1">{error}</p>
+              <Body className="text-status-failed mt-1">{error}</Body>
             )}
           </div>
           <div className="flex items-center gap-4">

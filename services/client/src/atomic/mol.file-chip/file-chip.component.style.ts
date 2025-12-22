@@ -13,7 +13,7 @@ export const style = tv({
     ],
     content: 'flex flex-col px-3 py-1',
     filename: 'text-sm font-bold text-text-main',
-    status: 'text-[10px] text-text-secondary font-mono uppercase font-bold tracking-tight',
+    status: 'text-[8px] text-text-secondary font-mono uppercase font-bold tracking-tight',
     removeBtn: [
       'size-10 flex items-center justify-center',
       'text-text-secondary',

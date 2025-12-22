@@ -8,13 +8,13 @@ import { tv, type VariantProps } from "tailwind-variants";
 export const typography = tv({
   slots: {
     base: "font-primary text-base",
-    display: "text-4xl font-secondary mt-md font-medium",
-    h1: "text-3xl text-neutral-xstrong my-md font-secondary font-medium",
-    h2: "text-xl font-primary font-medium text-neutral-xstrong mb-sm mt-md",
-    h3: "text-base font-primary font-medium mb-sm",
-    h4: "text-sm font-primary font-medium",
-    p: "font-primary text-sm text-neutral-strong",
-    bodySecondary: "text-xs text-neutral font-primary",
+    display: "text-4xl font-secondary font-bold tracking-tight text-text-main uppercase",
+    h1: "text-3xl font-secondary font-bold tracking-tight text-text-main",
+    h2: "text-xl font-primary font-medium text-text-main",
+    h3: "text-base font-primary font-medium text-text-main",
+    h4: "text-sm font-primary font-medium text-text-main uppercase tracking-wider",
+    p: "font-primary text-sm text-text-secondary",
+    bodySecondary: "text-xs text-text-muted font-primary",
   },
 });
 
@@ -54,16 +54,16 @@ export const BodySecondary: Typography = ({ className, children }) => (
  * Input-related typography variants
  */
 export const input = tv({
-  base: ["text-sm text-neutral-strong"],
+  base: ["text-sm text-text-secondary"],
   variants: {
-    hasError: { true: "text-feedback-danger" },
+    hasError: { true: "text-status-failed" },
     type: {
-      dt: "block font-medium text-neutral-xxstrong",
+      dt: "block font-medium text-text-main",
       label: "block font-medium mb-xs",
       value: "font-normal",
       caption: "mt-xs block text-xs font-medium",
     },
-    disabled: { true: "text-neutral-soft fill-neutral-xsoft opacity-100" },
+    disabled: { true: "text-text-muted opacity-100" },
   },
 });
 
@@ -85,7 +85,7 @@ export const InputLabel: Typography<InputLabelProps> = ({
     htmlFor={htmlFor}
   >
     {children}
-    {!!isRequired && <span className="text-feedback-danger"> * </span>}
+    {!!isRequired && <span className="text-status-failed"> * </span>}
   </label>
 );
 

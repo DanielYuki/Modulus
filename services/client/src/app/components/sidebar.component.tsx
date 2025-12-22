@@ -20,14 +20,14 @@ const styles = tv({
     logoText: 'flex flex-col',
     logoTitle: 'text-xl font-bold leading-none tracking-tight text-text-main',
     logoSubtitle: 'text-xs text-text-muted mt-1 font-medium uppercase tracking-wider',
-    nav: 'flex-1 px-4 space-y-2 overflow-y-auto',
+    nav: 'flex-1 px-4 space-y-2 overflow-y-auto', // TODO: add small gap between items
     sectionLabel: 'pt-6 pb-2 px-4 text-xs font-bold text-text-muted uppercase tracking-widest',
     navItem: [
-      'flex items-center gap-3 px-4 py-3',
+      'flex items-center px-4 py-3 gap-3',
       'text-sm font-medium text-text-secondary',
       'border-2 border-transparent',
       'transition-colors duration-200',
-      'hover:bg-gray-100 hover:text-text-main hover:border-border-strong',
+      'hover:bg-surface hover:text-text-main hover:border-border-strong',
       'cursor-pointer',
     ],
     navItemActive: [
@@ -37,7 +37,7 @@ const styles = tv({
     ],
     navBadge: [
       'ml-auto flex size-5 items-center justify-center',
-      'bg-fixed-black text-[10px] text-accent-yellow font-bold',
+      'bg-fixed-black text-[8px] text-accent-yellow font-bold',
     ],
   },
 })();

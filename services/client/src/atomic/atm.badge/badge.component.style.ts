@@ -4,7 +4,7 @@ export const style = tv({
   base: [
     'inline-flex items-center justify-center',
     'px-2 py-1',
-    'text-[10px] font-bold uppercase tracking-widest',
+    'text-[8px] font-bold uppercase tracking-widest',
     'border',
   ],
   variants: {

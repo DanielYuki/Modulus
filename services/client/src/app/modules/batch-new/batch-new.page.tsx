@@ -6,6 +6,9 @@ import {
   TextArea,
   Select,
   Badge,
+  HDisplay,
+  H3,
+  H4,
 } from '@atomic';
 import { FileDropzone } from '@atomic/mol.file-dropzone';
 import { FileChip } from '@atomic/mol.file-chip';
@@ -95,11 +98,11 @@ const BatchNewPage: React.FC = () => {
       {/* Header */}
       <header className="bg-fixed-white border-b-2 border-border-strong px-8 py-6">
         <div className="max-w-6xl mx-auto">
-          <h1 className="text-4xl lg:text-5xl font-bold tracking-tight text-text-main uppercase mb-3">
+          <HDisplay className="lg:text-5xl mb-3">
             Bulk Generation
-          </h1>
+          </HDisplay>
           <div className="text-base lg:text-lg text-text-secondary leading-relaxed font-medium">
-            <span className="bg-primary px-1.5 py-0.5 text-fixed-black font-bold border-2 border-border-strong text-sm">1. Upload</span> source PDFs. <span className="bg-primary px-1.5 py-0.5 text-fixed-black font-bold border-2 border-border-strong text-sm">2. Add</span> .tex template. <span className="bg-primary px-1.5 py-0.5 text-fixed-black font-bold border-2 border-border-strong text-sm">3. Define</span> subjects.
+            <span className="bg-primary px-2 py-1 text-fixed-black font-bold border-2 border-border-strong text-sm">1. Upload</span> source PDFs. <span className="bg-primary px-2 py-1 text-fixed-black font-bold border-2 border-border-strong text-sm">2. Add</span> .tex template. <span className="bg-primary px-2 py-1 text-fixed-black font-bold border-2 border-border-strong text-sm">3. Define</span> subjects.
           </div>
         </div>
       </header>
@@ -110,9 +113,9 @@ const BatchNewPage: React.FC = () => {
           <div className="xl:col-span-2 space-y-8">
             {/* Source Files */}
             <div className="bg-surface-light p-6 border-2 border-border-strong shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
-              <h3 className="text-sm font-bold uppercase tracking-wider text-text-main mb-6 flex items-center gap-2 w-max">
+              <H4 className="mb-6 flex items-center gap-2">
                 <span className="material-symbols-outlined text-xl">upload_file</span> Source Files
-              </h3>
+              </H4>
 
               <FileDropzone
                 title="Drop PDFs and .tex template"
@@ -160,9 +163,9 @@ const BatchNewPage: React.FC = () => {
           {/* Right Column (Config) */}
           <div className="xl:col-span-1">
             <div className="bg-surface-light p-6 border-2 border-border-strong shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] flex flex-col gap-6 sticky top-6">
-              <h3 className="text-lg font-bold text-text-main flex items-center gap-2 border-b-2 border-border-strong pb-4 uppercase">
+              <H3 className="flex items-center gap-2 border-b-2 border-border-strong pb-4">
                 <span className="material-symbols-outlined">tune</span> Configuration
-              </h3>
+              </H3>
 
               <Select
                 label="Active Template"
@@ -197,7 +200,7 @@ const BatchNewPage: React.FC = () => {
 
               {/* Error Display */}
               {error && (
-                <div className="p-3 bg-red-100 border-2 border-red-500 text-red-700 text-sm font-medium">
+                <div className="p-3 bg-status-failed-bg border-2 border-status-failed-border text-status-failed text-sm font-medium">
                   {error}
                 </div>
               )}
