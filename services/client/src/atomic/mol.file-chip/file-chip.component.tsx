@@ -1,7 +1,7 @@
 import type React from 'react';
-import { fileChipStyle, type FileChipStyleProps } from './file-chip.component.style';
+import { style, type StyleVariants } from './file-chip.component.style';
 
-export interface FileChipProps extends FileChipStyleProps {
+export interface FileChipProps extends StyleVariants {
   filename: string;
   status?: string;
   onRemove?: () => void;
@@ -18,7 +18,7 @@ export const FileChip: React.FC<FileChipProps> = ({
   const isPdf = filename.toLowerCase().endsWith('.pdf');
   const isTex = filename.toLowerCase().endsWith('.tex');
   const effectiveType = fileType ?? (isTex ? 'tex' : 'pdf');
-  const chipStyles = fileChipStyle({ fileType: effectiveType });
+  const chipStyles = style({ fileType: effectiveType });
 
   return (
     <div className={chipStyles.wrapper({ class: className })}>

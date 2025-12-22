@@ -1,6 +1,6 @@
 import { tv, type VariantProps } from 'tailwind-variants';
 
-export const progressBarStyle = tv({
+export const style = tv({
   slots: {
     wrapper: 'w-full space-y-2',
     label: 'flex justify-between items-center',
@@ -21,4 +21,4 @@ export const progressBarStyle = tv({
   },
 });
 
-export type ProgressBarStyleProps = VariantProps<typeof progressBarStyle>;
+export type StyleVariants = VariantProps<typeof style>;

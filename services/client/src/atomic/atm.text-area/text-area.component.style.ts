@@ -1,6 +1,6 @@
 import { tv, type VariantProps } from 'tailwind-variants';
 
-export const textAreaStyle = tv({
+export const style = tv({
   slots: {
     wrapper: 'flex flex-col gap-2',
     label: 'text-xs font-bold uppercase tracking-wide text-text-main',
@@ -24,4 +24,4 @@ export const textAreaStyle = tv({
   },
 });
 
-export type TextAreaStyleProps = VariantProps<typeof textAreaStyle>;
+export type StyleVariants = VariantProps<typeof style>;

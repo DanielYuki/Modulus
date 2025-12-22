@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { fileDropzoneStyle } from './file-dropzone.component.style';
+import { style } from './file-dropzone.component.style';
 
 export interface FileDropzoneProps {
   accept?: string;
@@ -10,6 +10,7 @@ export interface FileDropzoneProps {
   className?: string;
 }
 
+// TODO: Review dropzone logic
 export const FileDropzone: React.FC<FileDropzoneProps> = ({
   accept = '.pdf,.tex',
   multiple = true,
@@ -21,7 +22,7 @@ export const FileDropzone: React.FC<FileDropzoneProps> = ({
   const [isDragging, setIsDragging] = React.useState(false);
   const inputRef = React.useRef<HTMLInputElement>(null);
 
-  const styles = fileDropzoneStyle({ isDragging });
+  const styles = style({ isDragging });
 
   const handleFiles = React.useCallback((newFiles: FileList | null) => {
     if (!newFiles) return;

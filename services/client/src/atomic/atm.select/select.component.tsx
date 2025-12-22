@@ -1,12 +1,12 @@
 import type React from 'react';
-import { selectStyle, type SelectStyleProps } from './select.component.style';
+import { style, type StyleVariants } from './select.component.style';
 
 export interface SelectOption {
   value: string;
   label: string;
 }
 
-export interface SelectProps extends SelectStyleProps {
+export interface SelectProps extends StyleVariants {
   label?: string;
   options: SelectOption[];
   value?: string;
@@ -28,7 +28,7 @@ export const Select: React.FC<SelectProps> = ({
   placeholder,
   error,
 }) => {
-  const styles = selectStyle({ error });
+  const styles = style({ error });
 
   return (
     <div className={styles.wrapper({ class: className })}>

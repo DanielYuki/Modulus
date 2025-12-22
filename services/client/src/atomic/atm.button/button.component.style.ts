@@ -1,6 +1,6 @@
 import { tv, type VariantProps } from 'tailwind-variants';
 
-export const buttonStyle = tv({
+export const style = tv({
   base: [
     'inline-flex items-center justify-center gap-2',
     'font-bold text-sm uppercase tracking-wide',
@@ -58,4 +58,4 @@ export const buttonStyle = tv({
   },
 });
 
-export type ButtonStyleProps = VariantProps<typeof buttonStyle>;
+export type StyleVariants = VariantProps<typeof style>;

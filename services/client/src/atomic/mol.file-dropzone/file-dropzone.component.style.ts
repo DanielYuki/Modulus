@@ -1,6 +1,6 @@
 import { tv, type VariantProps } from 'tailwind-variants';
 
-export const fileDropzoneStyle = tv({
+export const style = tv({
   slots: {
     wrapper: [
       'relative w-full group/upload',
@@ -36,4 +36,4 @@ export const fileDropzoneStyle = tv({
   },
 });
 
-export type FileDropzoneStyleProps = VariantProps<typeof fileDropzoneStyle>;
+export type StyleVariants = VariantProps<typeof style>;

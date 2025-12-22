@@ -5,28 +5,29 @@ import { Sidebar, type NavSection } from './sidebar.component';
 const defaultNavSections: NavSection[] = [
   {
     items: [
-      { path: '/documents', label: 'My Documents', icon: 'folder' },
+      // { path: '/documents', label: 'My Documents', icon: 'folder' },
       { path: '/batch/new', label: 'New Batch', icon: 'library_add' },
     ],
   },
   {
     label: 'Current Session',
     items: [
-      { path: '/batch/output', label: 'Bulk Output', icon: 'auto_awesome_motion', badge: 8 },
+      { path: '/batch/output', label: 'Bulk Output', icon: 'auto_awesome_motion', badge: 8 }, // TODO: Add badge logic
     ],
   },
-  {
-    label: 'Preferences',
-    items: [
-      { path: '/settings', label: 'Settings', icon: 'settings' },
-    ],
-  },
+  // {
+  //   label: 'Preferences',
+  //   items: [
+  //     { path: '/settings', label: 'Settings', icon: 'settings' },
+  //   ],
+  // },
 ];
 
 interface AppLayoutProps {
   navSections?: NavSection[];
 }
 
+// TODO: Create dedicated .style file
 export const AppLayout: React.FC<AppLayoutProps> = ({
   navSections = defaultNavSections,
 }) => {

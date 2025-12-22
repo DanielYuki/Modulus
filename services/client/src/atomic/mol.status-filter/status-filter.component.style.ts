@@ -1,6 +1,6 @@
 import { tv, type VariantProps } from 'tailwind-variants';
 
-export const statusFilterStyle = tv({
+export const style = tv({
   slots: {
     wrapper: 'flex flex-wrap gap-4',
     button: [
@@ -34,4 +34,4 @@ export const statusFilterStyle = tv({
   },
 });
 
-export type StatusFilterStyleProps = VariantProps<typeof statusFilterStyle>;
+export type StyleVariants = VariantProps<typeof style>;

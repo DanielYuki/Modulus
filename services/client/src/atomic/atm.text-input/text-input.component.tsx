@@ -1,7 +1,7 @@
 import type React from 'react';
-import { textInputStyle, type TextInputStyleProps } from './text-input.component.style';
+import { style, type StyleVariants } from './text-input.component.style';
 
-export interface TextInputProps extends TextInputStyleProps {
+export interface TextInputProps extends StyleVariants {
   label?: string;
   placeholder?: string;
   value?: string;
@@ -21,7 +21,7 @@ export const TextInput: React.FC<TextInputProps> = ({
   id,
   error,
 }) => {
-  const styles = textInputStyle({ error });
+  const styles = style({ error });
 
   return (
     <div className={styles.wrapper({ class: className })}>

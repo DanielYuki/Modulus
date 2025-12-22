@@ -1,6 +1,6 @@
 import { tv, type VariantProps } from 'tailwind-variants';
 
-export const fileChipStyle = tv({
+export const style = tv({
   slots: {
     wrapper: [
       'flex items-center gap-0',
@@ -33,4 +33,4 @@ export const fileChipStyle = tv({
   },
 });
 
-export type FileChipStyleProps = VariantProps<typeof fileChipStyle>;
+export type StyleVariants = VariantProps<typeof style>;

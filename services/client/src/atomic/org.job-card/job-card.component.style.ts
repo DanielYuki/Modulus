@@ -1,6 +1,6 @@
 import { tv, type VariantProps } from 'tailwind-variants';
 
-export const jobCardStyle = tv({
+export const style = tv({
   slots: {
     wrapper: [
       'bg-fixed-white border-2 border-border-strong',
@@ -48,4 +48,4 @@ export const jobCardStyle = tv({
   },
 });
 
-export type JobCardStyleProps = VariantProps<typeof jobCardStyle>;
+export type StyleVariants = VariantProps<typeof style>;

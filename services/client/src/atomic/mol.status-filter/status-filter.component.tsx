@@ -1,5 +1,5 @@
 import type React from 'react';
-import { statusFilterStyle } from './status-filter.component.style';
+import { style } from './status-filter.component.style';
 
 export type FilterStatus = 'completed' | 'processing' | 'failed' | 'queued';
 
@@ -22,13 +22,13 @@ export const StatusFilter: React.FC<StatusFilterProps> = ({
   onSelect,
   className,
 }) => {
-  const styles = statusFilterStyle();
+  const styles = style();
 
   return (
     <div className={styles.wrapper({ class: className })}>
       {options.map((option) => {
         const isActive = option.status === activeStatus;
-        const buttonStyles = statusFilterStyle({ active: isActive, status: option.status });
+        const buttonStyles = style({ active: isActive, status: option.status });
 
         return (
           <button

@@ -2,6 +2,7 @@ import type React from 'react';
 import { NavLink, useLocation } from 'react-router';
 import { tv } from 'tailwind-variants';
 
+// TODO: move to dedicated .style file
 const styles = tv({
   slots: {
     wrapper: [
@@ -67,7 +68,6 @@ export const Sidebar: React.FC<SidebarProps> = ({ sections }) => {
           to="/"
           className={styles.logo()}
         >
-          {/* <div className={styles.logo()}> */}
           <div className={styles.logoIcon()}>
             <span className="material-symbols-outlined !text-2xl text-fixed-black font-bold">article</span>
           </div>
@@ -75,7 +75,6 @@ export const Sidebar: React.FC<SidebarProps> = ({ sections }) => {
             <span className={styles.logoTitle()}>AI Docs</span>
             <span className={styles.logoSubtitle()}>Bulk Processor</span>
           </div>
-          {/* </div> */}
         </NavLink>
       </div>
 

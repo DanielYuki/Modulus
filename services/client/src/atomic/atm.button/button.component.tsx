@@ -1,7 +1,7 @@
 import type React from 'react';
-import { buttonStyle, type ButtonStyleProps } from './button.component.style';
+import { style, type StyleVariants } from './button.component.style';
 
-export interface ButtonProps extends ButtonStyleProps {
+export interface ButtonProps extends StyleVariants {
   children: React.ReactNode;
   className?: string;
   disabled?: boolean;
@@ -23,11 +23,12 @@ export const Button: React.FC<ButtonProps> = ({
 }) => {
   return (
     <button
-      className={buttonStyle({ variant, size, fullWidth, class: className })}
+      className={style({ variant, size, fullWidth, class: className })}
       disabled={disabled || loading}
       onClick={onClick}
       type={type}
     >
+      {/* TODO: Create and Replace with proper ActivityIndicator */}
       {loading ? (
         <span className="inline-block w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin" />
       ) : (

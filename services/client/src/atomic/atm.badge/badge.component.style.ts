@@ -1,6 +1,6 @@
 import { tv, type VariantProps } from 'tailwind-variants';
 
-export const badgeStyle = tv({
+export const style = tv({
   base: [
     'inline-flex items-center justify-center',
     'px-2 py-1',
@@ -21,4 +21,4 @@ export const badgeStyle = tv({
   },
 });
 
-export type BadgeStyleProps = VariantProps<typeof badgeStyle>;
+export type StyleVariants = VariantProps<typeof style>;

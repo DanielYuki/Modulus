@@ -2,11 +2,11 @@ import type React from 'react';
 import { Badge } from '../atm.badge';
 import { Button } from '../atm.button';
 import { ProgressBar } from '../atm.progress-bar';
-import { jobCardStyle, type JobCardStyleProps } from './job-card.component.style';
+import { style, type StyleVariants } from './job-card.component.style';
 
 export type JobStatus = 'done' | 'active' | 'failed' | 'queued';
 
-export interface JobCardProps extends JobCardStyleProps {
+export interface JobCardProps extends StyleVariants {
   filename: string;
   fileSize?: string;
   statusLabel: string;
@@ -34,7 +34,7 @@ export const JobCard: React.FC<JobCardProps> = ({
   onDownload,
   className,
 }) => {
-  const styles = jobCardStyle({ status });
+  const styles = style({ status });
   const badgeStatus = status === 'done' ? 'done'
     : status === 'active' ? 'active'
       : status === 'failed' ? 'failed'

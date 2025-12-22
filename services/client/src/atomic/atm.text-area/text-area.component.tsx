@@ -1,7 +1,7 @@
 import type React from 'react';
-import { textAreaStyle, type TextAreaStyleProps } from './text-area.component.style';
+import { style, type StyleVariants } from './text-area.component.style';
 
-export interface TextAreaProps extends TextAreaStyleProps {
+export interface TextAreaProps extends StyleVariants {
   label?: string;
   placeholder?: string;
   value?: string;
@@ -23,7 +23,7 @@ export const TextArea: React.FC<TextAreaProps> = ({
   error,
   rows = 4,
 }) => {
-  const styles = textAreaStyle({ error });
+  const styles = style({ error });
 
   return (
     <div className={styles.wrapper({ class: className })}>
