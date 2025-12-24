@@ -1,3 +1,5 @@
+# DEPRECATED
+
 """
 Application Layer - Content Generation Use Case
 

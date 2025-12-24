@@ -15,7 +15,7 @@ from src.domain.interfaces import (
     LatexCompilerInterface,
     CompilationError,
 )
-from src.infrastructure.job_store import InMemoryJobStore
+from src.infrastructure.file_job_store import FileJobStore
 
 
 class BatchGenerationUseCase:
@@ -67,7 +67,7 @@ class BatchGenerationUseCase:
         )
         
         # Store job
-        InMemoryJobStore.create_job(job)
+        FileJobStore.create_job(job)
         
         return job
     
@@ -81,12 +81,12 @@ class BatchGenerationUseCase:
         Returns:
             The updated BatchJob
         """
-        job = InMemoryJobStore.get_job(job_id)
+        job = FileJobStore.get_job(job_id)
         if not job:
             raise ValueError(f"Job {job_id} not found")
         
         job.status = JobStatus.PROCESSING
-        InMemoryJobStore.update_job(job)
+        FileJobStore.update_job(job)
         
         # Create job output directory
         job_output_dir = os.path.join(self.output_dir, job_id)
@@ -98,7 +98,7 @@ class BatchGenerationUseCase:
             try:
                 # Generate tex content
                 item.status = ItemStatus.GENERATING
-                InMemoryJobStore.update_job(job)
+                FileJobStore.update_job(job)
                 
                 tex_content = self._generate_tex_for_subject(
                     subject=item.subject,
@@ -110,7 +110,7 @@ class BatchGenerationUseCase:
                 
                 # Compile to PDF
                 item.status = ItemStatus.COMPILING
-                InMemoryJobStore.update_job(job)
+                FileJobStore.update_job(job)
                 
                 filename = f"item_{idx}_{self._sanitize_filename(item.subject)}"
                 pdf_path = self.latex_compiler.compile_to_pdf(
@@ -130,16 +130,16 @@ class BatchGenerationUseCase:
                 item.error = f"Generation failed: {str(e)}"
                 all_succeeded = False
             
-            InMemoryJobStore.update_job(job)
+            FileJobStore.update_job(job)
         
         job.status = JobStatus.COMPLETED if all_succeeded else JobStatus.FAILED
-        InMemoryJobStore.update_job(job)
+        FileJobStore.update_job(job)
         
         return job
     
     def get_status(self, job_id: str) -> Optional[BatchJob]:
         """Get the current status of a batch job."""
-        return InMemoryJobStore.get_job(job_id)
+        return FileJobStore.get_job(job_id)
     
     def _generate_tex_for_subject(
         self,
@@ -148,13 +148,18 @@ class BatchGenerationUseCase:
         reference_text: Optional[str],
         instructions: Optional[str],
     ) -> str:
-        """Generate LaTeX content for a single subject."""
-        # Build prompt for the AI
-        prompt = f"Generate LaTeX content for the subject: {subject}"
-        if instructions:
-            prompt += f"\n\nAdditional instructions: {instructions}"
+        """
+        Generate a complete LaTeX document for a single subject.
         
-        # Use existing generation infrastructure
+        Uses the template-filling approach where the AI fills in all
+        placeholders while preserving the entire document structure.
+        """
+        # Build the prompt - the AI will fill in the template
+        prompt = f"Fill the template with content for: {subject}"
+        if instructions:
+            prompt += f"\n\nAdditional instructions from user: {instructions}"
+        
+        # Create the generation request
         request = GenerationRequest(
             prompt=prompt,
             subject=subject,
@@ -165,12 +170,14 @@ class BatchGenerationUseCase:
             template_files={"template.tex": template},
         )
         
+        # Generate the content
         result = self.ai_generator.generate(request)
         
-        # Return the main generated content
-        # Try to get questoes.tex first, otherwise return first file
-        if "questoes.tex" in result.files:
-            return result.files["questoes.tex"]
+        # The new adapter returns the complete document in "output.tex"
+        if "output.tex" in result.files:
+            return result.files["output.tex"]
+        
+        # Fallback: return first available file
         return list(result.files.values())[0] if result.files else ""
     
     def _sanitize_filename(self, name: str) -> str:

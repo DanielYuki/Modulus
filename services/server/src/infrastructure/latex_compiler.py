@@ -1,7 +1,7 @@
 """
 Infrastructure Layer - LaTeX Compiler Adapter
 
-Implements LatexCompilerInterface using pdflatex.
+Implements LatexCompilerInterface using pdflatex. # Todo: Test in dockerized environment
 """
 import os
 import subprocess
@@ -37,7 +37,7 @@ class PdfLatexAdapter(LatexCompilerInterface):
             with open(tex_path, "w", encoding="utf-8") as f:
                 f.write(tex_content)
             
-            # Run pdflatex (twice for references)
+            # Run pdflatex (twice for references) // TODO: Review this logic
             try:
                 for _ in range(2):  # Run twice for cross-references
                     result = subprocess.run(
@@ -50,6 +50,8 @@ class PdfLatexAdapter(LatexCompilerInterface):
                         ],
                         capture_output=True,
                         text=True,
+                        encoding="utf-8",
+                        errors="replace",  # Handle any encoding issues gracefully
                         timeout=60,  # 60 second timeout
                     )
                     

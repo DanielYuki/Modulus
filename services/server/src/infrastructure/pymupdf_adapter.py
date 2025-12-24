@@ -1,5 +1,5 @@
 """
-Infrastructure Layer - PyMuPDF Adapter
+Infrastructure Layer - PyMuPDF Adapter -> TODO: Test it further
 
 Implements PdfExtractorInterface using PyMuPDF (fitz).
 """
@@ -7,7 +7,7 @@ import fitz  # PyMuPDF
 
 from src.domain.interfaces import PdfExtractorInterface
 
-
+# Not properly used yet
 class PyMuPDFAdapter(PdfExtractorInterface):
     """Concrete implementation of PDF extraction using PyMuPDF."""
     

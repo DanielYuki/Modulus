@@ -1,7 +1,9 @@
 """
-Infrastructure Layer - OpenAI Adapter
+Infrastructure Layer - OpenAI Adapter // TODO: Implement universal AI/Agent adapter
 
 Implements AIGeneratorInterface using OpenAI API.
+Uses a template-filling approach where the AI fills in placeholders
+while preserving the entire LaTeX document structure.
 """
 import re
 from openai import OpenAI
@@ -11,29 +13,11 @@ from src.domain.entities import GenerationRequest, GeneratedContent
 from src.domain.interfaces import AIGeneratorInterface
 
 
-# Standard LaTeX document wrapper
-LATEX_DOCUMENT_WRAPPER = r"""\documentclass[12pt,a4paper]{article}
-\usepackage[utf8]{inputenc}
-\usepackage[brazil]{babel}
-\usepackage{amsmath,amssymb,amsfonts}
-\usepackage{enumitem}
-\usepackage{booktabs}
-\usepackage{geometry}
-\usepackage{float}
-\usepackage{tikz}
-\usepackage{graphicx}
-\geometry{margin=2.5cm}
-
-\begin{document}
-
-%CONTENT%
-
-\end{document}
-"""
-
-
 class OpenAIAdapter(AIGeneratorInterface):
     """Concrete implementation of AI generation using OpenAI."""
+    
+    # Model to use for generation - gpt-4-turbo is better at following complex formatting
+    MODEL = "gpt-4-turbo"
     
     def __init__(self):
         self.client = OpenAI(api_key=OPENAI_API_KEY) if OPENAI_API_KEY else None
@@ -42,102 +26,163 @@ class OpenAIAdapter(AIGeneratorInterface):
         if not self.client:
             raise RuntimeError("OpenAI API key not configured")
         
-        # Build the system prompt
-        system_prompt = self._build_system_prompt(request)
+        # Get the template content
+        template_content = self._get_template_content(request)
+        
+        if not template_content:
+            raise ValueError("No template provided for generation")
+        
+        # Build the prompt for template filling
+        system_prompt = self._build_template_filling_prompt(request, template_content)
+        user_prompt = self._build_user_prompt(request)
         
         # Call OpenAI
         response = self.client.chat.completions.create(
-            model="gpt-4o",
+            model=self.MODEL,
             messages=[
                 {"role": "system", "content": system_prompt},
-                {"role": "user", "content": request.prompt},
+                {"role": "user", "content": user_prompt},
             ],
             temperature=0.7,
+            max_tokens=4096,  # gpt-4-turbo max is 4096
         )
         
         content = response.choices[0].message.content or ""
         
-        # Parse the response into files
+        # Parse and return the complete document
         return self._parse_response(content, request)
     
-    def _build_system_prompt(self, request: GenerationRequest) -> str:
-        template_context = ""
-        if request.template_files:
-            template_context = "Use these LaTeX templates as reference for formatting:\n"
-            for name, content in request.template_files.items():
-                template_context += f"\n--- {name} ---\n{content}\n"
+    def _get_template_content(self, request: GenerationRequest) -> str:
+        """Extract template content from the request."""
+        if not request.template_files:
+            return ""
         
-        reference_context = ""
+        # Get the first (and should be only) template
+        if "template.tex" in request.template_files:
+            return request.template_files["template.tex"]
+        
+        # Return the first template file found
+        return list(request.template_files.values())[0] if request.template_files else ""
+    
+    def _build_template_filling_prompt(self, request: GenerationRequest, template: str) -> str:
+        """Build the system prompt for template-filling approach."""
+        
+        # Extract placeholders from template for guidance
+        placeholders = self._extract_placeholders(template)
+        placeholder_list = "\n".join(f"  - {p}" for p in placeholders) if placeholders else "  (Analyze the template for sections to fill)"
+        
+        return f"""You are an expert LaTeX content generator for Brazilian educational materials and competitive exams.
+
+YOUR TASK:
+You will receive a complete LaTeX template with placeholders marked by [PLACEHOLDER_NAME] or similar patterns.
+Your job is to fill in ALL placeholders with high-quality, relevant content for the given subject/topic.
+
+CRITICAL RULES:
+1. Return ONLY the complete .tex file - no markdown code blocks, no explanations, no extra text
+2. PRESERVE ALL LaTeX commands, packages, environments, and document structure EXACTLY as provided
+3. DO NOT modify any \\usepackage, \\documentclass, \\newcommand, or \\newtcolorbox definitions
+4. DO NOT add or remove any LaTeX environments - only fill in the content within them
+5. All placeholder text like [PLACEHOLDER] should be replaced with appropriate content
+6. The output MUST be a valid, directly compilable LaTeX document
+7. Write content in Portuguese (Brazilian) unless specified otherwise
+
+PLACEHOLDERS TO FILL:
+{placeholder_list}
+
+CONTENT GUIDELINES:
+- For theory sections: Provide clear, concise explanations with formulas
+- For questions: Create challenging, exam-style questions appropriate for competitive exams
+- For answer keys: Provide correct answers matching the questions
+- For strategy sections: Include practical tips and methods
+- Maintain consistent difficulty level throughout
+
+SUBJECT: {request.subject}
+TOPIC: {request.topic}
+DIFFICULTY: {request.difficulty}
+NUMBER OF QUESTIONS: {request.num_questions}"""
+
+    def _build_user_prompt(self, request: GenerationRequest) -> str:
+        """Build the user prompt with template and context."""
+        
+        template_content = self._get_template_content(request)
+        
+        prompt_parts = [
+            f"Generate a complete educational material for: {request.subject}",
+            f"\nSpecific topic: {request.topic}",
+        ]
+        
         if request.reference_text:
-            reference_context = f"\nReference Material:\n{request.reference_text}\n"
+            # Truncate if too long
+            ref_text = request.reference_text[:3000] if len(request.reference_text) > 3000 else request.reference_text
+            prompt_parts.append(f"\nREFERENCE MATERIAL (use for context and content ideas):\n{ref_text}")
         
-        return f"""You are an expert LaTeX content generator for Brazilian competitive exams.
-Subject: {request.subject}
-Topic: {request.topic}
-Difficulty: {request.difficulty}
-Number of questions: {request.num_questions}
+        prompt_parts.append(f"\n\nTEMPLATE TO FILL:\n{template_content}")
+        prompt_parts.append("\n\nReturn the complete .tex document with all placeholders filled:")
+        
+        return "\n".join(prompt_parts)
+    
 
-{template_context}
-{reference_context}
-
-IMPORTANT FORMATTING RULES:
-1. Return ONLY the LaTeX content for questions - no markdown, no explanations
-2. Do NOT include \\documentclass, \\usepackage, \\begin{{document}}, or \\end{{document}}
-3. Start directly with \\section* or the question content
-4. Use \\begin{{enumerate}} for question lists
-5. For math, use $...$ for inline and \\[...\\] or equation environment for display
-
-Generate the LaTeX content for questions on the given topic."""
+    # TODO: Review this logic
+    def _extract_placeholders(self, template: str) -> list[str]:
+        """Extract placeholder patterns from the template."""
+        # Match [PLACEHOLDER_NAME] patterns
+        pattern = r'\[([A-Z][A-Z0-9_\s/]+)\]'
+        matches = re.findall(pattern, template)
+        # Return unique placeholders
+        return list(set(matches))
     
     def _parse_response(self, content: str, request: GenerationRequest) -> GeneratedContent:
-        """Parse AI response and create complete LaTeX documents."""
+        """Parse AI response - extract clean LaTeX document."""
         
-        # Extract LaTeX from markdown code blocks if present
-        latex_content = self._extract_latex_from_markdown(content)
+        # Clean up the response
+        latex_content = self._clean_latex_response(content)
         
-        # Wrap in document structure
-        full_document = LATEX_DOCUMENT_WRAPPER.replace("%CONTENT%", latex_content)
-        
+        # Return as the main output file
         files = {
-            "questoes.tex": full_document,
-            "gabarito.tex": self._create_answer_key_stub(),
+            "output.tex": latex_content,
         }
+        
         return GeneratedContent(
             files=files,
-            metadata={"model": "gpt-4o", "num_questions": request.num_questions}
+            metadata={
+                "model": self.MODEL,
+                "subject": request.subject,
+                "topic": request.topic,
+            }
         )
     
-    def _extract_latex_from_markdown(self, content: str) -> str:
-        """Extract LaTeX code from markdown code blocks."""
+    # TODO: This should not be necessary, but keeping it for now just for reinforcement
+    def _clean_latex_response(self, content: str) -> str:
+        """Clean up the AI response to extract pure LaTeX."""
         
-        # Try to find latex code block
+        # Remove markdown code blocks if present
+        # Handle ```latex ... ``` or ```tex ... ``` or ``` ... ```
         latex_block_pattern = r"```(?:latex|tex)?\s*\n(.*?)```"
         matches = re.findall(latex_block_pattern, content, re.DOTALL)
         
         if matches:
-            # Return all matched blocks joined
-            return "\n\n".join(matches)
+            # Return the first (and should be only) code block
+            return matches[0].strip()
         
-        # If no code blocks, try to clean up the text
-        # Remove ### headers
-        content = re.sub(r"###.*?\n", "", content)
-        # Remove ``` if orphaned
-        content = content.replace("```latex", "").replace("```tex", "").replace("```", "")
-        # Remove common markdown phrases
-        content = re.sub(r"Certainly!.*?\n", "", content)
-        content = re.sub(r"Here is.*?\n", "", content)
-        content = re.sub(r"Below is.*?\n", "", content)
+        # If no code blocks, clean up common AI preamble/postamble
+        lines = content.split('\n')
+        clean_lines = []
+        in_document = False
         
+        for line in lines:
+            # Start capturing from \documentclass
+            if line.strip().startswith('\\documentclass'):
+                in_document = True
+            
+            if in_document:
+                clean_lines.append(line)
+            
+            # Stop after \end{document}
+            if '\\end{document}' in line:
+                break
+        
+        if clean_lines:
+            return '\n'.join(clean_lines)
+        
+        # If no document markers found, return as-is (might already be clean)
         return content.strip()
-    
-    def _create_answer_key_stub(self) -> str:
-        """Create a basic answer key document."""
-        return LATEX_DOCUMENT_WRAPPER.replace(
-            "%CONTENT%",
-            r"""\section*{Gabarito}
-
-\begin{center}
-\textit{Respostas serão geradas automaticamente.}
-\end{center}
-"""
-        )

@@ -37,3 +37,14 @@ class CreateBatchResponse(BaseModel):
     """Response body for POST /api/batch endpoint."""
     job_id: str
     message: str
+
+
+class BatchListItem(BaseModel):
+    """Summary of a batch for list view."""
+    id: str
+    status: str  # pending, processing, completed, failed
+    total_items: int
+    completed_items: int
+    failed_items: int
+    created_at: str  # ISO format timestamp
+

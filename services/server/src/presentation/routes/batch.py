@@ -12,13 +12,14 @@ from src.presentation.schemas.batch_schemas import (
     BatchStatusResponse,
     BatchItemResponse,
     CreateBatchResponse,
+    BatchListItem,
 )
 from src.application.batch_generation import BatchGenerationUseCase
 from src.domain.batch_entities import ItemStatus
 from src.infrastructure.openai_adapter import OpenAIAdapter
 from src.infrastructure.pymupdf_adapter import PyMuPDFAdapter
 from src.infrastructure.latex_compiler import PdfLatexAdapter
-from src.infrastructure.job_store import InMemoryJobStore
+from src.infrastructure.file_job_store import FileJobStore
 
 router = APIRouter()
 
@@ -83,6 +84,26 @@ async def create_batch(
     )
 
 
+@router.get("/batch", response_model=list[BatchListItem])
+async def list_batches():
+    """
+    List all batch jobs.
+    
+    Returns a summary of each batch, sorted by creation date (newest first).
+    """
+    jobs = FileJobStore.list_jobs()
+    return [
+        BatchListItem(
+            id=job.id,
+            status=job.status.value,
+            total_items=len(job.items),
+            completed_items=sum(1 for i in job.items if i.status == ItemStatus.DONE),
+            failed_items=sum(1 for i in job.items if i.status == ItemStatus.ERROR),
+            created_at=job.created_at.isoformat(),
+        )
+        for job in jobs
+    ]
+
 @router.get("/batch/{job_id}", response_model=BatchStatusResponse)
 async def get_batch_status(job_id: str):
     """
@@ -90,7 +111,7 @@ async def get_batch_status(job_id: str):
     
     Returns the overall job status and status of each item.
     """
-    job = InMemoryJobStore.get_job(job_id)
+    job = FileJobStore.get_job(job_id)
     
     if not job:
         raise HTTPException(status_code=404, detail=f"Job {job_id} not found")
@@ -125,7 +146,7 @@ async def get_item_tex(job_id: str, idx: int):
     """
     Download the generated .tex file for a specific item.
     """
-    job = InMemoryJobStore.get_job(job_id)
+    job = FileJobStore.get_job(job_id)
     
     if not job:
         raise HTTPException(status_code=404, detail=f"Job {job_id} not found")
@@ -156,7 +177,7 @@ async def get_item_pdf(job_id: str, idx: int):
     
     Use this URL directly in a browser tab for viewing.
     """
-    job = InMemoryJobStore.get_job(job_id)
+    job = FileJobStore.get_job(job_id)
     
     if not job:
         raise HTTPException(status_code=404, detail=f"Job {job_id} not found")
@@ -186,7 +207,7 @@ async def trigger_processing(job_id: str):
     
     Use this if background processing failed to start.
     """
-    job = InMemoryJobStore.get_job(job_id)
+    job = FileJobStore.get_job(job_id)
     
     if not job:
         raise HTTPException(status_code=404, detail=f"Job {job_id} not found")
