@@ -28,6 +28,24 @@ export interface CreateBatchResponse {
   message: string;
 }
 
+export interface BatchListItem {
+  id: string;
+  status: "pending" | "processing" | "completed" | "failed";
+  total_items: number;
+  completed_items: number;
+  failed_items: number;
+  created_at: string;
+}
+
+/**
+ * List all batch jobs.
+ */
+export async function listBatches(): Promise<BatchListItem[]> {
+  const response = await api.get<BatchListItem[]>("/api/batch");
+  return response.data;
+}
+
+
 /**
  * Create a new batch generation job.
  */

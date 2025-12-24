@@ -1,83 +1,46 @@
+import { useState, useEffect } from 'react';
 import type React from 'react';
 import { useNavigate, useMatch } from 'react-router';
-import { Button, H1, H3, BodySecondary, Badge } from '@atomic';
+import { Button, H1, H3, BodySecondary, Badge, Body } from '@atomic';
 import { BatchesRoutes } from './batches.routes';
 import { BatchesRouter } from './detail/batches.router';
+import { listBatches, type BatchListItem } from '@/app/data/batch.gateway';
 
-// Mock data for demonstration - replace with actual API call
-const mockBatches = [
-  {
-    id: '2940',
-    status: 'processing' as const,
-    startedAt: 'Today, 10:42 AM',
-    progress: 45,
-    processedCount: 8,
-    totalCount: 14,
-  },
-  {
-    id: '2939',
-    status: 'completed' as const,
-    date: 'Oct 24, 2023',
-    documentCount: 142,
-    successRate: 100,
-    size: '245 MB',
-  },
-  {
-    id: '2938',
-    status: 'completed' as const,
-    date: 'Oct 23, 2023',
-    documentCount: 56,
-    successRate: 100,
-    size: '89 MB',
-  },
-  {
-    id: '2937',
-    status: 'needs_review' as const,
-    date: 'Oct 22, 2023',
-    documentCount: 12,
-    successRate: 83,
-    size: '12 MB',
-  },
-  {
-    id: '2936',
-    status: 'archived' as const,
-    date: 'Oct 20, 2023',
-    documentCount: 205,
-    successRate: 100,
-    size: '310 MB',
-  },
-];
+// API status to UI status mapping
+type UIStatus = 'processing' | 'completed' | 'failed' | 'pending';
 
-type BatchStatus = 'processing' | 'completed' | 'needs_review' | 'archived';
+const statusToBadge: Record<UIStatus, 'ready' | 'done' | 'failed' | 'queued'> = {
+  processing: 'ready',
+  completed: 'done',
+  failed: 'failed',
+  pending: 'queued',
+};
+
+const statusBarStyle: Record<UIStatus, React.CSSProperties> = {
+  processing: { backgroundColor: 'var(--color-primary)' },
+  completed: { backgroundColor: 'var(--color-status-done)' },
+  failed: { backgroundColor: 'var(--color-status-failed)' },
+  pending: { backgroundColor: 'var(--color-status-queued)' },
+};
 
 interface BatchCardProps {
-  batch: (typeof mockBatches)[number];
+  batch: BatchListItem;
   onClick: () => void;
 }
 
-// Badge status mapping
-const badgeStatusMap: Record<BatchStatus, 'ready' | 'done' | 'failed' | 'queued'> = {
-  processing: 'ready',
-  completed: 'done',
-  needs_review: 'failed',
-  archived: 'queued',
-};
-
-// TODO: This is bad lmao
-// Using CSS variable values for inline styles (to avoid Tailwind purging)
-const statusBarStyle: Record<BatchStatus, React.CSSProperties> = {
-  processing: { backgroundColor: 'var(--color-primary)' },
-  completed: { backgroundColor: 'var(--color-status-done)' },
-  needs_review: { backgroundColor: 'var(--color-status-failed)' },
-  archived: { backgroundColor: 'var(--color-status-queued)' },
-};
-
 const BatchCard: React.FC<BatchCardProps> = ({ batch, onClick }) => {
-  const badgeStatus = badgeStatusMap[batch.status];
-  const statusLabel = batch.status === 'needs_review' ? 'Needs Review' : batch.status.charAt(0).toUpperCase() + batch.status.slice(1);
-  const isProcessing = batch.status === 'processing';
-  const isArchived = batch.status === 'archived';
-  const isNeedsReview = batch.status === 'needs_review';
+  const status = batch.status as UIStatus;
+  const badgeStatus = statusToBadge[status];
+  const statusLabel = status.charAt(0).toUpperCase() + status.slice(1);
+  const isProcessing = status === 'processing';
+
+  // Format date for display
+  const createdDate = new Date(batch.created_at);
+  const dateStr = createdDate.toLocaleDateString('en-US', {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric',
+  });
 
   return (
     <div
@@ -86,13 +49,12 @@ const BatchCard: React.FC<BatchCardProps> = ({ batch, onClick }) => {
         group relative bg-fixed-white border-2 border-border-strong p-0 flex flex-col md:flex-row 
         hover:translate-x-[-4px] hover:translate-y-[-4px] transition-all duration-200 cursor-pointer
         hover:shadow-geo
-        ${isArchived ? 'opacity-60 hover:opacity-100 bg-surface' : ''}
       `}
     >
       {/* Status bar */}
       <div
-        className={`w-2 shrink-0 border-r-2 border-border-strong`}
-        style={statusBarStyle[batch.status]}
+        className="w-2 shrink-0 border-r-2 border-border-strong"
+        style={statusBarStyle[status]}
       />
 
       <div className="flex-1 p-6 flex flex-col md:flex-row md:items-center gap-6">
@@ -100,19 +62,18 @@ const BatchCard: React.FC<BatchCardProps> = ({ batch, onClick }) => {
         <div className="flex items-center gap-4 flex-1">
           <div className="size-12 flex items-center justify-center border-2 border-border-strong">
             <span className={`material-symbols-outlined ${isProcessing ? 'animate-spin' : ''}`}>
-              {isProcessing ? 'progress_activity' : isNeedsReview ? 'warning' : isArchived ? 'inventory_2' : 'check_circle'}
+              {isProcessing ? 'progress_activity' : status === 'failed' ? 'warning' : 'check_circle'}
             </span>
           </div>
           <div>
             <div className="flex items-center gap-2 mb-1">
-              <H3 className={isArchived ? 'text-text-muted' : ''}>
-                Batch #{batch.id}
+              <H3>
+                Batch #{batch.id.slice(0, 8)}
               </H3>
             </div>
-            <BodySecondary className={`font-mono uppercase tracking-wide ${isArchived ? 'opacity-60' : ''}`}>
-              {isProcessing
-                ? `Started: ${batch.startedAt}`
-                : `${batch.date} • ${batch.documentCount} Documents`}
+            <BodySecondary className="font-mono uppercase tracking-wide">
+              {dateStr} • {batch.total_items} items
+              {batch.failed_items > 0 && ` • ${batch.failed_items} failed`}
             </BodySecondary>
           </div>
         </div>
@@ -131,11 +92,31 @@ const BatchCard: React.FC<BatchCardProps> = ({ batch, onClick }) => {
 
 const BatchesPage: React.FC = () => {
   const navigate = useNavigate();
+  const [batches, setBatches] = useState<BatchListItem[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   // Check if we're on a detail route
   const isDetailRoute = useMatch('/batches/:batchId');
 
-  // TODO: review this logic
+  // Fetch batches on mount
+  useEffect(() => {
+    const fetchBatches = async () => {
+      try {
+        const data = await listBatches();
+        setBatches(data);
+        setError(null);
+      } catch (err) {
+        console.error('Failed to fetch batches:', err);
+        setError('Failed to load batches');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchBatches();
+  }, []);
+
   // If on detail route, render the router
   if (isDetailRoute) {
     return <BatchesRouter />;
@@ -159,16 +140,45 @@ const BatchesPage: React.FC = () => {
       {/* Content */}
       <div className="p-8">
         <div className="max-w-[1200px] mx-auto">
+          {/* Loading State */}
+          {isLoading && (
+            <div className="flex items-center justify-center py-20">
+              <span className="material-symbols-outlined text-4xl animate-spin text-primary">
+                progress_activity
+              </span>
+            </div>
+          )}
+
+          {/* Error State */}
+          {error && (
+            <div className="p-4 bg-status-failed-bg border-2 border-status-failed-border text-status-failed text-center">
+              <Body className="text-status-failed">{error}</Body>
+            </div>
+          )}
+
+          {/* Empty State */}
+          {!isLoading && !error && batches.length === 0 && (
+            <div className="flex flex-col items-center justify-center py-20 gap-4">
+              <span className="material-symbols-outlined text-6xl text-text-muted">
+                folder_open
+              </span>
+              <H3>No batches yet</H3>
+              <BodySecondary>Create your first batch to get started</BodySecondary>
+            </div>
+          )}
+
           {/* Batch List */}
-          <div className="flex flex-col gap-4">
-            {mockBatches.map((batch) => (
-              <BatchCard
-                key={batch.id}
-                batch={batch}
-                onClick={() => navigate(`${BatchesRoutes.List}/${batch.id}`)}
-              />
-            ))}
-          </div>
+          {!isLoading && !error && batches.length > 0 && (
+            <div className="flex flex-col gap-4">
+              {batches.map((batch) => (
+                <BatchCard
+                  key={batch.id}
+                  batch={batch}
+                  onClick={() => navigate(`${BatchesRoutes.List}/${batch.id}`)}
+                />
+              ))}
+            </div>
+          )}
         </div>
       </div>
     </>
