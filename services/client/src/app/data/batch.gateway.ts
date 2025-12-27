@@ -3,39 +3,15 @@
  * Handles communication with batch generation endpoints.
  */
 import { api } from "@/app/core/api";
+import type {
+  BatchItem,
+  BatchJob,
+  BatchListItem,
+  CreateBatchResult,
+} from "@/app/domain/batch.entities";
 
-// Types matching backend schemas
-export interface BatchItem {
-  index: number;
-  subject: string;
-  status: "pending" | "generating" | "compiling" | "done" | "error";
-  tex_available: boolean;
-  pdf_available: boolean;
-  error: string | null;
-}
-
-export interface BatchStatusResponse {
-  id: string;
-  status: "pending" | "processing" | "completed" | "failed";
-  total_items: number;
-  completed_items: number;
-  failed_items: number;
-  items: BatchItem[];
-}
-
-export interface CreateBatchResponse {
-  job_id: string;
-  message: string;
-}
-
-export interface BatchListItem {
-  id: string;
-  status: "pending" | "processing" | "completed" | "failed";
-  total_items: number;
-  completed_items: number;
-  failed_items: number;
-  created_at: string;
-}
+// Re-export types for convenience (consumers can import from gateway or domain) // TODO: Remove these re-exports
+export type { BatchItem, BatchJob, BatchListItem, CreateBatchResult };
 
 /**
  * List all batch jobs.
@@ -45,7 +21,6 @@ export async function listBatches(): Promise<BatchListItem[]> {
   return response.data;
 }
 
-
 /**
  * Create a new batch generation job.
  */
@@ -54,7 +29,7 @@ export async function createBatch(
   template: File,
   subjects: string[],
   instructions?: string
-): Promise<CreateBatchResponse> {
+): Promise<CreateBatchResult> {
   const formData = new FormData();
 
   // Add template
@@ -63,6 +38,7 @@ export async function createBatch(
   // Add subjects as newline-separated string
   formData.append("subjects", subjects.join("\n"));
 
+  // TODO: implement proper PDF handling
   // Add reference PDFs
   for (const file of files) {
     if (file.name.endsWith(".pdf")) {
@@ -76,7 +52,7 @@ export async function createBatch(
     formData.append("instructions", instructions);
   }
 
-  const response = await api.post<CreateBatchResponse>("/api/batch", formData, {
+  const response = await api.post<CreateBatchResult>("/api/batch", formData, {
     headers: { "Content-Type": "multipart/form-data" },
   });
 
@@ -86,8 +62,8 @@ export async function createBatch(
 /**
  * Get the current status of a batch job.
  */
-export async function getBatchStatus(jobId: string): Promise<BatchStatusResponse> {
-  const response = await api.get<BatchStatusResponse>(`/api/batch/${jobId}`);
+export async function getBatchStatus(jobId: string): Promise<BatchJob> {
+  const response = await api.get<BatchJob>(`/api/batch/${jobId}`);
   return response.data;
 }
 

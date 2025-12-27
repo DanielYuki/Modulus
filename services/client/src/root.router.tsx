@@ -2,7 +2,6 @@ import type React from "react";
 import { Suspense } from "react";
 import { Navigate, Route, Routes, useLocation } from "react-router";
 import { AppLayout } from "@app/components";
-import { LazyHomePage } from "@app/modules/home";
 import { LazyBatchNewPage } from "@app/modules/batch-new";
 import { BatchNewRoutes } from "@app/modules/batch-new/batch-new.routes";
 import { LazyBatchesPage, BatchesRoutes } from "@app/modules/batches";
@@ -23,7 +22,6 @@ export const RootRouter: React.FC = () => {
       <Routes location={location}>
         <Route element={<AppLayout />}>
           <Route index element={<Navigate to={BatchesRoutes.List} replace />} />
-          <Route path="/home" element={<LazyHomePage />} />
           <Route path={BatchNewRoutes.New} element={<LazyBatchNewPage />} />
           <Route path={BatchesRoutes.Base} element={<LazyBatchesPage />} />
         </Route>
