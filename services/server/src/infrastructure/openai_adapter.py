@@ -15,8 +15,8 @@ from src.domain.interfaces import AIGeneratorInterface, GenerationInput, Generat
 class OpenAIAdapter(AIGeneratorInterface):
     """Concrete implementation of AI generation using OpenAI."""
     
-    # Model to use for generation - gpt-4-turbo is better at following complex formatting
-    MODEL = "gpt-4-turbo"
+    # Model to use for generation - gpt-5-mini-2025-08-07 cost x output efficiency
+    MODEL = "gpt-5-mini-2025-08-07"
     
     def __init__(self):
         self.client = OpenAI(api_key=OPENAI_API_KEY) if OPENAI_API_KEY else None
@@ -40,7 +40,7 @@ class OpenAIAdapter(AIGeneratorInterface):
                 {"role": "user", "content": user_prompt},
             ],
             temperature=0.7,
-            max_tokens=4096,  # gpt-4-turbo max is 4096
+            max_tokens=4096,  # Might be enough for most templates
         )
         
         content = response.choices[0].message.content or ""

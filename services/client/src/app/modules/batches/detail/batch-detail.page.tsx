@@ -4,7 +4,7 @@ import type React from 'react';
 import { Button, H1, Body, Icon } from '@atomic';
 import { StatusFilter, type FilterStatus, type StatusFilterOption } from '@atomic/mol.status-filter';
 import { JobCard, type JobStatus } from '@atomic/org.job-card';
-import { getBatchStatus, getPdfUrl, getTexUrl, type BatchItem } from '@/app/data/batch.gateway';
+import { getBatchStatus, getPdfUrl, getTexUrl, getDownloadAllUrl, type BatchItem } from '@/app/data/batch.gateway';
 import { BatchesRoutes } from '../batches.routes';
 
 // Map API status to UI JobStatus
@@ -71,20 +71,22 @@ const BatchDetailPage: React.FC = () => {
     return () => clearInterval(interval);
   }, [fetchStatus, batchStatus]);
 
-
-
   // Handle view PDF in new tab
   const handleView = (index: number) => {
     if (!batchId) return;
     const url = getPdfUrl(batchId, index);
-    window.open(url, '_blank');
+    window.open(url, '_blank'); // Opens in new tab
   };
 
-  // Handle download TEX
+  // Handle download TEX or PDF
   const handleDownload = (index: number, type: 'tex' | 'pdf') => {
     if (!batchId) return;
-    const url = type === 'tex' ? getTexUrl(batchId, index) : getPdfUrl(batchId, index);
-    window.open(url, '_blank');
+    const url = type === 'tex' ? getTexUrl(batchId, index) : getPdfUrl(batchId, index, true);
+    // Do not open in new tab, download instead
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `${index}.pdf`;
+    link.click();
   };
 
   // Filter options based on actual job data
@@ -127,8 +129,7 @@ const BatchDetailPage: React.FC = () => {
                 onClick={() => navigate(BatchesRoutes.List)}
                 className="hover:text-text-main transition-colors flex items-center gap-1"
               >
-                <Icon name="arrow_back" size="sm" />
-                All Batches
+                Batches
               </button>
               <Icon name="chevron_right" size="sm" />
               <span className="text-text-main font-bold font-mono">#{batchId.slice(0, 8)}...</span>
@@ -141,9 +142,12 @@ const BatchDetailPage: React.FC = () => {
             )}
           </div>
           <div className="flex items-center gap-4">
-            <Button variant="secondary" onClick={() => navigate('/batch/new')}>
-              <Icon name="add" size="sm" />
-              NEW BATCH
+            <Button variant="primary" onClick={() => {
+              if (!batchId) return;
+              window.location.href = getDownloadAllUrl(batchId);
+            }}>
+              <Icon name="download" size="sm" />
+              DOWNLOAD ALL
             </Button>
           </div>
         </div>
@@ -170,6 +174,7 @@ const BatchDetailPage: React.FC = () => {
               {/* Job Grid */}
               <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-6">
                 {filteredJobs.map((item) => (
+                  // TODO: Implement proper progress tracking
                   <JobCard
                     key={item.index}
                     filename={item.subject}

@@ -4,8 +4,10 @@ Presentation Layer - Batch Routes
 FastAPI router for batch generation endpoints.
 """
 import os
+import io
+import zipfile
 from fastapi import APIRouter, UploadFile, File, Form, HTTPException, BackgroundTasks
-from fastapi.responses import FileResponse
+from fastapi.responses import FileResponse, StreamingResponse
 from typing import Optional
 
 from src.presentation.schemas.batch_schemas import (
@@ -171,11 +173,12 @@ async def get_item_tex(job_id: str, idx: int):
 
 
 @router.get("/batch/{job_id}/item/{idx}/pdf")
-async def get_item_pdf(job_id: str, idx: int):
+async def get_item_pdf(job_id: str, idx: int, download: bool = False):
     """
     Stream the generated PDF for a specific item.
     
-    Use this URL directly in a browser tab for viewing.
+    - Use without ?download for inline viewing (preview in browser)
+    - Use with ?download=true to force download
     """
     job = FileJobStore.get_job(job_id)
     
@@ -193,11 +196,19 @@ async def get_item_pdf(job_id: str, idx: int):
     if not os.path.exists(item.pdf_path):
         raise HTTPException(status_code=404, detail="PDF file not found on disk")
     
-    return FileResponse(
-        path=item.pdf_path,
-        media_type="application/pdf",
-        filename=f"item_{idx}.pdf",
-    )
+    # If download=true, include filename to trigger download
+    # Otherwise, omit filename for inline viewing
+    if download:
+        return FileResponse(
+            path=item.pdf_path,
+            media_type="application/pdf",
+            filename=f"{item.subject}.pdf",
+        )
+    else:
+        return FileResponse(
+            path=item.pdf_path,
+            media_type="application/pdf",
+        )
 
 
 @router.post("/batch/{job_id}/process")
@@ -216,3 +227,42 @@ async def trigger_processing(job_id: str):
     updated_job = use_case.process_batch(job_id)
     
     return {"message": "Processing complete", "status": updated_job.status.value}
+
+
+@router.get("/batch/{job_id}/download-all")
+async def download_all_pdfs(job_id: str):
+    """
+    Download all available PDFs from a batch as a single zip file.
+    """
+    job = FileJobStore.get_job(job_id)
+    
+    if not job:
+        raise HTTPException(status_code=404, detail=f"Job {job_id} not found")
+    
+    # Collect all available PDFs
+    available_pdfs = [
+        (item.subject, item.pdf_path)
+        for item in job.items
+        if item.pdf_path and os.path.exists(item.pdf_path)
+    ]
+    
+    if not available_pdfs:
+        raise HTTPException(status_code=404, detail="No PDFs available for download")
+    
+    # Create zip in memory
+    zip_buffer = io.BytesIO()
+    with zipfile.ZipFile(zip_buffer, 'w', zipfile.ZIP_DEFLATED) as zip_file:
+        for subject, pdf_path in available_pdfs:
+            # Use subject as filename, sanitize for filesystem
+            safe_name = "".join(c for c in subject if c.isalnum() or c in (' ', '-', '_')).strip()
+            zip_file.write(pdf_path, f"{safe_name}.pdf")
+    
+    zip_buffer.seek(0)
+    
+    return StreamingResponse(
+        zip_buffer,
+        media_type="application/zip",
+        headers={
+            "Content-Disposition": f'attachment; filename="batch_{job_id[:8]}.zip"'
+        }
+    )

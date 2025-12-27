@@ -76,8 +76,17 @@ export function getTexUrl(jobId: string, itemIndex: number): string {
 
 /**
  * Get the URL for viewing/downloading a PDF.
- * Use this URL directly in window.open() for new tab viewing.
+ * - Without download param: inline viewing (preview)
+ * - With download=true: forces download
  */
-export function getPdfUrl(jobId: string, itemIndex: number): string {
-  return `${api.defaults.baseURL}/api/batch/${jobId}/item/${itemIndex}/pdf`;
+export function getPdfUrl(jobId: string, itemIndex: number, download = false): string {
+  const base = `${api.defaults.baseURL}/api/batch/${jobId}/item/${itemIndex}/pdf`;
+  return download ? `${base}?download=true` : base;
+}
+
+/**
+ * Get the URL for downloading all PDFs as a zip file.
+ */
+export function getDownloadAllUrl(jobId: string): string {
+  return `${api.defaults.baseURL}/api/batch/${jobId}/download-all`;
 }
