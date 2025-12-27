@@ -1,5 +1,6 @@
 import type React from 'react';
 import { style, type StyleVariants } from './file-chip.component.style';
+import { Icon } from '../atm.icon';
 
 export interface FileChipProps extends StyleVariants {
   filename: string;
@@ -23,9 +24,7 @@ export const FileChip: React.FC<FileChipProps> = ({
   return (
     <div className={chipStyles.wrapper({ class: className })}>
       <div className={chipStyles.icon()}>
-        <span className="material-symbols-outlined text-xl">
-          {isPdf ? 'picture_as_pdf' : 'code'}
-        </span>
+        <Icon name={isPdf ? 'picture_as_pdf' : 'code'} />
       </div>
       <div className={chipStyles.content()}>
         <span className={chipStyles.filename()}>{filename}</span>
@@ -33,7 +32,7 @@ export const FileChip: React.FC<FileChipProps> = ({
       </div>
       {onRemove && (
         <button type="button" onClick={onRemove} className={chipStyles.removeBtn()}>
-          <span className="material-symbols-outlined text-lg">close</span>
+          <Icon name="close" size="sm" />
         </button>
       )}
     </div>

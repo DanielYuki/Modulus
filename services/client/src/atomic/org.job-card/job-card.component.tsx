@@ -1,6 +1,7 @@
 import type React from 'react';
 import { Badge } from '../atm.badge';
 import { Button } from '../atm.button';
+import { Icon } from '../atm.icon';
 import { ProgressBar } from '../atm.progress-bar';
 import { style, type StyleVariants } from './job-card.component.style';
 
@@ -47,17 +48,17 @@ export const JobCard: React.FC<JobCardProps> = ({
           <div className={styles.headerLeft()}>
             <div className={styles.icon()}>
               {status === 'active' ? (
-                <span className="material-symbols-outlined animate-spin">sync</span>
+                <Icon name="sync" className="animate-spin" />
               ) : status === 'queued' ? (
-                <span className="material-symbols-outlined">hourglass_empty</span>
+                <Icon name="hourglass_empty" />
               ) : (
-                <span className="material-symbols-outlined">picture_as_pdf</span>
+                <Icon name="picture_as_pdf" />
               )}
             </div>
             <div className={styles.info()}>
               <h3 className={styles.filename()}>{filename}</h3>
               {status === 'active' ? (
-                <p className="text-xs text-fixed-black font-bold uppercase tracking-wider animate-pulse bg-accent-yellow px-1 inline-block mt-1">
+                <p className="text-xs text-fixed-black font-bold uppercase tracking-wider animate-pulse bg-primary px-1 inline-block mt-1">
                   {statusLabel}
                 </p>
               ) : (
@@ -97,18 +98,18 @@ export const JobCard: React.FC<JobCardProps> = ({
         {status === 'done' && (
           <>
             <Button variant="dark" size="sm" className="flex-1" onClick={onView}>
-              <span className="material-symbols-outlined !text-[18px]">visibility</span> View
+              <Icon name="visibility" size="sm" color='white' /> View
             </Button>
             <div className="flex gap-2">
               <button
                 onClick={() => onDownload?.('pdf')}
-                className="size-10 border-2 border-border-strong flex items-center justify-center hover:bg-accent-yellow text-text-secondary transition-colors bg-fixed-white"
+                className="size-10 border-2 border-border-strong flex items-center justify-center hover:bg-primary text-text-secondary transition-colors bg-fixed-white"
               >
                 <span className="font-bold text-[8px]">PDF</span>
               </button>
               <button
                 onClick={() => onDownload?.('tex')}
-                className="size-10 border-2 border-border-strong flex items-center justify-center hover:bg-accent-yellow text-text-secondary transition-colors bg-fixed-white"
+                className="size-10 border-2 border-border-strong flex items-center justify-center hover:bg-primary text-text-secondary transition-colors bg-fixed-white"
               >
                 <span className="font-bold text-[8px]">TEX</span>
               </button>
@@ -118,7 +119,7 @@ export const JobCard: React.FC<JobCardProps> = ({
         {status === 'failed' && (
           <>
             <Button variant="danger" size="sm" className="flex-1" onClick={onRetry}>
-              <span className="material-symbols-outlined !text-[18px]">replay</span> Retry
+              <Icon name="replay" size="sm" color='white' /> Retry
             </Button>
             <button
               onClick={() => onDownload?.('tex')}

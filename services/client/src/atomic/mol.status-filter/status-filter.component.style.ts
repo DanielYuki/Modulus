@@ -23,7 +23,7 @@ export const style = tv({
     },
     status: {
       completed: { indicator: 'bg-status-done' },
-      processing: { indicator: 'bg-accent-yellow animate-pulse' },
+      processing: { indicator: 'bg-primary animate-pulse' },
       failed: { indicator: 'bg-status-failed' },
       queued: { indicator: 'bg-gray-300' },
     },

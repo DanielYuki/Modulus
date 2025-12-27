@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import type React from 'react';
 import { useNavigate, useMatch } from 'react-router';
-import { Button, H1, H3, BodySecondary, Badge, Body } from '@atomic';
+import { Button, H1, H3, BodySecondary, Badge, Body, Icon } from '@atomic';
 import { BatchesRoutes } from './batches.routes';
 import { BatchesRouter } from './detail/batches.router';
 import { listBatches, type BatchListItem } from '@/app/data/batch.gateway';
@@ -61,9 +61,10 @@ const BatchCard: React.FC<BatchCardProps> = ({ batch, onClick }) => {
         {/* Icon and info */}
         <div className="flex items-center gap-4 flex-1">
           <div className="size-12 flex items-center justify-center border-2 border-border-strong">
-            <span className={`material-symbols-outlined ${isProcessing ? 'animate-spin' : ''}`}>
-              {isProcessing ? 'progress_activity' : status === 'failed' ? 'warning' : 'check_circle'}
-            </span>
+            <Icon
+              name={isProcessing ? 'progress_activity' : status === 'failed' ? 'warning' : 'check_circle'}
+              className={isProcessing ? 'animate-spin' : ''}
+            />
           </div>
           <div>
             <div className="flex items-center gap-2 mb-1">
@@ -81,9 +82,7 @@ const BatchCard: React.FC<BatchCardProps> = ({ batch, onClick }) => {
         {/* Progress/Stats */}
         <div className="flex items-center gap-4 md:justify-end flex-1">
           <Badge status={badgeStatus}>{statusLabel}</Badge>
-          <span className="material-symbols-outlined text-text-muted/50 group-hover:text-fixed-black group-hover:translate-x-1 transition-all">
-            arrow_forward
-          </span>
+          <Icon name="arrow_forward" className="text-text-muted/50 group-hover:text-fixed-black group-hover:translate-x-1 transition-all" />
         </div>
       </div>
     </div>
@@ -131,7 +130,7 @@ const BatchesPage: React.FC = () => {
             <H1>Batch Selection</H1>
           </div>
           <Button variant="primary" onClick={() => navigate('/batch/new')}>
-            <span className="material-symbols-outlined !text-[18px]">add</span>
+            <Icon name="add" size="sm" />
             NEW BATCH
           </Button>
         </div>
@@ -143,9 +142,7 @@ const BatchesPage: React.FC = () => {
           {/* Loading State */}
           {isLoading && (
             <div className="flex items-center justify-center py-20">
-              <span className="material-symbols-outlined text-4xl animate-spin text-primary">
-                progress_activity
-              </span>
+              <Icon name="progress_activity" size="xl" color="primary" className="animate-spin" />
             </div>
           )}
 
@@ -159,9 +156,7 @@ const BatchesPage: React.FC = () => {
           {/* Empty State */}
           {!isLoading && !error && batches.length === 0 && (
             <div className="flex flex-col items-center justify-center py-20 gap-4">
-              <span className="material-symbols-outlined text-6xl text-text-muted">
-                folder_open
-              </span>
+              <Icon name="folder_open" size="xl" color="secondary" />
               <H3>No batches yet</H3>
               <BodySecondary>Create your first batch to get started</BodySecondary>
             </div>

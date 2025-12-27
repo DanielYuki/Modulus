@@ -2,11 +2,10 @@
 
 :root {
   /* Primary Colors - Yellow */
-  --color-primary: #f9f506;
+  --color-primary: #ffe600;
   --color-primary-hover: #e6e205;
   --color-primary-light: #fffee0;
   --color-primary-accent: #e3e005;
-  --color-accent-yellow: #FFE600;
 
   /* Background Colors */
   --color-background: #ffffff;

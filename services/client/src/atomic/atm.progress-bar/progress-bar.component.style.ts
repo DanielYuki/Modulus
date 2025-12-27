@@ -11,7 +11,7 @@ export const style = tv({
   },
   variants: {
     status: {
-      active: { fill: 'bg-accent-yellow' },
+      active: { fill: 'bg-primary' },
       done: { fill: 'bg-status-done' },
       failed: { fill: 'bg-status-failed' },
     },

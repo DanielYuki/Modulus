@@ -1,6 +1,7 @@
 import type React from 'react';
 import { NavLink, useLocation } from 'react-router';
 import { tv } from 'tailwind-variants';
+import { Icon } from '@atomic';
 
 // TODO: move to dedicated .style file
 const styles = tv({
@@ -13,7 +14,7 @@ const styles = tv({
     header: 'p-8 pb-8',
     logo: 'flex items-center gap-3',
     logoIcon: [
-      'size-10 bg-accent-yellow flex items-center justify-center',
+      'size-10 bg-primary flex items-center justify-center',
       'border-2 border-border-strong',
       'shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]',
     ],
@@ -37,7 +38,7 @@ const styles = tv({
     ],
     navBadge: [
       'ml-auto flex size-5 items-center justify-center',
-      'bg-fixed-black text-[8px] text-accent-yellow font-bold',
+      'bg-fixed-black text-[8px] text-primary font-bold',
     ],
   },
 })();
@@ -69,7 +70,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ sections }) => {
           className={styles.logo()}
         >
           <div className={styles.logoIcon()}>
-            <span className="material-symbols-outlined !text-2xl text-fixed-black font-bold">article</span>
+            <Icon name="article" size="lg" color="black" />
           </div>
           <div className={styles.logoText()}>
             <span className={styles.logoTitle()}>AI Docs</span>
@@ -93,7 +94,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ sections }) => {
                   className={`${styles.navItem()} ${isActive ? styles.navItemActive() : ''}`}
                 >
                   {item.icon && (
-                    <span className="material-symbols-outlined !text-[20px]">{item.icon}</span>
+                    <Icon name={item.icon} />
                   )}
                   <span>{item.label}</span>
                   {item.badge !== undefined && (

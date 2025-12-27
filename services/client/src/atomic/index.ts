@@ -1,6 +1,7 @@
 // Atoms
 export * from './atm.button';
 export * from './atm.badge';
+export * from './atm.icon';
 export * from './atm.text-input';
 export * from './atm.text-area';
 export * from './atm.select';

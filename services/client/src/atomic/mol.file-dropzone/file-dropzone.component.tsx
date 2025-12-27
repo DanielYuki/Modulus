@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { style } from './file-dropzone.component.style';
+import { Icon } from '../atm.icon';
 
 export interface FileDropzoneProps {
   accept?: string;
@@ -67,7 +68,7 @@ export const FileDropzone: React.FC<FileDropzoneProps> = ({
         />
         <div className={styles.content()}>
           <div className={styles.icon()}>
-            <span className="material-symbols-outlined text-4xl text-fixed-black">cloud_upload</span>
+            <Icon name="cloud_upload" size="xl" color="black" />
           </div>
           <div>
             <p className={styles.title()}>{title}</p>

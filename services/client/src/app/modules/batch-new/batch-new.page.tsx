@@ -9,6 +9,7 @@ import {
   HDisplay,
   H3,
   H4,
+  Icon,
 } from '@atomic';
 import { FileDropzone } from '@atomic/mol.file-dropzone';
 import { FileChip } from '@atomic/mol.file-chip';
@@ -29,7 +30,6 @@ const BatchNewPage: React.FC = () => {
   const [subjects, setSubjects] = useState('');
   const [selectedTemplate, setSelectedTemplate] = useState('');
   const [instructions, setInstructions] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const handleFilesChange = useCallback((newFiles: File[]) => {
@@ -67,8 +67,6 @@ const BatchNewPage: React.FC = () => {
       return;
     }
 
-    setIsLoading(true);
-
     try {
       const pdfFiles = files.filter(f => f.type === 'pdf').map(f => f.file);
 
@@ -84,8 +82,6 @@ const BatchNewPage: React.FC = () => {
     } catch (err) {
       console.error('Batch creation failed:', err);
       setError(err instanceof Error ? err.message : 'Failed to create batch');
-    } finally {
-      setIsLoading(false);
     }
   };
 
@@ -114,7 +110,7 @@ const BatchNewPage: React.FC = () => {
             {/* Source Files */}
             <div className="bg-surface-light p-6 border-2 border-border-strong shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
               <H4 className="mb-6 flex items-center gap-2">
-                <span className="material-symbols-outlined text-xl">upload_file</span> Source Files
+                <Icon name="upload_file" /> Source Files
               </H4>
 
               <FileDropzone
@@ -141,10 +137,10 @@ const BatchNewPage: React.FC = () => {
             {/* Target Subjects */}
             <div className="bg-surface-light p-6 border-2 border-border-strong shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
               <div className="flex items-center justify-between mb-4">
-                <label className="font-bold text-text-main text-sm uppercase tracking-wide flex items-center gap-2">
-                  <span className="material-symbols-outlined text-lg">list_alt</span>
+                <H4 className="flex items-center gap-2">
+                  <Icon name="list_alt" />
                   Target Subjects
-                </label>
+                </H4>
                 <Badge status="ready">One per line</Badge>
               </div>
 
@@ -164,7 +160,7 @@ const BatchNewPage: React.FC = () => {
           <div className="xl:col-span-1">
             <div className="bg-surface-light p-6 border-2 border-border-strong shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] flex flex-col gap-6 sticky top-6">
               <H3 className="flex items-center gap-2 border-b-2 border-border-strong pb-4">
-                <span className="material-symbols-outlined">tune</span> Configuration
+                <Icon name="tune" /> Configuration
               </H3>
 
               <Select
@@ -211,19 +207,9 @@ const BatchNewPage: React.FC = () => {
                   size="lg"
                   fullWidth
                   onClick={handleGenerateBatch}
-                  disabled={isLoading}
                 >
-                  {isLoading ? (
-                    <>
-                      <span className="material-symbols-outlined text-2xl animate-spin">progress_activity</span>
-                      Processing...
-                    </>
-                  ) : (
-                    <>
-                      <span className="material-symbols-outlined text-2xl group-hover:rotate-12 transition-transform">auto_awesome</span>
-                      Generate Batch
-                    </>
-                  )}
+                  <Icon name="auto_awesome" size="lg" />
+                  Generate Batch
                 </Button>
                 <p className="text-center text-xs font-mono text-text-secondary mt-3 border-b-2 border-primary inline-block mx-auto w-max px-2">
                   Est. time: ~{Math.max(1, subjectCount * 0.5).toFixed(0)}m per subject

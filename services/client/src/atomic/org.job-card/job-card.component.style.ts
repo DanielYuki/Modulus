@@ -25,7 +25,7 @@ export const style = tv({
     status: {
       done: {
         wrapper: 'hover:translate-x-[-4px] hover:translate-y-[-4px] hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]',
-        icon: 'bg-accent-yellow text-fixed-black',
+        icon: 'bg-primary text-fixed-black',
       },
       active: {
         wrapper: 'shadow-[4px_4px_0px_0px_rgba(249,245,6,1)]',

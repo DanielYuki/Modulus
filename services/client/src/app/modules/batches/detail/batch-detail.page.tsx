@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router';
 import type React from 'react';
-import { Button, H1, Body } from '@atomic';
+import { Button, H1, Body, Icon } from '@atomic';
 import { StatusFilter, type FilterStatus, type StatusFilterOption } from '@atomic/mol.status-filter';
 import { JobCard, type JobStatus } from '@atomic/org.job-card';
 import { getBatchStatus, getPdfUrl, getTexUrl, type BatchItem } from '@/app/data/batch.gateway';
@@ -127,10 +127,10 @@ const BatchDetailPage: React.FC = () => {
                 onClick={() => navigate(BatchesRoutes.List)}
                 className="hover:text-text-main transition-colors flex items-center gap-1"
               >
-                <span className="material-symbols-outlined !text-sm">arrow_back</span>
+                <Icon name="arrow_back" size="sm" />
                 All Batches
               </button>
-              <span className="material-symbols-outlined !text-sm">chevron_right</span>
+              <Icon name="chevron_right" size="sm" />
               <span className="text-text-main font-bold font-mono">#{batchId.slice(0, 8)}...</span>
             </div>
             <H1>
@@ -142,7 +142,7 @@ const BatchDetailPage: React.FC = () => {
           </div>
           <div className="flex items-center gap-4">
             <Button variant="secondary" onClick={() => navigate('/batch/new')}>
-              <span className="material-symbols-outlined !text-[18px]">add</span>
+              <Icon name="add" size="sm" />
               NEW BATCH
             </Button>
           </div>
@@ -154,7 +154,7 @@ const BatchDetailPage: React.FC = () => {
           {/* Loading State */}
           {isLoading ? (
             <div className="flex items-center justify-center py-20">
-              <span className="material-symbols-outlined text-4xl animate-spin text-primary">progress_activity</span>
+              <Icon name="progress_activity" size="xl" color="primary" className="animate-spin" />
             </div>
           ) : (
             <>
