@@ -5,20 +5,13 @@ import { AppLayout } from "@app/components";
 import { LazyBatchNewPage } from "@app/modules/batch-new";
 import { BatchNewRoutes } from "@app/modules/batch-new/batch-new.routes";
 import { LazyBatchesPage, BatchesRoutes } from "@app/modules/batches";
-
-// TODO: Create ActivityIndicator component instead
-// Loading fallback component
-const LoadingFallback = () => (
-  <div className="flex items-center justify-center min-h-screen">
-    <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin" />
-  </div>
-);
+import { ActivityIndicator } from "@atomic";
 
 export const RootRouter: React.FC = () => {
   const location = useLocation();
 
   return (
-    <Suspense fallback={<LoadingFallback />}>
+    <Suspense fallback={<ActivityIndicator type="spinner" size="lg" />}>
       <Routes location={location}>
         <Route element={<AppLayout />}>
           <Route index element={<Navigate to={BatchesRoutes.List} replace />} />

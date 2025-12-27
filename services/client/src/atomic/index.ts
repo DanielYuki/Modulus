@@ -1,4 +1,5 @@
 // Atoms
+export * from './atm.activity-indicator';
 export * from './atm.button';
 export * from './atm.badge';
 export * from './atm.icon';

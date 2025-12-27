@@ -1,5 +1,6 @@
 import type React from 'react';
 import { style, type StyleVariants } from './button.component.style';
+import { ActivityIndicator } from '../atm.activity-indicator'; // ATOMIC DESIGN EXCEPTION
 
 export interface ButtonProps extends StyleVariants {
   children: React.ReactNode;
@@ -28,9 +29,8 @@ export const Button: React.FC<ButtonProps> = ({
       onClick={onClick}
       type={type}
     >
-      {/* TODO: Create and Replace with proper ActivityIndicator */}
       {loading ? (
-        <span className="inline-block w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin" />
+        <ActivityIndicator type="spinner" size="sm" />
       ) : (
         children
       )}
