@@ -4,15 +4,32 @@ Domain Layer - Abstract Interfaces
 Defines contracts that infrastructure adapters MUST implement.
 """
 from abc import ABC, abstractmethod
-from src.domain.entities import GenerationRequest, GeneratedContent
+from dataclasses import dataclass, field
+from typing import Optional
+
+
+@dataclass
+class GenerationInput:
+    """Input for AI content generation."""
+    subject: str
+    template: str
+    reference_text: Optional[str] = None
+    instructions: Optional[str] = None
+
+
+@dataclass
+class GenerationOutput:
+    """Output from AI content generation."""
+    tex_content: str
+    metadata: dict = field(default_factory=dict)
 
 
 class AIGeneratorInterface(ABC):
     """Contract for AI content generation."""
     
     @abstractmethod
-    def generate(self, request: GenerationRequest) -> GeneratedContent:
-        """Generate LaTeX content based on the request."""
+    def generate(self, input: GenerationInput) -> GenerationOutput:
+        """Generate LaTeX content based on the input."""
         pass
 
 

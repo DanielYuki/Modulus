@@ -8,12 +8,12 @@ import os
 from typing import Optional
 
 from src.domain.batch_entities import BatchJob, BatchItem, JobStatus, ItemStatus
-from src.domain.entities import GenerationRequest
 from src.domain.interfaces import (
     AIGeneratorInterface,
     PdfExtractorInterface,
     LatexCompilerInterface,
     CompilationError,
+    GenerationInput,
 )
 from src.infrastructure.file_job_store import FileJobStore
 
@@ -154,31 +154,18 @@ class BatchGenerationUseCase:
         Uses the template-filling approach where the AI fills in all
         placeholders while preserving the entire document structure.
         """
-        # Build the prompt - the AI will fill in the template
-        prompt = f"Fill the template with content for: {subject}"
-        if instructions:
-            prompt += f"\n\nAdditional instructions from user: {instructions}"
-        
-        # Create the generation request
-        request = GenerationRequest(
-            prompt=prompt,
+        # Create the generation input
+        gen_input = GenerationInput(
             subject=subject,
-            topic=subject,  # Use subject as topic
-            difficulty="medium",
-            num_questions=5,
+            template=template,
             reference_text=reference_text,
-            template_files={"template.tex": template},
+            instructions=instructions,
         )
         
         # Generate the content
-        result = self.ai_generator.generate(request)
+        result = self.ai_generator.generate(gen_input)
         
-        # The new adapter returns the complete document in "output.tex"
-        if "output.tex" in result.files:
-            return result.files["output.tex"]
-        
-        # Fallback: return first available file
-        return list(result.files.values())[0] if result.files else ""
+        return result.tex_content
     
     def _sanitize_filename(self, name: str) -> str:
         """Sanitize a string for use in filenames."""

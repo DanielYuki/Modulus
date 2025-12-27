@@ -1,10 +1,28 @@
 """Domain Layer Exports"""
-from src.domain.entities import GenerationRequest, GeneratedContent
-from src.domain.interfaces import AIGeneratorInterface, PdfExtractorInterface
+from src.domain.interfaces import (
+    AIGeneratorInterface,
+    PdfExtractorInterface,
+    LatexCompilerInterface,
+    CompilationError,
+    GenerationInput,
+    GenerationOutput,
+)
+from src.domain.batch_entities import (
+    BatchJob,
+    BatchItem,
+    JobStatus,
+    ItemStatus,
+)
 
 __all__ = [
-    "GenerationRequest",
-    "GeneratedContent",
     "AIGeneratorInterface",
     "PdfExtractorInterface",
+    "LatexCompilerInterface",
+    "CompilationError",
+    "GenerationInput",
+    "GenerationOutput",
+    "BatchJob",
+    "BatchItem",
+    "JobStatus",
+    "ItemStatus",
 ]

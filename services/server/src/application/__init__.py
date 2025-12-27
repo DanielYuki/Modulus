@@ -1,4 +1,4 @@
 """Application Layer Exports"""
-from src.application.content_generation import GenerateContentUseCase
+from src.application.batch_generation import BatchGenerationUseCase
 
-__all__ = ["GenerateContentUseCase"]
+__all__ = ["BatchGenerationUseCase"]

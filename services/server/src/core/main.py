@@ -4,7 +4,6 @@ Modulus Server - FastAPI Application Entry Point
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from src.presentation.routes import generation
 from src.presentation.routes import batch
 
 app = FastAPI(
@@ -23,7 +22,6 @@ app.add_middleware(
 )
 
 # Register routes
-app.include_router(generation.router, prefix="/api", tags=["Generation"])
 app.include_router(batch.router, prefix="/api", tags=["Batch"])
 
 
