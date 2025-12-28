@@ -118,7 +118,7 @@ export const JobCard: React.FC<JobCardProps> = ({
         )}
         {status === 'failed' && (
           <>
-            <Button variant="danger" size="sm" className="flex-1" onClick={onRetry}>
+            <Button variant="danger" size="sm" className="flex-1" onClick={onRetry} disabled>
               <Icon name="replay" size="sm" color='white' /> Retry
             </Button>
             <button
@@ -130,7 +130,7 @@ export const JobCard: React.FC<JobCardProps> = ({
           </>
         )}
         {status === 'active' && (
-          <Button variant="secondary" size="sm" fullWidth onClick={onCancel}>
+          <Button variant="secondary" size="sm" fullWidth onClick={onCancel} disabled>
             Cancel
           </Button>
         )}
