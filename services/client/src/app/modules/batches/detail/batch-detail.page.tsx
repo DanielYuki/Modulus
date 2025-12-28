@@ -4,7 +4,7 @@ import type React from 'react';
 import { Button, H1, Body, Icon } from '@atomic';
 import { StatusFilter, type FilterStatus, type StatusFilterOption } from '@atomic/mol.status-filter';
 import { JobCard, type JobStatus } from '@atomic/org.job-card';
-import { getBatchStatus, getPdfUrl, getTexUrl, getDownloadAllUrl, type BatchItem } from '@/app/data/batch.gateway';
+import { getBatchStatus, getPdfUrl, getTexUrl, getDownloadAllUrl, retryItem, type BatchItem } from '@/app/data/batch.gateway';
 import { BatchesRoutes } from '../batches.routes';
 
 // Map API status to UI JobStatus
@@ -174,19 +174,22 @@ const BatchDetailPage: React.FC = () => {
               {/* Job Grid */}
               <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-6">
                 {filteredJobs.map((item) => (
-                  // TODO: Implement proper progress tracking
+                  // TODO: Review JobCard atomic component
                   <JobCard
                     key={item.index}
                     filename={item.subject}
                     fileSize={item.pdf_available ? 'PDF Ready' : ''}
                     status={mapStatus(item.status)}
                     statusLabel={mapStatusLabel(item)}
-                    progress={item.status === 'generating' ? 33 : item.status === 'compiling' ? 66 : undefined}
+                    progress={item.status === 'generating' ? 33 : item.status === 'compiling' ? 66 : undefined} // TODO: Implement proper progress tracking
                     progressLabel={item.status === 'generating' ? 'AI generating...' : item.status === 'compiling' ? 'Compiling...' : undefined}
                     error={item.error || undefined}
                     onView={item.pdf_available ? () => handleView(item.index) : undefined}
-                    onRetry={() => console.log('Retry', item.index)}
-                    onCancel={() => console.log('Cancel', item.index)}
+                    onRetry={item.status === 'error' ? async () => {
+                      await retryItem(batchId!, item.index);
+                      fetchStatus();
+                    } : undefined}
+                    onCancel={() => console.log('Cancel', item.index)} // TODO: Implement proper cancel
                     onDownload={item.pdf_available || item.tex_available ? (type) => handleDownload(item.index, type) : undefined}
                   />
                 ))}

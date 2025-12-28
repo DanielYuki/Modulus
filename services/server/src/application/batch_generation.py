@@ -141,6 +141,96 @@ class BatchGenerationUseCase:
         """Get the current status of a batch job."""
         return FileJobStore.get_job(job_id)
     
+    def retry_item(self, job_id: str, item_index: int) -> BatchJob:
+        """
+        Retry a failed item, passing the previous error to the AI for context.
+        
+        Args:
+            job_id: The job ID
+            item_index: Index of the item to retry
+            
+        Returns:
+            The updated BatchJob
+        """
+        job = FileJobStore.get_job(job_id)
+        if not job:
+            raise ValueError(f"Job {job_id} not found")
+        
+        if item_index < 0 or item_index >= len(job.items):
+            raise ValueError(f"Item {item_index} not found in job")
+        
+        item = job.items[item_index]
+        previous_error = item.error
+        
+        # Reset item state
+        item.status = ItemStatus.PENDING
+        item.error = None
+        item.tex_content = None
+        item.pdf_path = None
+        
+        # Update job status to processing
+        job.status = JobStatus.PROCESSING
+        FileJobStore.update_job(job)
+        
+        # Create job output directory
+        job_output_dir = os.path.join(self.output_dir, job_id)
+        os.makedirs(job_output_dir, exist_ok=True)
+        
+        try:
+            # Generate tex content with error context
+            item.status = ItemStatus.GENERATING
+            FileJobStore.update_job(job)
+            
+            # Build enhanced instructions with error context
+            retry_instructions = job.instructions or ""
+            if previous_error:
+                retry_instructions += f"\n\nPREVIOUS ATTEMPT FAILED with error:\n{previous_error}\n\nPlease fix the issue that caused this error. Ensure the LaTeX is valid and compilable."
+            
+            tex_content = self._generate_tex_for_subject(
+                subject=item.subject,
+                template=job.template_content,
+                reference_text=job.source_pdf_text,
+                instructions=retry_instructions.strip() or None,
+            )
+            item.tex_content = tex_content
+            
+            # Compile to PDF
+            item.status = ItemStatus.COMPILING
+            FileJobStore.update_job(job)
+            
+            filename = f"item_{item_index}_{self._sanitize_filename(item.subject)}"
+            pdf_path = self.latex_compiler.compile_to_pdf(
+                tex_content=tex_content,
+                output_dir=job_output_dir,
+                filename=filename,
+            )
+            item.pdf_path = pdf_path
+            item.status = ItemStatus.DONE
+            
+        except CompilationError as e:
+            item.status = ItemStatus.ERROR
+            item.error = str(e)
+        except Exception as e:
+            item.status = ItemStatus.ERROR
+            item.error = f"Generation failed: {str(e)}"
+        
+        FileJobStore.update_job(job)
+        
+        # Update overall job status
+        all_done = all(i.status == ItemStatus.DONE for i in job.items)
+        any_error = any(i.status == ItemStatus.ERROR for i in job.items)
+        
+        if all_done:
+            job.status = JobStatus.COMPLETED
+        elif any_error:
+            job.status = JobStatus.FAILED
+        else:
+            job.status = JobStatus.PROCESSING
+        
+        FileJobStore.update_job(job)
+        
+        return job
+    
     def _generate_tex_for_subject(
         self,
         subject: str,

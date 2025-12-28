@@ -266,3 +266,26 @@ async def download_all_pdfs(job_id: str):
             "Content-Disposition": f'attachment; filename="batch_{job_id[:8]}.zip"'
         }
     )
+
+
+@router.post("/batch/{job_id}/item/{idx}/retry")
+async def retry_item(job_id: str, idx: int, background_tasks: BackgroundTasks):
+    """
+    Retry a failed item with error context passed to the AI.
+    
+    The previous error is included in the AI prompt so it can fix the issue.
+    """
+    job = FileJobStore.get_job(job_id)
+    
+    if not job:
+        raise HTTPException(status_code=404, detail=f"Job {job_id} not found")
+    
+    if idx < 0 or idx >= len(job.items):
+        raise HTTPException(status_code=404, detail=f"Item {idx} not found")
+    
+    use_case = get_use_case()
+    
+    # Process in background
+    background_tasks.add_task(use_case.retry_item, job_id, idx)
+    
+    return {"message": f"Retry started for item {idx}", "status": "processing"}

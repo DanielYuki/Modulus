@@ -90,3 +90,10 @@ export function getPdfUrl(jobId: string, itemIndex: number, download = false): s
 export function getDownloadAllUrl(jobId: string): string {
   return `${api.defaults.baseURL}/api/batch/${jobId}/download-all`;
 }
+
+/**
+ * Retry a failed item with error context.
+ */
+export async function retryItem(jobId: string, itemIndex: number): Promise<void> {
+  await api.post(`/api/batch/${jobId}/item/${itemIndex}/retry`);
+}
