@@ -58,3 +58,6 @@ Template_Lista_IA/
 *.synctex.gz
 *.fls
 *.fdb_latexmk
+
+# Local job dumping
+.modulus
