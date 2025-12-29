@@ -6,8 +6,8 @@ const defaultNavSections: NavSection[] = [
   {
     items: [
       // { path: '/documents', label: 'My Documents', icon: 'folder' },
-      { path: '/batches', label: 'Batches', icon: 'stacks' },
       { path: '/batch/new', label: 'New Batch', icon: 'note_stack_add' },
+      { path: '/batches', label: 'Batches', icon: 'stacks' },
     ],
   },
   // {

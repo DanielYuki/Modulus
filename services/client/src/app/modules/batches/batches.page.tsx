@@ -1,9 +1,8 @@
 import { useState, useEffect } from 'react';
 import type React from 'react';
-import { useNavigate, useMatch } from 'react-router';
-import { Button, H1, H3, BodySecondary, Badge, Body, Icon } from '@atomic';
+import { Link } from 'react-router';
+import { LinkButton, H1, H3, BodySecondary, Badge, Body, Icon } from '@atomic';
 import { BatchesRoutes } from './batches.routes';
-import { BatchesRouter } from './detail/batches.router';
 import { listBatches, type BatchListItem } from '@/app/data/batch.gateway';
 
 // API status to UI status mapping
@@ -25,10 +24,10 @@ const statusBarStyle: Record<UIStatus, React.CSSProperties> = {
 
 interface BatchCardProps {
   batch: BatchListItem;
-  onClick: () => void;
+  to: string;
 }
 
-const BatchCard: React.FC<BatchCardProps> = ({ batch, onClick }) => {
+const BatchCard: React.FC<BatchCardProps> = ({ batch, to }) => {
   const status = batch.status as UIStatus;
   const badgeStatus = statusToBadge[status];
   const statusLabel = status.charAt(0).toUpperCase() + status.slice(1);
@@ -43,8 +42,8 @@ const BatchCard: React.FC<BatchCardProps> = ({ batch, onClick }) => {
   });
 
   return (
-    <div
-      onClick={onClick}
+    <Link
+      to={to}
       className={`
         group relative bg-fixed-white border-2 border-border-strong p-0 flex flex-col md:flex-row 
         hover:translate-x-[-4px] hover:translate-y-[-4px] transition-all duration-200 cursor-pointer
@@ -85,18 +84,14 @@ const BatchCard: React.FC<BatchCardProps> = ({ batch, onClick }) => {
           <Icon name="arrow_forward" className="text-text-muted/50 group-hover:text-fixed-black group-hover:translate-x-1 transition-all" />
         </div>
       </div>
-    </div>
+    </Link>
   );
 };
 
 const BatchesPage: React.FC = () => {
-  const navigate = useNavigate();
   const [batches, setBatches] = useState<BatchListItem[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-
-  // Check if we're on a detail route
-  const isDetailRoute = useMatch('/batches/:batchId');
 
   // Fetch batches on mount
   useEffect(() => {
@@ -116,11 +111,6 @@ const BatchesPage: React.FC = () => {
     fetchBatches();
   }, []);
 
-  // If on detail route, render the router
-  if (isDetailRoute) {
-    return <BatchesRouter />;
-  }
-
   return (
     <>
       {/* Header */}
@@ -129,10 +119,10 @@ const BatchesPage: React.FC = () => {
           <div className="flex flex-col gap-1">
             <H1>Batch Selection</H1>
           </div>
-          <Button variant="primary" onClick={() => navigate('/batch/new')}>
+          <LinkButton to="/batch/new" variant="primary">
             <Icon name="add" size="sm" />
             NEW BATCH
-          </Button>
+          </LinkButton>
         </div>
       </header>
 
@@ -169,7 +159,7 @@ const BatchesPage: React.FC = () => {
                 <BatchCard
                   key={batch.id}
                   batch={batch}
-                  onClick={() => navigate(`${BatchesRoutes.List}/${batch.id}`)}
+                  to={BatchesRoutes.detailPath(batch.id)}
                 />
               ))}
             </div>

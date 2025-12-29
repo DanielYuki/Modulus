@@ -9,7 +9,6 @@ export const style = tv({
     'focus:outline-none',
     'disabled:opacity-50 disabled:cursor-not-allowed',
     'cursor-pointer',
-
   ],
   variants: {
     variant: {

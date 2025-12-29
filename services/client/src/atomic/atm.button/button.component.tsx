@@ -1,6 +1,6 @@
+import { ActivityIndicator } from '@atomic/atm.activity-indicator';
 import type React from 'react';
-import { style, type StyleVariants } from './button.component.style';
-import { ActivityIndicator } from '../atm.activity-indicator'; // ATOMIC DESIGN EXCEPTION
+import { type StyleVariants, style } from './button.component.style';
 
 export interface ButtonProps extends StyleVariants {
   children: React.ReactNode;
@@ -12,28 +12,21 @@ export interface ButtonProps extends StyleVariants {
 }
 
 export const Button: React.FC<ButtonProps> = ({
-  children,
   className,
+  children,
+  onClick,
   disabled,
   loading,
-  onClick,
-  type = 'button',
-  variant,
-  size,
-  fullWidth,
-}) => {
+  type,
+  ...rest
+}: ButtonProps) => {
   return (
     <button
-      className={style({ variant, size, fullWidth, class: className })}
-      disabled={disabled || loading}
+      className={style({ ...rest, class: className })}
       onClick={onClick}
-      type={type}
-    >
-      {loading ? (
-        <ActivityIndicator type="spinner" size="sm" />
-      ) : (
-        children
-      )}
+      disabled={disabled || loading}
+      type={type ?? 'button'}>
+      {loading ? <ActivityIndicator type={'spinner'} /> : children}
     </button>
   );
 };

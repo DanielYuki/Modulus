@@ -1,5 +1,5 @@
 export const BatchesRoutes = {
-  Base: '/batches/*',
   List: '/batches',
-  Detail: ':batchId',
+  Detail: '/batches/:batchId',
+  detailPath: (batchId: string) => `/batches/${batchId}`,
 } as const;
