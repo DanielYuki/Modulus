@@ -3,14 +3,15 @@ Domain Layer - Batch Entities
 
 Pure Python dataclasses for batch generation. NO external dependencies.
 """
+
 from dataclasses import dataclass, field
-from typing import Optional
-from enum import Enum
 from datetime import datetime
+from enum import Enum
 
 
 class JobStatus(str, Enum):
     """Status of a batch job."""
+
     PENDING = "pending"
     PROCESSING = "processing"
     COMPLETED = "completed"
@@ -19,6 +20,7 @@ class JobStatus(str, Enum):
 
 class ItemStatus(str, Enum):
     """Status of a single batch item."""
+
     PENDING = "pending"
     GENERATING = "generating"
     COMPILING = "compiling"
@@ -29,11 +31,12 @@ class ItemStatus(str, Enum):
 @dataclass
 class BatchItem:
     """Single subject within a batch."""
+
     subject: str
     status: ItemStatus = ItemStatus.PENDING
-    tex_content: Optional[str] = None
-    pdf_path: Optional[str] = None
-    error: Optional[str] = None
+    tex_content: str | None = None
+    pdf_path: str | None = None
+    error: str | None = None
 
     def to_dict(self) -> dict:
         """Serialize to dictionary for JSON storage."""
@@ -60,15 +63,16 @@ class BatchItem:
 @dataclass
 class BatchJob:
     """Represents a batch generation job."""
+
     id: str
     subjects: list[str]
     template_content: str
-    source_pdf_text: Optional[str] = None
+    source_pdf_text: str | None = None
     status: JobStatus = JobStatus.PENDING
     items: list[BatchItem] = field(default_factory=list)
-    instructions: Optional[str] = None
+    instructions: str | None = None
     created_at: datetime = field(default_factory=datetime.now)
-    
+
     def __post_init__(self):
         """Initialize items from subjects if not provided."""
         if not self.items and self.subjects:

@@ -1,6 +1,7 @@
 """
 Modulus Server - FastAPI Application Entry Point
 """
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 

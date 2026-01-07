@@ -3,8 +3,10 @@ Modulus Server - Configuration Module
 
 Loads environment variables from the root .env file.
 """
+
 import os
 from pathlib import Path
+
 from dotenv import load_dotenv
 
 # Resolve path to root .env (works for both Docker and local)
