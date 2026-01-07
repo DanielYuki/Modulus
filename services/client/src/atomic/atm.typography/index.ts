@@ -1,27 +1,27 @@
 export {
-  // Typography variants
-  typography,
-  input,
-  // Main typography components
-  HDisplay,
+  Body,
+  BodySecondary,
+  DD,
+  DL,
+  // Description list components
+  DT,
+  // Utility components
+  Ellipsed,
   H1,
   H2,
   H3,
   H4,
-  Body,
-  BodySecondary,
+  // Main typography components
+  HDisplay,
+  InputCaption,
+  InputCaptionError,
   // Input typography components
   InputLabel,
   InputLegend,
   InputValue,
-  InputCaption,
-  InputCaptionError,
+  input,
   // Special typography
   ProductPrice,
-  // Description list components
-  DT,
-  DD,
-  DL,
-  // Utility components
-  Ellipsed,
-} from "./typography.component";
+  // Typography variants
+  typography,
+} from './typography.component';

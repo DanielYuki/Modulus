@@ -1,5 +1,5 @@
 import type React from 'react';
-import { style, type StyleVariants } from './badge.component.style';
+import { type StyleVariants, style } from './badge.component.style';
 
 export interface BadgeProps extends StyleVariants {
   children: React.ReactNode;
@@ -7,9 +7,5 @@ export interface BadgeProps extends StyleVariants {
 }
 
 export const Badge: React.FC<BadgeProps> = ({ children, className, status }) => {
-  return (
-    <span className={style({ status, class: className })}>
-      {children}
-    </span>
-  );
+  return <span className={style({ status, class: className })}>{children}</span>;
 };

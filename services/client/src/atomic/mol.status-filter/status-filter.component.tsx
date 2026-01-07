@@ -16,17 +16,12 @@ export interface StatusFilterProps {
   className?: string;
 }
 
-export const StatusFilter: React.FC<StatusFilterProps> = ({
-  options,
-  activeStatus,
-  onSelect,
-  className,
-}) => {
+export const StatusFilter: React.FC<StatusFilterProps> = ({ options, activeStatus, onSelect, className }) => {
   const styles = style();
 
   return (
     <div className={styles.wrapper({ class: className })}>
-      {options.map((option) => {
+      {options.map(option => {
         const isActive = option.status === activeStatus;
         const buttonStyles = style({ active: isActive, status: option.status });
 
@@ -35,8 +30,7 @@ export const StatusFilter: React.FC<StatusFilterProps> = ({
             key={option.status}
             type="button"
             onClick={() => onSelect?.(option.status)}
-            className={buttonStyles.button()}
-          >
+            className={buttonStyles.button()}>
             <span className={buttonStyles.indicator()} />
             <span>{option.count}</span>
             <span>{option.label}</span>

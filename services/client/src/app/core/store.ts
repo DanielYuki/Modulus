@@ -1,4 +1,4 @@
-import { useSyncExternalStore } from "react";
+import { useSyncExternalStore } from 'react';
 
 type Listener = () => void;
 
@@ -17,7 +17,7 @@ export class LocalStore<T> {
   }
 
   private loadFromStorage(): T | null {
-    if (typeof window === "undefined") return null;
+    if (typeof window === 'undefined') return null;
     try {
       const stored = localStorage.getItem(this.key);
       return stored ? JSON.parse(stored) : null;
@@ -27,14 +27,14 @@ export class LocalStore<T> {
   }
 
   private saveToStorage(): void {
-    if (typeof window === "undefined") return;
+    if (typeof window === 'undefined') return;
     localStorage.setItem(this.key, JSON.stringify(this.state));
   }
 
   getState = (): T => this.state;
 
   setState = (update: Partial<T> | ((prev: T) => Partial<T>)): void => {
-    const partial = typeof update === "function" ? update(this.state) : update;
+    const partial = typeof update === 'function' ? update(this.state) : update;
     this.state = { ...this.state, ...partial };
     this.saveToStorage();
     this.notify();
@@ -46,7 +46,7 @@ export class LocalStore<T> {
   };
 
   private notify(): void {
-    this.listeners.forEach((listener) => listener());
+    this.listeners.forEach(listener => listener());
   }
 }
 

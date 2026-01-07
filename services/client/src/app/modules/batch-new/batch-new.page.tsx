@@ -1,18 +1,9 @@
-import { useState, useCallback } from 'react';
-import { useNavigate } from 'react-router';
-import type React from 'react';
-import {
-  Button,
-  TextArea,
-  Select,
-  Badge,
-  HDisplay,
-  H3,
-  H4,
-  Icon,
-} from '@atomic';
-import { FileDropzone } from '@atomic/mol.file-dropzone';
+import { Badge, Button, H3, H4, HDisplay, Icon, Select, TextArea } from '@atomic';
 import { FileChip } from '@atomic/mol.file-chip';
+import { FileDropzone } from '@atomic/mol.file-dropzone';
+import type React from 'react';
+import { useCallback, useState } from 'react';
+import { useNavigate } from 'react-router';
 import { createBatch } from '@/app/data/batch.gateway';
 
 interface UploadedFile {
@@ -43,13 +34,16 @@ const BatchNewPage: React.FC = () => {
     setFiles(prev => [...prev, ...uploadedFiles]);
   }, []);
 
-  const handleRemoveFile = useCallback((id: string) => {
-    setFiles(prev => prev.filter(f => f.id !== id));
-    // Clear selected template if the removed file was the template
-    if (selectedTemplate === id) {
-      setSelectedTemplate('');
-    }
-  }, [selectedTemplate]);
+  const handleRemoveFile = useCallback(
+    (id: string) => {
+      setFiles(prev => prev.filter(f => f.id !== id));
+      // Clear selected template if the removed file was the template
+      if (selectedTemplate === id) {
+        setSelectedTemplate('');
+      }
+    },
+    [selectedTemplate],
+  );
 
   const handleGenerateBatch = async () => {
     setError(null);
@@ -70,12 +64,7 @@ const BatchNewPage: React.FC = () => {
     try {
       const pdfFiles = files.filter(f => f.type === 'pdf').map(f => f.file);
 
-      const result = await createBatch(
-        pdfFiles,
-        templateFile.file,
-        subjectList,
-        instructions || undefined
-      );
+      const result = await createBatch(pdfFiles, templateFile.file, subjectList, instructions || undefined);
 
       // Navigate to output page with the job ID
       navigate(`/batch/output/${result.job_id}`);
@@ -92,23 +81,32 @@ const BatchNewPage: React.FC = () => {
   return (
     <>
       {/* Header */}
-      <header className="bg-fixed-white border-b-2 border-border-strong px-8 py-6">
-        <div className="max-w-6xl mx-auto">
-          <HDisplay className="lg:text-5xl mb-3">
-            Bulk Generation
-          </HDisplay>
-          <div className="text-base lg:text-lg text-text-secondary leading-relaxed font-medium">
-            <span className="bg-primary px-2 py-1 text-fixed-black font-bold border-2 border-border-strong text-sm">1. Upload</span> source PDFs. <span className="bg-primary px-2 py-1 text-fixed-black font-bold border-2 border-border-strong text-sm">2. Add</span> .tex template. <span className="bg-primary px-2 py-1 text-fixed-black font-bold border-2 border-border-strong text-sm">3. Define</span> subjects.
+      <header className="border-border-strong border-b-2 bg-fixed-white px-8 py-6">
+        <div className="mx-auto max-w-6xl">
+          <HDisplay className="mb-3 lg:text-5xl">Bulk Generation</HDisplay>
+          <div className="font-medium text-base text-text-secondary leading-relaxed lg:text-lg">
+            <span className="border-2 border-border-strong bg-primary px-2 py-1 font-bold text-fixed-black text-sm">
+              1. Upload
+            </span>{' '}
+            source PDFs.{' '}
+            <span className="border-2 border-border-strong bg-primary px-2 py-1 font-bold text-fixed-black text-sm">
+              2. Add
+            </span>{' '}
+            .tex template.{' '}
+            <span className="border-2 border-border-strong bg-primary px-2 py-1 font-bold text-fixed-black text-sm">
+              3. Define
+            </span>{' '}
+            subjects.
           </div>
         </div>
       </header>
 
       <div className="p-8">
-        <div className="max-w-6xl mx-auto grid grid-cols-1 xl:grid-cols-3 gap-8">
+        <div className="mx-auto grid max-w-6xl grid-cols-1 gap-8 xl:grid-cols-3">
           {/* Left Column */}
-          <div className="xl:col-span-2 space-y-8">
+          <div className="space-y-8 xl:col-span-2">
             {/* Source Files */}
-            <div className="bg-surface-light p-6 border-2 border-border-strong shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+            <div className="border-2 border-border-strong bg-surface-light p-6 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
               <H4 className="mb-6 flex items-center gap-2">
                 <Icon name="upload_file" /> Source Files
               </H4>
@@ -120,7 +118,7 @@ const BatchNewPage: React.FC = () => {
               />
 
               {files.length > 0 && (
-                <div className="flex flex-wrap gap-4 mt-6">
+                <div className="mt-6 flex flex-wrap gap-4">
                   {files.map(file => (
                     <FileChip
                       key={file.id}
@@ -135,8 +133,8 @@ const BatchNewPage: React.FC = () => {
             </div>
 
             {/* Target Subjects */}
-            <div className="bg-surface-light p-6 border-2 border-border-strong shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
-              <div className="flex items-center justify-between mb-4">
+            <div className="border-2 border-border-strong bg-surface-light p-6 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+              <div className="mb-4 flex items-center justify-between">
                 <H4 className="flex items-center gap-2">
                   <Icon name="list_alt" />
                   Target Subjects
@@ -158,8 +156,8 @@ const BatchNewPage: React.FC = () => {
 
           {/* Right Column (Config) */}
           <div className="xl:col-span-1">
-            <div className="bg-surface-light p-6 border-2 border-border-strong shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] flex flex-col gap-6 sticky top-6">
-              <H3 className="flex items-center gap-2 border-b-2 border-border-strong pb-4">
+            <div className="sticky top-6 flex flex-col gap-6 border-2 border-border-strong bg-surface-light p-6 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+              <H3 className="flex items-center gap-2 border-border-strong border-b-2 pb-4">
                 <Icon name="tune" /> Configuration
               </H3>
 
@@ -171,47 +169,45 @@ const BatchNewPage: React.FC = () => {
                 placeholder="Select a template..."
               />
 
-              <div className="p-4 bg-primary-light border-2 border-border-strong flex justify-between items-center">
-                <label className="font-bold text-text-main text-xs uppercase">Batch Size</label>
+              <div className="flex items-center justify-between border-2 border-border-strong bg-primary-light p-4">
+                <span className="font-bold text-text-main text-xs uppercase">Batch Size</span>
                 <div className="flex items-center gap-2">
-                  <span className="text-xs font-medium text-text-secondary uppercase tracking-wider">Subject Count:</span>
-                  <span className="bg-fixed-black text-fixed-white font-mono font-bold text-sm px-2 py-1">
+                  <span className="font-medium text-text-secondary text-xs uppercase tracking-wider">
+                    Subject Count:
+                  </span>
+                  <span className="bg-fixed-black px-2 py-1 font-bold font-mono text-fixed-white text-sm">
                     {subjectCount.toString().padStart(2, '0')}
                   </span>
                 </div>
               </div>
 
               <div className="space-y-2">
-                <label className="font-bold text-text-main text-xs uppercase">
-                  Instructions <span className="text-text-muted font-normal normal-case opacity-70">(Optional)</span>
+                <label htmlFor="instructions-input" className="font-bold text-text-main text-xs uppercase">
+                  Instructions <span className="font-normal text-text-muted normal-case opacity-70">(Optional)</span>
                 </label>
                 <input
-                  className="w-full px-3 py-3 bg-fixed-white border-2 border-border-strong text-sm text-text-main placeholder:text-text-muted font-medium focus:outline-none focus:border-primary-hover focus:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all"
+                  id="instructions-input"
+                  className="w-full border-2 border-border-strong bg-fixed-white px-3 py-3 font-medium text-sm text-text-main transition-all placeholder:text-text-muted focus:border-primary-hover focus:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] focus:outline-none"
                   placeholder="E.g., Maintain citation keys..."
                   type="text"
                   value={instructions}
-                  onChange={(e) => setInstructions(e.target.value)}
+                  onChange={e => setInstructions(e.target.value)}
                 />
               </div>
 
               {/* Error Display */}
               {error && (
-                <div className="p-3 bg-status-failed-bg border-2 border-status-failed-border text-status-failed text-sm font-medium">
+                <div className="border-2 border-status-failed-border bg-status-failed-bg p-3 font-medium text-sm text-status-failed">
                   {error}
                 </div>
               )}
 
-              <div className="pt-4 border-t-2 border-border-strong border-dashed">
-                <Button
-                  variant="primary"
-                  size="lg"
-                  fullWidth
-                  onClick={handleGenerateBatch}
-                >
+              <div className="border-border-strong border-t-2 border-dashed pt-4">
+                <Button variant="primary" size="lg" fullWidth onClick={handleGenerateBatch}>
                   <Icon name="auto_awesome" size="lg" />
                   Generate Batch
                 </Button>
-                <p className="text-center text-xs font-mono text-text-secondary mt-3 border-b-2 border-primary inline-block mx-auto w-max px-2">
+                <p className="mx-auto mt-3 inline-block w-max border-primary border-b-2 px-2 text-center font-mono text-text-secondary text-xs">
                   Est. time: ~{Math.max(1, subjectCount * 0.5).toFixed(0)}m per subject
                 </p>
               </div>

@@ -1,6 +1,6 @@
 import type React from 'react';
 import { Outlet } from 'react-router';
-import { Sidebar, type NavSection } from './sidebar.component';
+import { type NavSection, Sidebar } from './sidebar.component';
 
 const defaultNavSections: NavSection[] = [
   {
@@ -29,13 +29,11 @@ interface AppLayoutProps {
 }
 
 // TODO: Create dedicated .style file
-export const AppLayout: React.FC<AppLayoutProps> = ({
-  navSections = defaultNavSections,
-}) => {
+export const AppLayout: React.FC<AppLayoutProps> = ({ navSections = defaultNavSections }) => {
   return (
-    <div className="flex h-screen w-full bg-background text-text-main font-display overflow-hidden antialiased">
+    <div className="flex h-screen w-full overflow-hidden bg-background font-display text-text-main antialiased">
       <Sidebar sections={navSections} />
-      <main className="flex-1 flex flex-col h-full overflow-hidden relative bg-fixed-white">
+      <main className="relative flex h-full flex-1 flex-col overflow-hidden bg-fixed-white">
         <div className="flex-1 overflow-y-auto bg-surface">
           <Outlet />
         </div>

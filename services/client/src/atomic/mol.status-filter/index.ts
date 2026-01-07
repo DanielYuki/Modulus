@@ -1,1 +1,6 @@
-export { StatusFilter, type StatusFilterProps, type StatusFilterOption, type FilterStatus } from './status-filter.component';
+export {
+  type FilterStatus,
+  StatusFilter,
+  type StatusFilterOption,
+  type StatusFilterProps,
+} from './status-filter.component';

@@ -1,5 +1,5 @@
 import type React from 'react';
-import { style, type StyleVariants } from './text-input.component.style';
+import { type StyleVariants, style } from './text-input.component.style';
 
 export interface TextInputProps extends StyleVariants {
   label?: string;
@@ -36,7 +36,7 @@ export const TextInput: React.FC<TextInputProps> = ({
         className={styles.input()}
         placeholder={placeholder}
         value={value}
-        onChange={(e) => onChange?.(e.target.value)}
+        onChange={e => onChange?.(e.target.value)}
         disabled={disabled}
       />
     </div>

@@ -1,5 +1,5 @@
 import type React from 'react';
-import { style, type StyleVariants } from './text-area.component.style';
+import { type StyleVariants, style } from './text-area.component.style';
 
 export interface TextAreaProps extends StyleVariants {
   label?: string;
@@ -37,7 +37,7 @@ export const TextArea: React.FC<TextAreaProps> = ({
         className={styles.textarea()}
         placeholder={placeholder}
         value={value}
-        onChange={(e) => onChange?.(e.target.value)}
+        onChange={e => onChange?.(e.target.value)}
         disabled={disabled}
         rows={rows}
       />

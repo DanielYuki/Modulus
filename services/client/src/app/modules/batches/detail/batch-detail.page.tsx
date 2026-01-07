@@ -1,32 +1,43 @@
-import { useState, useEffect, useCallback } from 'react';
-import { useParams, useNavigate } from 'react-router';
-import type React from 'react';
-import { Button, H1, Body, Icon } from '@atomic';
-import { StatusFilter, type FilterStatus, type StatusFilterOption } from '@atomic/mol.status-filter';
+import { Body, Button, H1, Icon } from '@atomic';
+import { type FilterStatus, StatusFilter, type StatusFilterOption } from '@atomic/mol.status-filter';
 import { JobCard, type JobStatus } from '@atomic/org.job-card';
-import { getBatchStatus, getPdfUrl, getTexUrl, getDownloadAllUrl, type BatchItem } from '@/app/data/batch.gateway';
+import type React from 'react';
+import { useCallback, useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router';
+import { type BatchItem, getBatchStatus, getDownloadAllUrl, getPdfUrl, getTexUrl } from '@/app/data/batch.gateway';
 import { BatchesRoutes } from '../batches.routes';
 
 // Map API status to UI JobStatus
 function mapStatus(apiStatus: BatchItem['status']): JobStatus {
   switch (apiStatus) {
-    case 'done': return 'done';
-    case 'error': return 'failed';
+    case 'done':
+      return 'done';
+    case 'error':
+      return 'failed';
     case 'generating':
-    case 'compiling': return 'active';
-    case 'pending': return 'queued';
-    default: return 'queued';
+    case 'compiling':
+      return 'active';
+    case 'pending':
+      return 'queued';
+    default:
+      return 'queued';
   }
 }
 
 function mapStatusLabel(item: BatchItem): string {
   switch (item.status) {
-    case 'done': return 'READY';
-    case 'error': return 'Error';
-    case 'generating': return 'Generating content...';
-    case 'compiling': return 'Compiling PDF...';
-    case 'pending': return 'Waiting...';
-    default: return 'Unknown';
+    case 'done':
+      return 'READY';
+    case 'error':
+      return 'Error';
+    case 'generating':
+      return 'Generating content...';
+    case 'compiling':
+      return 'Compiling PDF...';
+    case 'pending':
+      return 'Waiting...';
+    default:
+      return 'Unknown';
   }
 }
 
@@ -92,19 +103,23 @@ const BatchDetailPage: React.FC = () => {
   // Filter options based on actual job data
   const filterOptions: StatusFilterOption[] = [
     { status: 'completed', label: 'Completed', count: jobs.filter(j => j.status === 'done').length },
-    { status: 'processing', label: 'Processing', count: jobs.filter(j => j.status === 'generating' || j.status === 'compiling').length },
+    {
+      status: 'processing',
+      label: 'Processing',
+      count: jobs.filter(j => j.status === 'generating' || j.status === 'compiling').length,
+    },
     { status: 'failed', label: 'Failed', count: jobs.filter(j => j.status === 'error').length },
     { status: 'queued', label: 'Queued', count: jobs.filter(j => j.status === 'pending').length },
   ];
 
   const filteredJobs = activeFilter
     ? jobs.filter(j => {
-      if (activeFilter === 'completed') return j.status === 'done';
-      if (activeFilter === 'processing') return j.status === 'generating' || j.status === 'compiling';
-      if (activeFilter === 'failed') return j.status === 'error';
-      if (activeFilter === 'queued') return j.status === 'pending';
-      return true;
-    })
+        if (activeFilter === 'completed') return j.status === 'done';
+        if (activeFilter === 'processing') return j.status === 'generating' || j.status === 'compiling';
+        if (activeFilter === 'failed') return j.status === 'error';
+        if (activeFilter === 'queued') return j.status === 'pending';
+        return true;
+      })
     : jobs;
 
   if (!batchId) {
@@ -121,31 +136,29 @@ const BatchDetailPage: React.FC = () => {
   return (
     <>
       {/* Header */}
-      <header className="bg-fixed-white border-b-2 border-border-strong px-8 py-6">
-        <div className="max-w-[1600px] mx-auto flex items-start justify-between">
+      <header className="border-border-strong border-b-2 bg-fixed-white px-8 py-6">
+        <div className="mx-auto flex max-w-[1600px] items-start justify-between">
           <div className="flex flex-col gap-1">
-            <div className="flex items-center gap-2 text-sm text-text-muted uppercase tracking-wide font-medium">
+            <div className="flex items-center gap-2 font-medium text-sm text-text-muted uppercase tracking-wide">
               <button
+                type="button"
                 onClick={() => navigate(BatchesRoutes.List)}
-                className="hover:text-text-main transition-colors flex items-center gap-1"
-              >
+                className="flex items-center gap-1 transition-colors hover:text-text-main">
                 Batches
               </button>
               <Icon name="chevron_right" size="sm" />
-              <span className="text-text-main font-bold font-mono">#{batchId.slice(0, 8)}...</span>
+              <span className="font-bold font-mono text-text-main">#{batchId.slice(0, 8)}...</span>
             </div>
-            <H1>
-              Batch #{batchId.slice(0, 8)}
-            </H1>
-            {error && (
-              <Body className="text-status-failed mt-1">{error}</Body>
-            )}
+            <H1>Batch #{batchId.slice(0, 8)}</H1>
+            {error && <Body className="mt-1 text-status-failed">{error}</Body>}
           </div>
           <div className="flex items-center gap-4">
-            <Button variant="primary" onClick={() => {
-              if (!batchId) return;
-              window.location.href = getDownloadAllUrl(batchId);
-            }}>
+            <Button
+              variant="primary"
+              onClick={() => {
+                if (!batchId) return;
+                window.location.href = getDownloadAllUrl(batchId);
+              }}>
               <Icon name="download" size="sm" />
               DOWNLOAD ALL
             </Button>
@@ -154,7 +167,7 @@ const BatchDetailPage: React.FC = () => {
       </header>
 
       <div className="p-8">
-        <div className="max-w-[1600px] mx-auto">
+        <div className="mx-auto max-w-[1600px]">
           {/* Loading State */}
           {isLoading ? (
             <div className="flex items-center justify-center py-20">
@@ -167,13 +180,13 @@ const BatchDetailPage: React.FC = () => {
                 <StatusFilter
                   options={filterOptions}
                   activeStatus={activeFilter}
-                  onSelect={(status) => setActiveFilter(status === activeFilter ? undefined : status)}
+                  onSelect={status => setActiveFilter(status === activeFilter ? undefined : status)}
                 />
               </div>
 
               {/* Job Grid */}
-              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-6">
-                {filteredJobs.map((item) => (
+              <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
+                {filteredJobs.map(item => (
                   // TODO: Implement proper progress tracking
                   <JobCard
                     key={item.index}
@@ -182,21 +195,27 @@ const BatchDetailPage: React.FC = () => {
                     status={mapStatus(item.status)}
                     statusLabel={mapStatusLabel(item)}
                     progress={item.status === 'generating' ? 33 : item.status === 'compiling' ? 66 : undefined}
-                    progressLabel={item.status === 'generating' ? 'AI generating...' : item.status === 'compiling' ? 'Compiling...' : undefined}
+                    progressLabel={
+                      item.status === 'generating'
+                        ? 'AI generating...'
+                        : item.status === 'compiling'
+                          ? 'Compiling...'
+                          : undefined
+                    }
                     error={item.error || undefined}
                     onView={item.pdf_available ? () => handleView(item.index) : undefined}
-                    onRetry={() => console.log('Retry', item.index)}
-                    onCancel={() => console.log('Cancel', item.index)}
-                    onDownload={item.pdf_available || item.tex_available ? (type) => handleDownload(item.index, type) : undefined}
+                    onRetry={() => {}}
+                    onCancel={() => {}}
+                    onDownload={
+                      item.pdf_available || item.tex_available ? type => handleDownload(item.index, type) : undefined
+                    }
                   />
                 ))}
               </div>
 
               {/* Empty State */}
               {filteredJobs.length === 0 && (
-                <div className="text-center py-12 text-text-muted">
-                  No items match the selected filter
-                </div>
+                <div className="py-12 text-center text-text-muted">No items match the selected filter</div>
               )}
             </>
           )}

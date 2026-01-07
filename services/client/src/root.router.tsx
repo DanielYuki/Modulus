@@ -1,12 +1,12 @@
-import type React from "react";
-import { Suspense } from "react";
-import { Navigate, Route, Routes, useLocation } from "react-router";
-import { AppLayout } from "@app/components";
-import { BatchNewRoutes } from "@app/modules/batch-new/batch-new.routes";
-import { LazyBatchNewPage } from "@app/modules/batch-new";
-import { BatchesRoutes } from "@app/modules/batches/batches.routes";
-import { LazyBatchesPage, LazyBatchDetailPage } from "@app/modules/batches";
-import { ActivityIndicator } from "@atomic";
+import { AppLayout } from '@app/components';
+import { LazyBatchNewPage } from '@app/modules/batch-new';
+import { BatchNewRoutes } from '@app/modules/batch-new/batch-new.routes';
+import { LazyBatchDetailPage, LazyBatchesPage } from '@app/modules/batches';
+import { BatchesRoutes } from '@app/modules/batches/batches.routes';
+import { ActivityIndicator } from '@atomic';
+import type React from 'react';
+import { Suspense } from 'react';
+import { Navigate, Route, Routes, useLocation } from 'react-router';
 
 export const RootRouter: React.FC = () => {
   const location = useLocation();

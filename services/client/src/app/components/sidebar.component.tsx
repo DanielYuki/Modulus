@@ -1,7 +1,7 @@
+import { Icon } from '@atomic';
 import type React from 'react';
 import { NavLink, useLocation } from 'react-router';
 import { tv } from 'tailwind-variants';
-import { Icon } from '@atomic';
 
 // TODO: move to dedicated .style file
 const styles = tv({
@@ -36,10 +36,7 @@ const styles = tv({
       '!border-border-strong',
       'shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]',
     ],
-    navBadge: [
-      'ml-auto flex size-5 items-center justify-center',
-      'bg-fixed-black text-[8px] text-primary font-bold',
-    ],
+    navBadge: ['ml-auto flex size-5 items-center justify-center', 'bg-fixed-black text-[8px] text-primary font-bold'],
   },
 })();
 
@@ -65,10 +62,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ sections }) => {
   return (
     <aside className={styles.wrapper()}>
       <div className={styles.header()}>
-        <NavLink
-          to="/"
-          className={styles.logo()}
-        >
+        <NavLink to="/" className={styles.logo()}>
           <div className={styles.logoIcon()}>
             <Icon name="article" size="lg" color="black" />
           </div>
@@ -82,24 +76,17 @@ export const Sidebar: React.FC<SidebarProps> = ({ sections }) => {
       <nav className={styles.nav()}>
         {sections.map((section, idx) => (
           <div key={idx}>
-            {section.label && (
-              <div className={styles.sectionLabel()}>{section.label}</div>
-            )}
-            {section.items.map((item) => {
+            {section.label && <div className={styles.sectionLabel()}>{section.label}</div>}
+            {section.items.map(item => {
               const isActive = location.pathname === item.path;
               return (
                 <NavLink
                   key={item.path}
                   to={item.path}
-                  className={`${styles.navItem()} ${isActive ? styles.navItemActive() : ''}`}
-                >
-                  {item.icon && (
-                    <Icon name={item.icon} />
-                  )}
+                  className={`${styles.navItem()} ${isActive ? styles.navItemActive() : ''}`}>
+                  {item.icon && <Icon name={item.icon} />}
                   <span>{item.label}</span>
-                  {item.badge !== undefined && (
-                    <span className={styles.navBadge()}>{item.badge}</span>
-                  )}
+                  {item.badge !== undefined && <span className={styles.navBadge()}>{item.badge}</span>}
                 </NavLink>
               );
             })}

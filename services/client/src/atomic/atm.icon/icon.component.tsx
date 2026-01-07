@@ -1,5 +1,5 @@
 import type React from 'react';
-import { style, type StyleVariants } from './icon.component.style';
+import { type StyleVariants, style } from './icon.component.style';
 
 export interface IconProps extends StyleVariants {
   /**
@@ -15,11 +15,5 @@ export interface IconProps extends StyleVariants {
 }
 
 export const Icon: React.FC<IconProps> = ({ name, className, size, color }) => {
-  return (
-    <span
-      className={style({ size, color, class: className })}
-    >
-      {name}
-    </span>
-  );
+  return <span className={style({ size, color, class: className })}>{name}</span>;
 };

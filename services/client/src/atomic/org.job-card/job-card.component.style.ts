@@ -17,9 +17,7 @@ export const style = tv({
     body: 'flex flex-col gap-2 mt-4',
     error: 'p-3 bg-fixed-white border-2 border-status-failed/20 text-xs text-status-failed font-mono leading-relaxed',
     footer: 'border-t-2 border-border-strong p-4 flex gap-3 mt-auto bg-gray-50',
-    footerBtn: [
-      'flex-1 h-10 font-bold text-sm flex items-center justify-center gap-2 uppercase tracking-wide',
-    ],
+    footerBtn: ['flex-1 h-10 font-bold text-sm flex items-center justify-center gap-2 uppercase tracking-wide'],
   },
   variants: {
     status: {
@@ -32,7 +30,8 @@ export const style = tv({
         icon: 'bg-fixed-white text-fixed-black',
       },
       failed: {
-        wrapper: 'bg-status-failed-bg border-status-failed-border hover:translate-x-[-4px] hover:translate-y-[-4px] hover:shadow-[8px_8px_0px_0px_rgba(153,27,27,1)]',
+        wrapper:
+          'bg-status-failed-bg border-status-failed-border hover:translate-x-[-4px] hover:translate-y-[-4px] hover:shadow-[8px_8px_0px_0px_rgba(153,27,27,1)]',
         icon: 'bg-fixed-white border-status-failed-border text-status-failed',
         footer: 'border-status-failed-border bg-status-failed/10',
       },

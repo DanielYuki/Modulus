@@ -1,2 +1,2 @@
-export { Sidebar, type NavSection, type NavItem } from './sidebar.component';
 export { AppLayout } from './layout.component';
+export { type NavItem, type NavSection, Sidebar } from './sidebar.component';

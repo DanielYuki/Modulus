@@ -1,6 +1,6 @@
 import type React from 'react';
-import { style, type StyleVariants } from './file-chip.component.style';
 import { Icon } from '../atm.icon';
+import { type StyleVariants, style } from './file-chip.component.style';
 
 export interface FileChipProps extends StyleVariants {
   filename: string;
@@ -9,13 +9,7 @@ export interface FileChipProps extends StyleVariants {
   className?: string;
 }
 
-export const FileChip: React.FC<FileChipProps> = ({
-  filename,
-  status = 'Ready',
-  onRemove,
-  className,
-  fileType,
-}) => {
+export const FileChip: React.FC<FileChipProps> = ({ filename, status = 'Ready', onRemove, className, fileType }) => {
   const isPdf = filename.toLowerCase().endsWith('.pdf');
   const isTex = filename.toLowerCase().endsWith('.tex');
   const effectiveType = fileType ?? (isTex ? 'tex' : 'pdf');

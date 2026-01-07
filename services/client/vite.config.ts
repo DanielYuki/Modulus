@@ -1,8 +1,8 @@
-import { defineConfig } from "vite";
-import react from "@vitejs/plugin-react";
-import tailwindcss from "@tailwindcss/vite";
-import path from "node:path";
-import { fileURLToPath } from "node:url";
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+import tailwindcss from '@tailwindcss/vite';
+import react from '@vitejs/plugin-react';
+import { defineConfig } from 'vite';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -10,14 +10,14 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 export default defineConfig({
   plugins: [react(), tailwindcss()],
   // Load .env from the monorepo root
-  envDir: "../../",
+  envDir: '../../',
   resolve: {
     alias: {
-      "@": path.resolve(__dirname, "./src"),
-      "@assets": path.resolve(__dirname, "src/assets"),
-      "@app": path.resolve(__dirname, "src/app"),
-      "@atomic": path.resolve(__dirname, "src/atomic"),
-      "@utils": path.resolve(__dirname, "src/utils"),
+      '@': path.resolve(__dirname, './src'),
+      '@assets': path.resolve(__dirname, 'src/assets'),
+      '@app': path.resolve(__dirname, 'src/app'),
+      '@atomic': path.resolve(__dirname, 'src/atomic'),
+      '@utils': path.resolve(__dirname, 'src/utils'),
     },
   },
   server: {
@@ -25,4 +25,3 @@ export default defineConfig({
     port: 5173,
   },
 });
-

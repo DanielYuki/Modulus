@@ -2,15 +2,8 @@
   "compilerOptions": {
     "target": "ES2022",
     "useDefineForClassFields": true,
-    "lib": [
-      "ES2022",
-      "DOM",
-      "DOM.Iterable"
-    ],
-    "types": [
-      "vite/client",
-      "node"
-    ],
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "types": ["vite/client", "node"],
     "module": "ESNext",
     "skipLibCheck": true,
     /* Bundler mode */
@@ -29,27 +22,13 @@
     /* Paths */
     "baseUrl": ".",
     "paths": {
-      "@/*": [
-        "./src/*"
-      ],
-      "@assets/*": [
-        "./src/assets/*"
-      ],
-      "@app/*": [
-        "./src/app/*"
-      ],
-      "@atomic": [
-        "./src/atomic"
-      ],
-      "@atomic/*": [
-        "./src/atomic/*"
-      ],
-      "@utils/*": [
-        "./src/utils/*"
-      ]
+      "@/*": ["./src/*"],
+      "@assets/*": ["./src/assets/*"],
+      "@app/*": ["./src/app/*"],
+      "@atomic": ["./src/atomic"],
+      "@atomic/*": ["./src/atomic/*"],
+      "@utils/*": ["./src/utils/*"]
     }
   },
-  "include": [
-    "src"
-  ]
+  "include": ["src"]
 }

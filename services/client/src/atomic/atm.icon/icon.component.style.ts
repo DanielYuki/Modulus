@@ -1,11 +1,7 @@
 import { tv, type VariantProps } from 'tailwind-variants';
 
 export const style = tv({
-  base: [
-    'material-symbols-outlined',
-    'select-none',
-    'inline-flex items-center justify-center',
-  ],
+  base: ['material-symbols-outlined', 'select-none', 'inline-flex items-center justify-center'],
   variants: {
     // !important is used to override the default size of the icon
     size: {

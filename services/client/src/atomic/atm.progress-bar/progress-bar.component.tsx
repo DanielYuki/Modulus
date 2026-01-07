@@ -1,5 +1,5 @@
 import type React from 'react';
-import { style, type StyleVariants } from './progress-bar.component.style';
+import { type StyleVariants, style } from './progress-bar.component.style';
 
 export interface ProgressBarProps extends StyleVariants {
   value: number; // 0-100
@@ -8,13 +8,7 @@ export interface ProgressBarProps extends StyleVariants {
   className?: string;
 }
 
-export const ProgressBar: React.FC<ProgressBarProps> = ({
-  value,
-  label,
-  showPercent = true,
-  className,
-  status,
-}) => {
+export const ProgressBar: React.FC<ProgressBarProps> = ({ value, label, showPercent = true, className, status }) => {
   const styles = style({ status });
   const clampedValue = Math.min(100, Math.max(0, value));
 
@@ -27,10 +21,7 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
         </div>
       )}
       <div className={styles.track()}>
-        <div
-          className={styles.fill()}
-          style={{ width: `${clampedValue}%` }}
-        />
+        <div className={styles.fill()} style={{ width: `${clampedValue}%` }} />
       </div>
     </div>
   );

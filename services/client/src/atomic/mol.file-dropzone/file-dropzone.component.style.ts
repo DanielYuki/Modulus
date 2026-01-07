@@ -2,9 +2,7 @@ import { tv, type VariantProps } from 'tailwind-variants';
 
 export const style = tv({
   slots: {
-    wrapper: [
-      'relative w-full group/upload',
-    ],
+    wrapper: ['relative w-full group/upload'],
     dropzone: [
       'relative flex flex-col items-center justify-center w-full min-h-[220px]',
       'border-2 border-dashed border-border-strong',
@@ -13,9 +11,7 @@ export const style = tv({
       'cursor-pointer',
       'hover:bg-primary-light hover:border-solid',
     ],
-    content: [
-      'flex flex-col items-center gap-4 p-6 text-center pointer-events-none',
-    ],
+    content: ['flex flex-col items-center gap-4 p-6 text-center pointer-events-none'],
     icon: [
       'size-16 bg-primary border-2 border-border-strong flex items-center justify-center',
       'shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]',

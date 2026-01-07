@@ -1,5 +1,5 @@
 import type React from 'react';
-import { style, type StyleVariants } from './select.component.style';
+import { type StyleVariants, style } from './select.component.style';
 
 export interface SelectOption {
   value: string;
@@ -42,15 +42,14 @@ export const Select: React.FC<SelectProps> = ({
         id={id}
         className={styles.select()}
         value={value}
-        onChange={(e) => onChange?.(e.target.value)}
-        disabled={disabled}
-      >
+        onChange={e => onChange?.(e.target.value)}
+        disabled={disabled}>
         {placeholder && (
           <option value="" disabled>
             {placeholder}
           </option>
         )}
-        {options.map((option) => (
+        {options.map(option => (
           <option key={option.value} value={option.value}>
             {option.label}
           </option>

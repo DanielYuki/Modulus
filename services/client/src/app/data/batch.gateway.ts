@@ -2,13 +2,8 @@
  * Data Layer - Batch API Gateway
  * Handles communication with batch generation endpoints.
  */
-import { api } from "@/app/core/api";
-import type {
-  BatchItem,
-  BatchJob,
-  BatchListItem,
-  CreateBatchResult,
-} from "@/app/domain/batch.entities";
+import { api } from '@/app/core/api';
+import type { BatchItem, BatchJob, BatchListItem, CreateBatchResult } from '@/app/domain/batch.entities';
 
 // Re-export types for convenience (consumers can import from gateway or domain) // TODO: Remove these re-exports
 export type { BatchItem, BatchJob, BatchListItem, CreateBatchResult };
@@ -17,7 +12,7 @@ export type { BatchItem, BatchJob, BatchListItem, CreateBatchResult };
  * List all batch jobs.
  */
 export async function listBatches(): Promise<BatchListItem[]> {
-  const response = await api.get<BatchListItem[]>("/api/batch");
+  const response = await api.get<BatchListItem[]>('/api/batch');
   return response.data;
 }
 
@@ -28,32 +23,32 @@ export async function createBatch(
   files: File[],
   template: File,
   subjects: string[],
-  instructions?: string
+  instructions?: string,
 ): Promise<CreateBatchResult> {
   const formData = new FormData();
 
   // Add template
-  formData.append("template", template);
+  formData.append('template', template);
 
   // Add subjects as newline-separated string
-  formData.append("subjects", subjects.join("\n"));
+  formData.append('subjects', subjects.join('\n'));
 
   // TODO: implement proper PDF handling
   // Add reference PDFs
   for (const file of files) {
-    if (file.name.endsWith(".pdf")) {
-      formData.append("reference_pdf", file);
+    if (file.name.endsWith('.pdf')) {
+      formData.append('reference_pdf', file);
       break; // Only first PDF for now
     }
   }
 
   // Add instructions if provided
   if (instructions) {
-    formData.append("instructions", instructions);
+    formData.append('instructions', instructions);
   }
 
-  const response = await api.post<CreateBatchResult>("/api/batch", formData, {
-    headers: { "Content-Type": "multipart/form-data" },
+  const response = await api.post<CreateBatchResult>('/api/batch', formData, {
+    headers: { 'Content-Type': 'multipart/form-data' },
   });
 
   return response.data;

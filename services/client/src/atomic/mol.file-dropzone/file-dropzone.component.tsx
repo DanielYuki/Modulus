@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { style } from './file-dropzone.component.style';
 import { Icon } from '../atm.icon';
+import { style } from './file-dropzone.component.style';
 
 export interface FileDropzoneProps {
   accept?: string;
@@ -25,11 +25,14 @@ export const FileDropzone: React.FC<FileDropzoneProps> = ({
 
   const styles = style({ isDragging });
 
-  const handleFiles = React.useCallback((newFiles: FileList | null) => {
-    if (!newFiles) return;
-    const fileArray = Array.from(newFiles);
-    onFilesChange?.(fileArray);
-  }, [onFilesChange]);
+  const handleFiles = React.useCallback(
+    (newFiles: FileList | null) => {
+      if (!newFiles) return;
+      const fileArray = Array.from(newFiles);
+      onFilesChange?.(fileArray);
+    },
+    [onFilesChange],
+  );
 
   const handleDragOver = React.useCallback((e: React.DragEvent) => {
     e.preventDefault();
@@ -43,27 +46,32 @@ export const FileDropzone: React.FC<FileDropzoneProps> = ({
     setIsDragging(false);
   }, []);
 
-  const handleDrop = React.useCallback((e: React.DragEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setIsDragging(false);
-    handleFiles(e.dataTransfer.files);
-  }, [handleFiles]);
+  const handleDrop = React.useCallback(
+    (e: React.DragEvent) => {
+      e.preventDefault();
+      e.stopPropagation();
+      setIsDragging(false);
+      handleFiles(e.dataTransfer.files);
+    },
+    [handleFiles],
+  );
 
   return (
     <div className={styles.wrapper({ class: className })}>
+      {/* biome-ignore lint/a11y/useKeyWithClickEvents: Hidden file input provides keyboard accessibility */}
+      {/* biome-ignore lint/a11y/noStaticElementInteractions: Dropzone div intentionally interactive for drag-and-drop */}
       <div
         className={styles.dropzone()}
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
-      >
+        onClick={() => inputRef.current?.click()}>
         <input
           ref={inputRef}
           type="file"
           accept={accept}
           multiple={multiple}
-          onChange={(e) => handleFiles(e.target.files)}
+          onChange={e => handleFiles(e.target.files)}
           className={styles.input()}
         />
         <div className={styles.content()}>
