@@ -6,7 +6,7 @@ Implements PdfExtractorInterface using PyMuPDF (fitz).
 
 import fitz  # PyMuPDF
 
-from src.domain.interfaces import PdfExtractorInterface
+from src.domain import PdfExtractorInterface
 
 
 # Not properly used yet

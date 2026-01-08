@@ -14,27 +14,29 @@ dependencies = [
     "python-multipart>=0.0.21",
 ]
 
-[project.optional-dependencies]
+[dependency-groups]
 dev = [
     "pytest>=8.0.0",
     "ruff>=0.8.0",
 ]
 
+
 [tool.ruff]
-# Similar to your 120 line width in biome
 line-length = 120
 
 [tool.ruff.lint]
 # Select minimal but impactful rule sets
 select = [
-    "E",   # pycodestyle errors (similar to ESLint errors)
-    "F",   # Pyflakes (unused imports, variables)
-    "I",   # isort (import sorting, like your organizeImports)
-    "UP",  # pyupgrade (modern Python syntax)
-    "B",   # flake8-bugbear (common bugs)
+    "E",      # pycodestyle errors (similar to ESLint errors)
+    "F",      # Pyflakes (unused imports, variables, including F822 for undefined __all__ exports)
+    "I",      # isort (import sorting, like your organizeImports)
+    "UP",     # pyupgrade (modern Python syntax)
+    "B",      # flake8-bugbear (common bugs)
+    "RUF022", # unsorted-dunder-all (ensures __all__ entries are sorted)
+    "RUF100", # unused-noqa (validates noqa directives)
 ]
 
-# Ignore specific rules for flexibility (inspired by your biome config)
+# Ignore specific rules for flexibility (inspired by client biome config)
 ignore = [
     "E501",  # Line too long (handled by formatter)
     "B008",  # Do not perform function calls in argument defaults (common in FastAPI)

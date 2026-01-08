@@ -8,7 +8,7 @@ Provides persistence across server restarts without needing a database.
 import json
 from pathlib import Path
 
-from src.domain.batch_entities import BatchJob
+from src.domain import BatchJob
 
 
 class FileJobStore:

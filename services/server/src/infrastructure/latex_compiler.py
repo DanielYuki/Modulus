@@ -9,7 +9,7 @@ import subprocess
 import tempfile
 from pathlib import Path
 
-from src.domain.interfaces import CompilationError, LatexCompilerInterface
+from src.domain import CompilationError, LatexCompilerInterface
 
 
 class PdfLatexAdapter(LatexCompilerInterface):

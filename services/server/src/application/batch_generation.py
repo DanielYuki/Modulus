@@ -7,15 +7,17 @@ Orchestrates batch generation of LaTeX content for multiple subjects.
 import os
 import uuid
 
-from src.domain.batch_entities import BatchJob, ItemStatus, JobStatus
-from src.domain.interfaces import (
+from src.domain import (
     AIGeneratorInterface,
+    BatchJob,
     CompilationError,
     GenerationInput,
+    ItemStatus,
+    JobStatus,
     LatexCompilerInterface,
     PdfExtractorInterface,
 )
-from src.infrastructure.file_job_store import FileJobStore
+from src.infrastructure import FileJobStore
 
 
 class BatchGenerationUseCase:

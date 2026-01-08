@@ -11,7 +11,7 @@ while preserving the entire LaTeX document structure.
 from openai import OpenAI
 
 from src.core.config import OPENAI_API_KEY
-from src.domain.interfaces import AIGeneratorInterface, GenerationInput, GenerationOutput
+from src.domain import AIGeneratorInterface, GenerationInput, GenerationOutput
 
 
 class OpenAIAdapter(AIGeneratorInterface):

@@ -1,1 +1,1 @@
-"""Core Module"""
+"""Core module - Application entry point and configuration."""

@@ -1,11 +1,6 @@
-"""Domain Layer Exports"""
+"""Domain layer - Entities, interfaces, and business rules."""
 
-from src.domain.batch_entities import (
-    BatchItem,
-    BatchJob,
-    ItemStatus,
-    JobStatus,
-)
+from src.domain.batch_entities import BatchItem, BatchJob, ItemStatus, JobStatus
 from src.domain.interfaces import (
     AIGeneratorInterface,
     CompilationError,
@@ -17,13 +12,13 @@ from src.domain.interfaces import (
 
 __all__ = [
     "AIGeneratorInterface",
-    "PdfExtractorInterface",
-    "LatexCompilerInterface",
+    "BatchItem",
+    "BatchJob",
     "CompilationError",
     "GenerationInput",
     "GenerationOutput",
-    "BatchJob",
-    "BatchItem",
-    "JobStatus",
     "ItemStatus",
+    "JobStatus",
+    "LatexCompilerInterface",
+    "PdfExtractorInterface",
 ]

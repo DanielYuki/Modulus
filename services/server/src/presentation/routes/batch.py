@@ -11,13 +11,10 @@ import zipfile
 from fastapi import APIRouter, BackgroundTasks, File, Form, HTTPException, UploadFile
 from fastapi.responses import FileResponse, StreamingResponse
 
-from src.application.batch_generation import BatchGenerationUseCase
-from src.domain.batch_entities import ItemStatus
-from src.infrastructure.file_job_store import FileJobStore
-from src.infrastructure.latex_compiler import PdfLatexAdapter
-from src.infrastructure.openai_adapter import OpenAIAdapter
-from src.infrastructure.pymupdf_adapter import PyMuPDFAdapter
-from src.presentation.schemas.batch_schemas import (
+from src.application import BatchGenerationUseCase
+from src.domain import ItemStatus
+from src.infrastructure import FileJobStore, OpenAIAdapter, PdfLatexAdapter, PyMuPDFAdapter
+from src.presentation.schemas import (
     BatchItemResponse,
     BatchListItem,
     BatchStatusResponse,
