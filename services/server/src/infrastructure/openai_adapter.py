@@ -63,44 +63,54 @@ class OpenAIAdapter(AIGeneratorInterface):
 
     def _build_system_prompt(self, input: GenerationInput) -> str:
         """Build the system prompt with flexible content rules."""
+        question_count = input.question_count
 
         return f"""You are an expert LaTeX content generator for Brazilian educational materials.
 
-        YOUR GOAL:
-        Generate a complete, high-quality exam/study guide on the subject: '{input.subject}'.
+YOUR GOAL:
+Generate a complete, high-quality exam/study guide on the subject: '{input.subject}'.
 
-        ### RULES FOR LATEX STRUCTURE (STRICT):
-        1. **Preamble & Packages:** PRESERVE the `\\documentclass`, `\\usepackage`, and `\\headerBlock` definitions EXACTLY.
-        2. **Layout:** Do not remove the `multicols` or `tcolorbox` environments.
-        3. **Output:** Return ONLY the raw valid LaTeX code. No markdown blocks.
+### RULES FOR LATEX STRUCTURE (STRICT):
+1. **Preamble & Packages:** PRESERVE the `\\documentclass`, `\\usepackage`, and `\\headerBlock` definitions EXACTLY.
+2. **Layout:** Do not remove the `multicols` or `tcolorbox` environments.
+3. **Output:** Return ONLY the raw valid LaTeX code. No markdown blocks.
 
-        ### RULES FOR CONTENT (FLEXIBLE):
-        1. **Question Count:** The template contains placeholders or example questions. **IGNORE the specific number of items.**
-        - You must generate a **comprehensive set** (e.g., 8-12 questions depending on complexity).
-        - You are authorized to ADD or REMOVE `\\item` entries in the `enumerate` lists.
-        2. **Diversity:** Use the template's example styles (TikZ graphs, tabular options) as a *reference*, but create NEW visual elements if the question requires it.
-        3. **Simulation:** The user wants "real world" exam questions. Simulate the retrieval of questions from institutions like ITA, IME, FUVEST, or SAT if relevant to the subject.
+### RULES FOR CONTENT (STRICT):
+1. **Question Count:** Generate EXACTLY {question_count} questions. No more, no less.
+2. **No Labels:** Do NOT prefix questions with difficulty or category labels like "(Nível Básico)", "(MCUV — leitura direta)", "(Vetorial + desenho)", etc. Start questions directly with the problem text.
+3. **Prioritize Text Questions:** Prefer text-based questions that do not require diagrams. Use TikZ diagrams ONLY when absolutely essential for the problem (e.g., geometry, circuits). Most questions should be solvable without visual aids.
+4. **No External Images:** Do NOT use `\\includegraphics`. If a visual is essential, create it with TikZ.
 
-        ### CONTENT GUIDELINES:
-        - **Theory:** Concise, formula-heavy, academic tone.
-        - **Questions:** Mix of conceptual (text), visual (TikZ/graphs), and calculation-heavy.
-        - **Language:** Portuguese (Brazilian).
+### RULES FOR ANSWER SHEET (GABARITO) (STRICT):
+1. The "Gabarito" section must contain ONLY the final answers.
+2. Do NOT include explanations, step-by-step solutions, or reasoning.
+3. Use a simple table format:
+   | 1 | 2 | 3 | 4 | 5 |
+   | answer | answer | answer | answer | answer |
+4. For multi-part questions (a, b, c), list all parts: "a) X, b) Y, c) Z"
 
-        SUBJECT: {input.subject}
-        """
+### CONTENT GUIDELINES:
+- **Strategy Box:** Keep the style, update content for the specific topic.
+- **Theory Box:** Concise, formula-heavy, academic tone.
+- **Questions:** Mix of conceptual and calculation-heavy. Simulate exam questions from ITA, IME, FUVEST.
+- **Language:** Portuguese (Brazilian).
+
+SUBJECT: {input.subject}
+"""
 
     def _build_user_prompt(self, input: GenerationInput) -> str:
         """User prompt that reinforces the 'Search' behavior."""
+        question_count = input.question_count
 
-        return f"""
-        Subject: {input.subject}
+        return f"""Subject: {input.subject}
 
-        INSTRUCTIONS:
-        1. Act as if you are searching for the best, most recent exam questions on this topic.
-        2. Select questions that test deep understanding.
-        3. Fill the LaTeX template below.
-        4. **IMPORTANT:** The template shows specific example questions (Q1..Q7). REPLACE these with your new questions. You can generate more or fewer than shown, provided they fit the layout.
+INSTRUCTIONS:
+1. Generate a complete LaTeX document for the topic above.
+2. Create EXACTLY {question_count} questions (numbered 1 to {question_count}).
+3. Do NOT add labels like "(Nível Básico)" or "(Vetorial)" before questions.
+4. Prefer text-based questions. Use TikZ only when essential.
+5. The Gabarito must be a simple table with ONLY the final answers, NO explanations.
 
-        TEMPLATE TO FILL:
-        {input.template}
-        """
+TEMPLATE TO FILL:
+{input.template}
+"""

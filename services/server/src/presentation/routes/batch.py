@@ -39,6 +39,7 @@ async def create_batch(
     subjects: str = Form(..., description="Subjects separated by newlines"),
     template: UploadFile = File(..., description="The .tex template file"),
     reference_pdf: UploadFile | None = File(None, description="Optional reference PDF"),
+    question_count: int = Form(10, ge=5, le=20, description="Number of questions per list (5-20)"),
     instructions: str | None = Form(None, description="Optional instructions"),
 ):
     """
@@ -47,6 +48,7 @@ async def create_batch(
     - Upload a .tex template
     - Optionally upload a reference PDF for context
     - Provide subjects (one per line)
+    - Specify question_count (default: 10)
     - Receive a job ID to track progress
     """
     # Parse subjects
@@ -72,6 +74,7 @@ async def create_batch(
         subjects=subject_list,
         template_content=template_content,
         reference_pdf=pdf_bytes,
+        question_count=question_count,
         instructions=instructions,
     )
 
@@ -228,30 +231,43 @@ async def trigger_processing(job_id: str):
 
 
 @router.get("/batch/{job_id}/download-all")
-async def download_all_pdfs(job_id: str):
+async def download_all_files(job_id: str):
     """
-    Download all available PDFs from a batch as a single zip file.
+    Download all available PDFs and .tex files from a batch as a single zip file.
+
+    Files are organized as:
+    - pdfs/{subject}.pdf
+    - tex/{subject}.tex
     """
     job = FileJobStore.get_job(job_id)
 
     if not job:
         raise HTTPException(status_code=404, detail=f"Job {job_id} not found")
 
-    # Collect all available PDFs
-    available_pdfs = [
-        (item.subject, item.pdf_path) for item in job.items if item.pdf_path and os.path.exists(item.pdf_path)
-    ]
-
-    if not available_pdfs:
-        raise HTTPException(status_code=404, detail="No PDFs available for download")
+    # Helper to sanitize filenames using the subject
+    def sanitize_filename(subject: str) -> str:
+        return "".join(c for c in subject if c.isalnum() or c in (" ", "-", "_")).strip()
 
     # Create zip in memory
     zip_buffer = io.BytesIO()
+    files_added = 0
+
     with zipfile.ZipFile(zip_buffer, "w", zipfile.ZIP_DEFLATED) as zip_file:
-        for subject, pdf_path in available_pdfs:
-            # Use subject as filename, sanitize for filesystem
-            safe_name = "".join(c for c in subject if c.isalnum() or c in (" ", "-", "_")).strip()
-            zip_file.write(pdf_path, f"{safe_name}.pdf")
+        for item in job.items:
+            safe_name = sanitize_filename(item.subject)
+
+            # Add .tex file if available
+            if item.tex_content:
+                zip_file.writestr(f"tex/{safe_name}.tex", item.tex_content)
+                files_added += 1
+
+            # Add PDF if available
+            if item.pdf_path and os.path.exists(item.pdf_path):
+                zip_file.write(item.pdf_path, f"pdfs/{safe_name}.pdf")
+                files_added += 1
+
+    if files_added == 0:
+        raise HTTPException(status_code=404, detail="No files available for download")
 
     zip_buffer.seek(0)
 

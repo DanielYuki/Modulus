@@ -40,6 +40,7 @@ class BatchGenerationUseCase:
         subjects: list[str],
         template_content: str,
         reference_pdf: bytes | None = None,
+        question_count: int = 10,
         instructions: str | None = None,
     ) -> BatchJob:
         """
@@ -49,6 +50,7 @@ class BatchGenerationUseCase:
             subjects: List of subjects to generate content for
             template_content: The .tex template content
             reference_pdf: Optional PDF bytes for context extraction
+            question_count: Number of questions per list (default: 10)
             instructions: Optional user instructions
 
         Returns:
@@ -65,6 +67,7 @@ class BatchGenerationUseCase:
             subjects=subjects,
             template_content=template_content,
             source_pdf_text=source_pdf_text,
+            question_count=question_count,
             instructions=instructions,
         )
 
@@ -105,6 +108,7 @@ class BatchGenerationUseCase:
                 tex_content = self._generate_tex_for_subject(
                     subject=item.subject,
                     template=job.template_content,
+                    question_count=job.question_count,
                     reference_text=job.source_pdf_text,
                     instructions=job.instructions,
                 )
@@ -147,8 +151,9 @@ class BatchGenerationUseCase:
         self,
         subject: str,
         template: str,
-        reference_text: str | None,
-        instructions: str | None,
+        question_count: int = 10,
+        reference_text: str | None = None,
+        instructions: str | None = None,
     ) -> str:
         """
         Generate a complete LaTeX document for a single subject.
@@ -160,6 +165,7 @@ class BatchGenerationUseCase:
         gen_input = GenerationInput(
             subject=subject,
             template=template,
+            question_count=question_count,
             reference_text=reference_text,
             instructions=instructions,
         )

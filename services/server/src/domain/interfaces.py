@@ -14,6 +14,7 @@ class GenerationInput:
 
     subject: str
     template: str
+    question_count: int = 10  # Default: 10 questions per list
     reference_text: str | None = None
     instructions: str | None = None
 

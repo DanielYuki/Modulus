@@ -11,6 +11,7 @@ class CreateBatchRequest(BaseModel):
     """Request body for POST /api/batch endpoint."""
 
     subjects: list[str] = Field(..., description="List of subjects to generate content for")
+    question_count: int = Field(10, ge=5, le=20, description="Number of questions per list (default: 10)")
     instructions: str | None = Field(None, description="Optional instructions for generation")
 
 

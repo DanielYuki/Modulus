@@ -71,6 +71,7 @@ class BatchJob:
     status: JobStatus = JobStatus.PENDING
     items: list[BatchItem] = field(default_factory=list)
     instructions: str | None = None
+    question_count: int = 10  # Default: 10 questions per list
     created_at: datetime = field(default_factory=datetime.now)
 
     def __post_init__(self):
@@ -88,6 +89,7 @@ class BatchJob:
             "status": self.status.value,
             "items": [item.to_dict() for item in self.items],
             "instructions": self.instructions,
+            "question_count": self.question_count,
             "created_at": self.created_at.isoformat(),
         }
 
@@ -102,6 +104,7 @@ class BatchJob:
             status=JobStatus(data["status"]),
             items=[BatchItem.from_dict(i) for i in data.get("items", [])],
             instructions=data.get("instructions"),
+            question_count=data.get("question_count", 10),
             created_at=datetime.fromisoformat(data["created_at"]) if data.get("created_at") else datetime.now(),
         )
         return job
