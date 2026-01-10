@@ -49,29 +49,37 @@ cp .env.example .env
 # Configure your API keys in .env
 ```
 
-### 2. Start the Backend Server
+### 2. Install Backend Dependencies
 
 ```bash
 cd services/server
 
-# Create virtual environment and install dependencies
+# Install Python dependencies with uv (creates virtual environment automatically)
 uv sync
+```
 
-# Start the development server
+### 3. Start the Backend Server
+
+```bash
+# Start the development server with auto-reload
 uv run uvicorn src.core.main:app --reload --host 0.0.0.0 --port 8000
 ```
 
 The API will be available at `http://localhost:8000`. API docs at `http://localhost:8000/docs`.
 
-### 3. Start the Frontend Client
+### 4. Install Frontend Dependencies
 
 ```bash
 cd services/client
 
-# Install dependencies
+# Install dependencies using Bun
 bun install
+```
 
-# Start the development server
+### 5. Start the Frontend Client
+
+```bash
+# Start the development server with HMR (Hot Module Replacement)
 bun dev
 ```
 
@@ -147,33 +155,35 @@ modulus/
 
 ---
 
-## API Endpoints
-
-| Method | Endpoint                     | Description               |
-| ------ | ---------------------------- | ------------------------- |
-| POST   | `/api/batch`                 | Create a new batch job    |
-| GET    | `/api/batch`                 | List all batch jobs       |
-| GET    | `/api/batch/{job_id}`        | Get batch job status      |
-| GET    | `/api/batch/{job_id}/stream` | SSE stream for job updates|
-| GET    | `/api/batch/{job_id}/download/{item_index}` | Download generated PDF |
-
----
-
 ## Development Scripts
 
-### Client
+### Client (Frontend)
+
+All commands should be run from `services/client/`:
 
 ```bash
-bun dev      # Start dev server
-bun build    # Production build
-bun check    # Lint and format (Biome)
-bun lint     # Lint only
+# Development
+bun dev              # Start dev server with HMR on http://localhost:5173
+bun build            # Production build (type-check + build)
+bun preview          # Preview production build locally
+
+# Code Quality
+bun check            # Run Biome linter + formatter (auto-fix)
+bun lint             # Run Biome linter only (no auto-fix)
 ```
 
-### Server
+### Server (Backend)
+
+All commands should be run from `services/server/`:
 
 ```bash
-uv run uvicorn src.core.main:app --reload  # Dev server
-uv run pytest                               # Run tests
-uv run ruff check .                         # Lint
+# Development
+uv sync                                            # Install/sync dependencies
+uv sync --group dev                                # Install dev dependencies (ruff, pytest)
+uv run uvicorn src.core.main:app --reload          # Start dev server with auto-reload
+
+# Code Quality
+uv run ruff check .                                # Check for linting errors
+uv run ruff check --fix .                          # Auto-fix linting errors
+uv run ruff format .                               # Format code with Ruff
 ```
