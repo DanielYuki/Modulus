@@ -6,6 +6,6 @@ export interface BadgeProps extends StyleVariants {
   className?: string;
 }
 
-export const Badge: React.FC<BadgeProps> = ({ children, className, status }) => {
-  return <span className={style({ status, class: className })}>{children}</span>;
+export const Badge: React.FC<BadgeProps> = ({ children, className, status, size }) => {
+  return <span className={style({ status, size, class: className })}>{children}</span>;
 };

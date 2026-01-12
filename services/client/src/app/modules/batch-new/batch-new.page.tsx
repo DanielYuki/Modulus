@@ -84,19 +84,19 @@ const BatchNewPage: React.FC = () => {
       <header className="border-border-strong border-b-2 bg-fixed-white px-8 py-6">
         <div className="mx-auto max-w-6xl">
           <HDisplay className="mb-3 lg:text-5xl">Bulk Generation</HDisplay>
-          <div className="font-medium text-base text-text-secondary leading-relaxed lg:text-lg">
-            <span className="border-2 border-border-strong bg-primary px-2 py-1 font-bold text-fixed-black text-sm">
+          <div className="flex items-center gap-1">
+            <Badge status="ready" size="lg">
               1. Upload
-            </span>{' '}
-            source PDFs.{' '}
-            <span className="border-2 border-border-strong bg-primary px-2 py-1 font-bold text-fixed-black text-sm">
+            </Badge>
+            <H4>source PDFs</H4>
+            <Badge status="ready" size="lg">
               2. Add
-            </span>{' '}
-            .tex template.{' '}
-            <span className="border-2 border-border-strong bg-primary px-2 py-1 font-bold text-fixed-black text-sm">
+            </Badge>
+            <H4>.tex template</H4>
+            <Badge status="ready" size="lg">
               3. Define
-            </span>{' '}
-            subjects.
+            </Badge>
+            <H4>subjects</H4>
           </div>
         </div>
       </header>
@@ -171,14 +171,9 @@ const BatchNewPage: React.FC = () => {
 
               <div className="flex items-center justify-between border-2 border-border-strong bg-primary-light p-4">
                 <span className="font-bold text-text-main text-xs uppercase">Batch Size</span>
-                <div className="flex items-center gap-2">
-                  <span className="font-medium text-text-secondary text-xs uppercase tracking-wider">
-                    Subject Count:
-                  </span>
-                  <span className="bg-fixed-black px-2 py-1 font-bold font-mono text-fixed-white text-sm">
-                    {subjectCount.toString().padStart(2, '0')}
-                  </span>
-                </div>
+                <Badge status="count" size="md">
+                  {subjectCount}
+                </Badge>
               </div>
 
               <div className="space-y-2">
