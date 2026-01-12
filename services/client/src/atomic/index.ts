@@ -12,6 +12,6 @@ export * from './mol.file-chip';
 // Molecules
 export * from './mol.file-dropzone';
 export * from './mol.status-filter';
-
+export * from './org.batch-card';
 // Organisms
 export * from './org.job-card';

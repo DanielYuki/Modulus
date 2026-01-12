@@ -1,107 +1,13 @@
-import { Badge, Body, BodySecondary, H1, H3, Icon, LinkButton } from '@atomic';
+import { Body, BodySecondary, H1, H3, Icon, LinkButton } from '@atomic';
+import { BatchCard, type BatchCardStatus } from '@atomic/org.batch-card';
 import type React from 'react';
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router';
+import { useNavigate } from 'react-router';
 import { type BatchListItem, listBatches } from '@/app/data/batch.gateway';
 import { BatchesRoutes } from './batches.routes';
 
-// API status to UI status mapping
-type UIStatus = 'processing' | 'completed' | 'failed' | 'pending';
-
-const statusToBadge: Record<UIStatus, 'ready' | 'done' | 'failed' | 'queued'> = {
-  processing: 'ready',
-  completed: 'done',
-  failed: 'failed',
-  pending: 'queued',
-};
-
-const statusBarStyle: Record<UIStatus, React.CSSProperties> = {
-  processing: { backgroundColor: 'var(--color-primary)' },
-  completed: { backgroundColor: 'var(--color-status-done)' },
-  failed: { backgroundColor: 'var(--color-status-failed)' },
-  pending: { backgroundColor: 'var(--color-status-queued)' },
-};
-
-// Format bytes to human-readable size
-function formatBytes(bytes: number): string {
-  if (bytes === 0) return '0 B';
-  const k = 1024;
-  const sizes = ['B', 'KB', 'MB', 'GB'];
-  const i = Math.floor(Math.log(bytes) / Math.log(k));
-  return `${Number.parseFloat((bytes / k ** i).toFixed(1))} ${sizes[i]}`;
-}
-
-// Calculate success rate percentage
-function getSuccessRate(completed: number, total: number): string {
-  if (total === 0) return '0%';
-  return `${Math.round((completed / total) * 100)}%`;
-}
-
-interface BatchCardProps {
-  batch: BatchListItem;
-  to: string;
-}
-
-const BatchCard: React.FC<BatchCardProps> = ({ batch, to }) => {
-  const status = batch.status as UIStatus;
-  const badgeStatus = statusToBadge[status];
-  const statusLabel = status.charAt(0).toUpperCase() + status.slice(1);
-  const isProcessing = status === 'processing';
-
-  // Format date for display
-  const createdDate = new Date(batch.created_at);
-  const dateStr = createdDate.toLocaleDateString('en-US', {
-    month: 'short',
-    day: 'numeric',
-    year: 'numeric',
-  });
-
-  const successRate = getSuccessRate(batch.completed_items, batch.total_items);
-  const totalSize = formatBytes(batch.total_size_bytes);
-
-  return (
-    <Link
-      to={to}
-      className={
-        'group relative flex cursor-pointer flex-col border-2 border-border-strong bg-fixed-white p-0 transition-all duration-200 hover:translate-x-[-4px] hover:translate-y-[-4px] hover:shadow-geo md:flex-row'
-      }>
-      {/* Status bar */}
-      <div className="w-2 shrink-0 border-border-strong border-r-2" style={statusBarStyle[status]} />
-
-      <div className="flex flex-1 flex-col gap-6 p-6 md:flex-row md:items-center">
-        {/* Icon and info */}
-        <div className="flex flex-1 items-center gap-4">
-          <div className="flex size-12 items-center justify-center border-2 border-border-strong">
-            <Icon
-              name={isProcessing ? 'progress_activity' : status === 'failed' ? 'warning' : 'check_circle'}
-              className={isProcessing ? 'animate-spin' : ''}
-            />
-          </div>
-          <div>
-            <div className="mb-1 flex items-center gap-2">
-              <H3>Batch #{batch.id.slice(0, 8)}</H3>
-            </div>
-            <BodySecondary className="font-mono uppercase tracking-wide">
-              {dateStr} • {batch.total_items} items • {successRate} success
-              {batch.total_size_bytes > 0 && ` • ${totalSize}`}
-            </BodySecondary>
-          </div>
-        </div>
-
-        {/* Progress/Stats */}
-        <div className="flex flex-1 items-center gap-4 md:justify-end">
-          <Badge status={badgeStatus}>{statusLabel}</Badge>
-          <Icon
-            name="arrow_forward"
-            className="text-text-muted/50 transition-all group-hover:translate-x-1 group-hover:text-fixed-black"
-          />
-        </div>
-      </div>
-    </Link>
-  );
-};
-
 const BatchesPage: React.FC = () => {
+  const navigate = useNavigate();
   const [batches, setBatches] = useState<BatchListItem[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -169,7 +75,17 @@ const BatchesPage: React.FC = () => {
           {!isLoading && !error && batches.length > 0 && (
             <div className="flex flex-col gap-4">
               {batches.map(batch => (
-                <BatchCard key={batch.id} batch={batch} to={BatchesRoutes.detailPath(batch.id)} />
+                <BatchCard
+                  key={batch.id}
+                  batchId={batch.id}
+                  onClick={() => navigate(BatchesRoutes.detailPath(batch.id))}
+                  status={batch.status as BatchCardStatus}
+                  createdAt={batch.created_at}
+                  totalItems={batch.total_items}
+                  completedItems={batch.completed_items}
+                  failedItems={batch.failed_items}
+                  totalSizeBytes={batch.total_size_bytes}
+                />
               ))}
             </div>
           )}

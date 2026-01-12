@@ -123,12 +123,12 @@ const BatchDetailPage: React.FC = () => {
 
   const filteredJobs = activeFilter
     ? jobs.filter(j => {
-      if (activeFilter === 'completed') return j.status === 'done';
-      if (activeFilter === 'processing') return j.status === 'generating' || j.status === 'compiling';
-      if (activeFilter === 'failed') return j.status === 'error';
-      if (activeFilter === 'queued') return j.status === 'pending';
-      return true;
-    })
+        if (activeFilter === 'completed') return j.status === 'done';
+        if (activeFilter === 'processing') return j.status === 'generating' || j.status === 'compiling';
+        if (activeFilter === 'failed') return j.status === 'error';
+        if (activeFilter === 'queued') return j.status === 'pending';
+        return true;
+      })
     : jobs;
 
   if (!batchId) {
@@ -213,8 +213,8 @@ const BatchDetailPage: React.FC = () => {
                     }
                     error={item.error || undefined}
                     onView={item.pdf_available ? () => handleView(item.index) : undefined}
-                    onRetry={() => { }}
-                    onCancel={() => { }}
+                    onRetry={() => {}}
+                    onCancel={() => {}}
                     onDownload={
                       item.pdf_available || item.tex_available ? type => handleDownload(item.index, type) : undefined
                     }
