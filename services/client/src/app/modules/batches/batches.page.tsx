@@ -22,6 +22,21 @@ const statusBarStyle: Record<UIStatus, React.CSSProperties> = {
   pending: { backgroundColor: 'var(--color-status-queued)' },
 };
 
+// Format bytes to human-readable size
+function formatBytes(bytes: number): string {
+  if (bytes === 0) return '0 B';
+  const k = 1024;
+  const sizes = ['B', 'KB', 'MB', 'GB'];
+  const i = Math.floor(Math.log(bytes) / Math.log(k));
+  return `${Number.parseFloat((bytes / k ** i).toFixed(1))} ${sizes[i]}`;
+}
+
+// Calculate success rate percentage
+function getSuccessRate(completed: number, total: number): string {
+  if (total === 0) return '0%';
+  return `${Math.round((completed / total) * 100)}%`;
+}
+
 interface BatchCardProps {
   batch: BatchListItem;
   to: string;
@@ -40,6 +55,9 @@ const BatchCard: React.FC<BatchCardProps> = ({ batch, to }) => {
     day: 'numeric',
     year: 'numeric',
   });
+
+  const successRate = getSuccessRate(batch.completed_items, batch.total_items);
+  const totalSize = formatBytes(batch.total_size_bytes);
 
   return (
     <Link
@@ -64,8 +82,8 @@ const BatchCard: React.FC<BatchCardProps> = ({ batch, to }) => {
               <H3>Batch #{batch.id.slice(0, 8)}</H3>
             </div>
             <BodySecondary className="font-mono uppercase tracking-wide">
-              {dateStr} • {batch.total_items} items
-              {batch.failed_items > 0 && ` • ${batch.failed_items} failed`}
+              {dateStr} • {batch.total_items} items • {successRate} success
+              {batch.total_size_bytes > 0 && ` • ${totalSize}`}
             </BodySecondary>
           </div>
         </div>

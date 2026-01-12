@@ -24,6 +24,7 @@ class BatchItemResponse(BaseModel):
     tex_available: bool = False
     pdf_available: bool = False
     error: str | None = None
+    size_bytes: int = 0  # PDF file size in bytes
 
 
 class BatchStatusResponse(BaseModel):
@@ -53,3 +54,4 @@ class BatchListItem(BaseModel):
     completed_items: int
     failed_items: int
     created_at: str  # ISO format timestamp
+    total_size_bytes: int = 0  # Sum of all PDF file sizes

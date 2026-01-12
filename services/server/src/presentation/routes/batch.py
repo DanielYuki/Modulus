@@ -95,17 +95,29 @@ async def list_batches():
     Returns a summary of each batch, sorted by creation date (newest first).
     """
     jobs = FileJobStore.list_jobs()
-    return [
-        BatchListItem(
-            id=job.id,
-            status=job.status.value,
-            total_items=len(job.items),
-            completed_items=sum(1 for i in job.items if i.status == ItemStatus.DONE),
-            failed_items=sum(1 for i in job.items if i.status == ItemStatus.ERROR),
-            created_at=job.created_at.isoformat(),
+    result = []
+    for job in jobs:
+        # Calculate total size of all PDFs in this batch
+        total_size = 0
+        for item in job.items:
+            if item.pdf_path and os.path.exists(item.pdf_path):
+                try:
+                    total_size += os.path.getsize(item.pdf_path)
+                except OSError:
+                    pass  # File may have been deleted
+
+        result.append(
+            BatchListItem(
+                id=job.id,
+                status=job.status.value,
+                total_items=len(job.items),
+                completed_items=sum(1 for i in job.items if i.status == ItemStatus.DONE),
+                failed_items=sum(1 for i in job.items if i.status == ItemStatus.ERROR),
+                created_at=job.created_at.isoformat(),
+                total_size_bytes=total_size,
+            )
         )
-        for job in jobs
-    ]
+    return result
 
 
 @router.get("/batch/{job_id}", response_model=BatchStatusResponse)
@@ -120,17 +132,27 @@ async def get_batch_status(job_id: str):
     if not job:
         raise HTTPException(status_code=404, detail=f"Job {job_id} not found")
 
-    items = [
-        BatchItemResponse(
-            index=idx,
-            subject=item.subject,
-            status=item.status.value,
-            tex_available=item.tex_content is not None,
-            pdf_available=item.pdf_path is not None,
-            error=item.error,
+    items = []
+    for idx, item in enumerate(job.items):
+        # Calculate individual PDF size
+        size_bytes = 0
+        if item.pdf_path and os.path.exists(item.pdf_path):
+            try:
+                size_bytes = os.path.getsize(item.pdf_path)
+            except OSError:
+                pass  # File may have been deleted
+
+        items.append(
+            BatchItemResponse(
+                index=idx,
+                subject=item.subject,
+                status=item.status.value,
+                tex_available=item.tex_content is not None,
+                pdf_available=item.pdf_path is not None,
+                error=item.error,
+                size_bytes=size_bytes,
+            )
         )
-        for idx, item in enumerate(job.items)
-    ]
 
     completed = sum(1 for i in job.items if i.status == ItemStatus.DONE)
     failed = sum(1 for i in job.items if i.status == ItemStatus.ERROR)

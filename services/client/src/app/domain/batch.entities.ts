@@ -18,6 +18,7 @@ export interface BatchItem {
   tex_available: boolean;
   pdf_available: boolean;
   error: string | null;
+  size_bytes: number;
 }
 
 /** Full batch job with items (used in detail view) */
@@ -38,6 +39,7 @@ export interface BatchListItem {
   completed_items: number;
   failed_items: number;
   created_at: string;
+  total_size_bytes: number;
 }
 
 /** Response when creating a batch */

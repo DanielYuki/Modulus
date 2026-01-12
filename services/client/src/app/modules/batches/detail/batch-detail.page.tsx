@@ -7,6 +7,15 @@ import { useNavigate, useParams } from 'react-router';
 import { type BatchItem, getBatchStatus, getDownloadAllUrl, getPdfUrl, getTexUrl } from '@/app/data/batch.gateway';
 import { BatchesRoutes } from '../batches.routes';
 
+// Format bytes to human-readable size
+function formatBytes(bytes: number): string {
+  if (bytes === 0) return '';
+  const k = 1024;
+  const sizes = ['B', 'KB', 'MB', 'GB'];
+  const i = Math.floor(Math.log(bytes) / Math.log(k));
+  return `${Number.parseFloat((bytes / k ** i).toFixed(1))} ${sizes[i]}`;
+}
+
 // Map API status to UI JobStatus
 function mapStatus(apiStatus: BatchItem['status']): JobStatus {
   switch (apiStatus) {
@@ -114,12 +123,12 @@ const BatchDetailPage: React.FC = () => {
 
   const filteredJobs = activeFilter
     ? jobs.filter(j => {
-        if (activeFilter === 'completed') return j.status === 'done';
-        if (activeFilter === 'processing') return j.status === 'generating' || j.status === 'compiling';
-        if (activeFilter === 'failed') return j.status === 'error';
-        if (activeFilter === 'queued') return j.status === 'pending';
-        return true;
-      })
+      if (activeFilter === 'completed') return j.status === 'done';
+      if (activeFilter === 'processing') return j.status === 'generating' || j.status === 'compiling';
+      if (activeFilter === 'failed') return j.status === 'error';
+      if (activeFilter === 'queued') return j.status === 'pending';
+      return true;
+    })
     : jobs;
 
   if (!batchId) {
@@ -191,7 +200,7 @@ const BatchDetailPage: React.FC = () => {
                   <JobCard
                     key={item.index}
                     filename={item.subject}
-                    fileSize={item.pdf_available ? 'PDF Ready' : ''}
+                    fileSize={item.pdf_available ? formatBytes(item.size_bytes) : ''}
                     status={mapStatus(item.status)}
                     statusLabel={mapStatusLabel(item)}
                     progress={item.status === 'generating' ? 33 : item.status === 'compiling' ? 66 : undefined}
@@ -204,8 +213,8 @@ const BatchDetailPage: React.FC = () => {
                     }
                     error={item.error || undefined}
                     onView={item.pdf_available ? () => handleView(item.index) : undefined}
-                    onRetry={() => {}}
-                    onCancel={() => {}}
+                    onRetry={() => { }}
+                    onCancel={() => { }}
                     onDownload={
                       item.pdf_available || item.tex_available ? type => handleDownload(item.index, type) : undefined
                     }
