@@ -1,7 +1,7 @@
 @theme {
   --font-*: initial;
-  --font-display: "Spline Sans", system-ui, sans-serif;
-  --font-body: "Noto Sans", system-ui, sans-serif;
+  --font-primary: "Spline Sans", system-ui, sans-serif;
+  --font-secondary: "Noto Sans", system-ui, sans-serif;
   --font-mono: "JetBrains Mono", "Fira Code", monospace;
   --font-icon: "Material Symbols Outlined";
 }

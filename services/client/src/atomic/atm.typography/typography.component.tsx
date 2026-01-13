@@ -12,7 +12,7 @@ export const typography = tv({
     h1: 'text-3xl font-secondary font-bold tracking-tight text-text-main',
     h2: 'text-xl font-primary font-medium text-text-main',
     h3: 'text-base font-primary font-medium text-text-main',
-    h4: 'text-sm font-primary font-medium text-text-main uppercase tracking-wider',
+    h4: 'text-sm font-primary font-medium text-text-main tracking-wider',
     p: 'font-primary text-sm text-text-secondary',
     bodySecondary: 'text-xs text-text-muted font-primary',
   },
