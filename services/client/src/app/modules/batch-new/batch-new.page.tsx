@@ -1,4 +1,4 @@
-import { Badge, Button, H3, H4, HDisplay, Icon, Select, TextArea } from '@atomic';
+import { Badge, Button, H4, HDisplay, Icon, InputLabel, Select, TextArea } from '@atomic';
 import { FileChip } from '@atomic/mol.file-chip';
 import { FileDropzone } from '@atomic/mol.file-dropzone';
 import type React from 'react';
@@ -88,15 +88,15 @@ const BatchNewPage: React.FC = () => {
             <Badge status="ready" size="lg">
               1. Upload
             </Badge>
-            <H4>source PDFs</H4>
+            <H4>SOURCE PDFs</H4>
             <Badge status="ready" size="lg">
               2. Add
             </Badge>
-            <H4>.tex template</H4>
+            <H4>.TEX TEMPLATE</H4>
             <Badge status="ready" size="lg">
               3. Define
             </Badge>
-            <H4>subjects</H4>
+            <H4>SUBJECTS</H4>
           </div>
         </div>
       </header>
@@ -108,14 +108,10 @@ const BatchNewPage: React.FC = () => {
             {/* Source Files */}
             <div className="border-2 border-border-strong bg-surface-light p-6 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
               <H4 className="mb-6 flex items-center gap-2">
-                <Icon name="upload_file" /> Source Files
+                <Icon name="upload_file" /> SOURCE FILES
               </H4>
 
-              <FileDropzone
-                title="Drop PDFs and .tex template"
-                subtitle="MAX 20MB PER FILE"
-                onFilesChange={handleFilesChange}
-              />
+              <FileDropzone title="Drop PDFs and .tex template" onFilesChange={handleFilesChange} />
 
               {files.length > 0 && (
                 <div className="mt-6 flex flex-wrap gap-4">
@@ -123,7 +119,6 @@ const BatchNewPage: React.FC = () => {
                     <FileChip
                       key={file.id}
                       filename={file.name}
-                      status={file.type === 'tex' ? 'Template' : 'Ready'}
                       fileType={file.type}
                       onRemove={() => handleRemoveFile(file.id)}
                     />
@@ -137,7 +132,7 @@ const BatchNewPage: React.FC = () => {
               <div className="mb-4 flex items-center justify-between">
                 <H4 className="flex items-center gap-2">
                   <Icon name="list_alt" />
-                  Target Subjects
+                  TARGET SUBJECTS
                 </H4>
                 <Badge status="ready">One per line</Badge>
               </div>
@@ -157,9 +152,9 @@ const BatchNewPage: React.FC = () => {
           {/* Right Column (Config) */}
           <div className="xl:col-span-1">
             <div className="sticky top-6 flex flex-col gap-6 border-2 border-border-strong bg-surface-light p-6 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
-              <H3 className="flex items-center gap-2 border-border-strong border-b-2 pb-4">
-                <Icon name="tune" /> Configuration
-              </H3>
+              <H4 className="flex items-center gap-2 border-border-strong border-b-2 pb-4">
+                <Icon name="tune" /> CONFIGURATION
+              </H4>
 
               <Select
                 label="Active Template"
@@ -170,16 +165,16 @@ const BatchNewPage: React.FC = () => {
               />
 
               <div className="flex items-center justify-between border-2 border-border-strong bg-primary-light p-4">
-                <span className="font-bold text-text-main text-xs uppercase">Batch Size</span>
+                <H4 className="font-bold text-text-main text-xs uppercase">Batch Size</H4>
                 <Badge status="count" size="md">
                   {subjectCount}
                 </Badge>
               </div>
 
               <div className="space-y-2">
-                <label htmlFor="instructions-input" className="font-bold text-text-main text-xs uppercase">
+                <InputLabel htmlFor="instructions-input" className="font-bold text-xs uppercase">
                   Instructions <span className="font-normal text-text-muted normal-case opacity-70">(Optional)</span>
-                </label>
+                </InputLabel>
                 <input
                   id="instructions-input"
                   className="w-full border-2 border-border-strong bg-fixed-white px-3 py-3 font-medium text-sm text-text-main transition-all placeholder:text-text-muted focus:border-primary-hover focus:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] focus:outline-none"
@@ -202,9 +197,6 @@ const BatchNewPage: React.FC = () => {
                   <Icon name="auto_awesome" size="lg" />
                   Generate Batch
                 </Button>
-                <p className="mx-auto mt-3 inline-block w-max border-primary border-b-2 px-2 text-center font-mono text-text-secondary text-xs">
-                  Est. time: ~{Math.max(1, subjectCount * 0.5).toFixed(0)}m per subject
-                </p>
               </div>
             </div>
           </div>

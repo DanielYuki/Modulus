@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { Icon } from '../atm.icon';
+import { H3 } from '../atm.typography';
 import { style } from './file-dropzone.component.style';
 
 export interface FileDropzoneProps {
@@ -7,7 +8,6 @@ export interface FileDropzoneProps {
   multiple?: boolean;
   onFilesChange?: (files: File[]) => void;
   title?: string;
-  subtitle?: string;
   className?: string;
 }
 
@@ -17,7 +17,6 @@ export const FileDropzone: React.FC<FileDropzoneProps> = ({
   multiple = true,
   onFilesChange,
   title = 'Drop PDFs and .tex template',
-  subtitle = 'MAX 20MB PER FILE',
   className,
 }) => {
   const [isDragging, setIsDragging] = React.useState(false);
@@ -58,14 +57,8 @@ export const FileDropzone: React.FC<FileDropzoneProps> = ({
 
   return (
     <div className={styles.wrapper({ class: className })}>
-      {/* biome-ignore lint/a11y/useKeyWithClickEvents: Hidden file input provides keyboard accessibility */}
       {/* biome-ignore lint/a11y/noStaticElementInteractions: Dropzone div intentionally interactive for drag-and-drop */}
-      <div
-        className={styles.dropzone()}
-        onDragOver={handleDragOver}
-        onDragLeave={handleDragLeave}
-        onDrop={handleDrop}
-        onClick={() => inputRef.current?.click()}>
+      <div className={styles.dropzone()} onDragOver={handleDragOver} onDragLeave={handleDragLeave} onDrop={handleDrop}>
         <input
           ref={inputRef}
           type="file"
@@ -78,10 +71,7 @@ export const FileDropzone: React.FC<FileDropzoneProps> = ({
           <div className={styles.icon()}>
             <Icon name="cloud_upload" size="xl" color="black" />
           </div>
-          <div>
-            <p className={styles.title()}>{title}</p>
-            <p className={styles.subtitle()}>{subtitle}</p>
-          </div>
+          <H3>{title}</H3>
         </div>
       </div>
     </div>
